@@ -781,9 +781,7 @@ export default function LandingPage({
                       {settings.spots_subtitle || ''}
                     </p>
                     <div className="text-base text-slate-300 font-medium leading-relaxed space-y-4">
-                      <p>
-                        {settings.spots_content || ""}
-                      </p>
+                      <p dangerouslySetInnerHTML={{ __html: settings.spots_content || "" }} />
                     </div>
                   </div>
                 </div>
