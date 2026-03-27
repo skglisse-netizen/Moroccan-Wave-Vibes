@@ -450,11 +450,18 @@ export default function LandingPage({
                   <h2 className="text-4xl font-black mb-3 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>{settings.services_title || ''}</h2>
                   <p className="text-lg font-medium max-w-2xl mx-auto" style={{ color: settings.subtitle_color || '#64748b' }}>{settings.services_subtitle || ''}</p>
                 </div>
-                <div className="flex flex-wrap lg:flex-nowrap justify-center gap-4 lg:gap-3 pb-6 px-0 lg:px-4">
+                <div className={`
+                  ${settings.services_layout === 'grid-2' ? 'grid grid-cols-1 sm:grid-cols-2 gap-6' : 
+                    settings.services_layout === 'grid-3' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' : 
+                    settings.services_layout === 'grid-4' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4' : 
+                    'flex flex-wrap lg:flex-nowrap justify-center gap-4 lg:gap-3'} 
+                  pb-6 px-4 lg:px-8 max-w-7xl mx-auto`}
+                >
                   {activeServices.map((service) => (
                     <div
                       key={service.id}
-                      className="bg-slate-100/40 backdrop-blur-sm p-3 lg:p-2.5 rounded-2xl border border-slate-200/60 flex flex-col w-full min-w-[240px] lg:min-w-[190px] max-w-[260px] lg:max-w-[240px] snap-start shadow-sm hover:shadow-md transition-shadow"
+                      className={`bg-slate-100/40 backdrop-blur-sm p-3 lg:p-2.5 rounded-2xl border border-slate-200/60 flex flex-col w-full shadow-sm hover:shadow-md transition-shadow
+                        ${!settings.services_layout || settings.services_layout === 'scroll' ? 'min-w-[240px] lg:min-w-[190px] max-w-[260px] lg:max-w-[240px] snap-start' : ''}`}
                     >
                       {service.image_url && (
                         <div className="aspect-video rounded-xl overflow-hidden mb-2">

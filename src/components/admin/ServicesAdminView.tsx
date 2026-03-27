@@ -267,11 +267,22 @@ export function ServicesAdminView({ services, onUpdate, settings, onUpdateSettin
                       accept="image/*"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
-                        if (file) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => setConfigForm(prev => ({ ...prev, services_bg_image: reader.result as string }));
-                          reader.readAsDataURL(file);
-                        }
+                        if (!file) return;
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          const img = new Image();
+                          img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const MAX = 1200;
+                            let w = img.width, h = img.height;
+                            if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                            canvas.width = w; canvas.height = h;
+                            canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+                            setConfigForm(prev => ({ ...prev, services_bg_image: canvas.toDataURL('image/jpeg', 0.7) }));
+                          };
+                          img.src = reader.result as string;
+                        };
+                        reader.readAsDataURL(file);
                       }}
                       className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-white file:text-indigo-700 hover:file:bg-indigo-50 transition-all cursor-pointer border border-slate-100 rounded-xl"
                     />
@@ -402,7 +413,44 @@ export function ServicesAdminView({ services, onUpdate, settings, onUpdateSettin
                 className={!serviceForm.is_pack ? 'bg-slate-100 opacity-75 cursor-not-allowed' : ''}
               />
             </div>
-            <Input label="URL de l'image" value={serviceForm.image_url} onChange={(e) => setServiceForm({ ...serviceForm, image_url: e.target.value })} />
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Image du service</label>
+              <div className="flex gap-2">
+                <Input 
+                  className="flex-1" 
+                  placeholder="URL de l'image" 
+                  value={serviceForm.image_url} 
+                  onChange={(e) => setServiceForm({ ...serviceForm, image_url: e.target.value })} 
+                />
+                <div className="relative">
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        const img = new Image();
+                        img.onload = () => {
+                          const canvas = document.createElement('canvas');
+                          const MAX = 800; // Smaller for service thumbnails
+                          let w = img.width, h = img.height;
+                          if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                          canvas.width = w; canvas.height = h;
+                          canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+                          setServiceForm(prev => ({ ...prev, image_url: canvas.toDataURL('image/jpeg', 0.8) }));
+                        };
+                        img.src = reader.result as string;
+                      };
+                      reader.readAsDataURL(file);
+                    }} 
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                  />
+                  <Button variant="secondary" type="button"><Upload size={16} /></Button>
+                </div>
+              </div>
+            </div>
             <div className="flex items-center gap-2">
               <input
                 type="checkbox"

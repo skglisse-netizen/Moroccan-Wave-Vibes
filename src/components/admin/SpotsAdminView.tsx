@@ -405,7 +405,44 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
                 { value: 'Expert', label: 'Expert' }
               ]}
             />
-            <Input label="URL de l'image" value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Image du spot</label>
+              <div className="flex gap-2">
+                <Input 
+                  className="flex-1" 
+                  placeholder="URL de l'image" 
+                  value={formData.image_url} 
+                  onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} 
+                />
+                <div className="relative">
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        const img = new Image();
+                        img.onload = () => {
+                          const canvas = document.createElement('canvas');
+                          const MAX = 800;
+                          let w = img.width, h = img.height;
+                          if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                          canvas.width = w; canvas.height = h;
+                          canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+                          setFormData(prev => ({ ...prev, image_url: canvas.toDataURL('image/jpeg', 0.8) }));
+                        };
+                        img.src = reader.result as string;
+                      };
+                      reader.readAsDataURL(file);
+                    }} 
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
+                  />
+                  <Button variant="secondary" type="button"><Upload size={16} /></Button>
+                </div>
+              </div>
+            </div>
             <div className="pt-4 border-t border-slate-100 space-y-4">
               <h4 className="text-sm font-bold text-slate-700">Suggestion d'Hébergement / École</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

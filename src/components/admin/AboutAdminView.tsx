@@ -58,25 +58,45 @@ export function AboutAdminView({ content, onUpdate, user, onUpdateContent }: {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('type', type);
-
-    try {
-      const res = await fetch('/api/upload/media', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+    if (type === 'video') {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', 'video');
+      try {
+        const res = await fetch('/api/upload/media', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+          }
+        });
+        if (res.ok) {
+          const { url } = await res.json();
+          setAboutForm(prev => ({ ...prev, video_url: url }));
         }
-      });
-      if (res.ok) {
-        const { url } = await res.json();
-        setAboutForm(prev => ({ ...prev, [type === 'image' ? 'image_url' : 'video_url']: url }));
+      } catch (err) {
+        console.error('Upload failed:', err);
       }
-    } catch (err) {
-      console.error('Upload failed:', err);
+      return;
     }
+
+    // Image compression and base64 for persistence
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX = 1200;
+        let w = img.width, h = img.height;
+        if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+        const compressed = canvas.toDataURL('image/jpeg', 0.7);
+        setAboutForm(prev => ({ ...prev, image_url: compressed }));
+      };
+      img.src = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   };
 
   const StyleControls = ({ value, onChange, onApplyRichColor }: { value: string, onChange: (val: string) => void, onApplyRichColor?: (color: string) => void }) => {
