@@ -136,11 +136,22 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
                     accept="image/*"
                     onChange={(e) => {
                       const file = e.target.files?.[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => setFormData(prev => ({ ...prev, app_logo: reader.result as string }));
-                        reader.readAsDataURL(file);
-                      }
+                      if (!file) return;
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        const img = new Image();
+                        img.onload = () => {
+                          const canvas = document.createElement('canvas');
+                          const MAX = 400; // Small for logo
+                          let w = img.width, h = img.height;
+                          if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                          canvas.width = w; canvas.height = h;
+                          canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+                          setFormData(prev => ({ ...prev, app_logo: canvas.toDataURL('image/jpeg', 0.8) }));
+                        };
+                        img.src = reader.result as string;
+                      };
+                      reader.readAsDataURL(file);
                     }}
                     className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer"
                   />
