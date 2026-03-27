@@ -280,11 +280,22 @@ export function ReservationsView({ reservations, services, onUpdate, settings, o
                         accept="image/*"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
-                          if (file) {
-                            const reader = new FileReader();
-                            reader.onloadend = () => setConfigForm(prev => ({ ...prev, reserve_bg_image: reader.result as string }));
-                            reader.readAsDataURL(file);
-                          }
+                          if (!file) return;
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            const img = new Image();
+                            img.onload = () => {
+                              const canvas = document.createElement('canvas');
+                              const MAX = 1200;
+                              let w = img.width, h = img.height;
+                              if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                              canvas.width = w; canvas.height = h;
+                              canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+                              setConfigForm(prev => ({ ...prev, reserve_bg_image: canvas.toDataURL('image/jpeg', 0.7) }));
+                            };
+                            img.src = reader.result as string;
+                          };
+                          reader.readAsDataURL(file);
                         }}
                         className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-white file:text-indigo-700 hover:file:bg-indigo-50 transition-all cursor-pointer border border-slate-100 rounded-xl"
                       />

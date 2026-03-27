@@ -262,24 +262,25 @@ export function ConseilsView({ conseils, onUpdate, settings, onUpdateSettings, u
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={async (e) => {
+                      onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (!file) return;
-                        const fd = new FormData();
-                        fd.append('file', file);
-                        const token = localStorage.getItem('auth_token');
-                        try {
-                          const res = await fetch('/api/upload/media', {
-                            method: 'POST',
-                            headers: { ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
-                            body: fd,
-                            credentials: 'include'
-                          });
-                          if (res.ok) {
-                            const data = await res.json();
-                            setConfigForm(prev => ({ ...prev, conseils_bg_image: data.url }));
-                          }
-                        } catch (err) { console.error(err); }
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                          const img = new Image();
+                          img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            const MAX = 1200;
+                            let w = img.width, h = img.height;
+                            if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+                            canvas.width = w; canvas.height = h;
+                            canvas.getContext('2d')!.drawImage(img, 0, 0, w, h);
+                            const compressed = canvas.toDataURL('image/jpeg', 0.7);
+                            setConfigForm(prev => ({ ...prev, conseils_bg_image: compressed }));
+                          };
+                          img.src = reader.result as string;
+                        };
+                        reader.readAsDataURL(file);
                       }}
                       className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-white file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer border border-slate-100 rounded-xl"
                     />
