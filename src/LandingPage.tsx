@@ -271,7 +271,7 @@ export default function LandingPage({
             <React.Fragment key={s.key}>
               <button
                 onClick={() => { setCurrentPage(s.key as any); setIsMobileMenuOpen(false); }}
-                className={`text-[12px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-black' : ''}`}
+                className={`text-[12px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-slate-400' : ''}`}
                 style={{ color: currentPage !== s.key ? (settings.nav_text_color || settings.header_text_color || '#475569') : undefined }}
               >
                 {label}
