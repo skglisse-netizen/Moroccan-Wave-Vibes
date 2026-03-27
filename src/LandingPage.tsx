@@ -613,12 +613,6 @@ export default function LandingPage({
 
               <section className="flex-grow flex items-center justify-center p-4 py-2 relative z-10">
                 <div className={`w-full max-w-4xl mx-auto flex flex-col ${settings.reserve_layout === 'split' ? 'lg:flex-row lg:items-center gap-12' : 'items-center'}`}>
-                  {settings.reserve_layout === 'split' && settings.reserve_bg_image && (
-                    <div className="hidden lg:block w-1/2 aspect-square rounded-3xl overflow-hidden shadow-2xl relative">
-                      <img src={settings.reserve_bg_image} alt="Réserver" className="w-full h-full object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                    </div>
-                  )}
                   <div className={`w-full ${settings.reserve_layout === 'split' ? 'lg:w-1/2' : 'max-w-xl'}`}>
                     <div className="text-center mb-10">
                       <h2 className="text-4xl font-black mb-3 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>{settings.reserve_title || ''}</h2>
