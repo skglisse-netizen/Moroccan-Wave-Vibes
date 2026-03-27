@@ -458,6 +458,27 @@ export async function initDb() {
       }
     }
 
+    // Seed default landing page sections (if missing)
+    const sectionsToInit = [
+      { section: 'about', button_label: 'Accueil', is_active: true },
+      { section: 'services', button_label: 'Services', is_active: true },
+      { section: 'reserve', button_label: 'Réserver', is_active: true },
+      { section: 'conseils', button_label: 'Conseils', is_active: true },
+      { section: 'spots', button_label: 'Spots', is_active: true },
+      { section: 'contact', button_label: 'Contact', is_active: true },
+    ];
+
+    for (const sec of sectionsToInit) {
+      const exists = await getOne("SELECT id FROM landing_page_content WHERE section = ?", [sec.section]);
+      if (!exists) {
+        await query(
+          "INSERT INTO landing_page_content (section, button_label, is_active) VALUES (?, ?, ?)",
+          [sec.section, sec.button_label, sec.is_active]
+        );
+        console.log(`✓ Seeded landing_page_content section: ${sec.section}`);
+      }
+    }
+
     // Initialize default categories
     const expenseCatsCount: any = await getOne("SELECT COUNT(*) as count FROM categories WHERE type = 'expense'");
     if (parseInt(expenseCatsCount.count) === 0) {
