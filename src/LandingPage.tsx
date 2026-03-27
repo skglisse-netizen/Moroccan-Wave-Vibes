@@ -786,7 +786,7 @@ export default function LandingPage({
                     <p className="text-xl font-bold mb-8 leading-relaxed" style={{ color: settings.subtitle_color || '#475569' }}>
                       {settings.spots_subtitle || ''}
                     </p>
-                    <div className="text-base text-slate-500 font-medium leading-relaxed space-y-4">
+                    <div className="text-base text-slate-300 font-medium leading-relaxed space-y-4">
                       <p>
                         {settings.spots_content || ""}
                       </p>
