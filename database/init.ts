@@ -184,9 +184,9 @@ export async function initDb() {
         session_id TEXT,
         ip_address TEXT,
         user_agent TEXT,
-        login_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        last_seen_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        logout_at TIMESTAMP,
+        login_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        last_seen_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        logout_at TIMESTAMPTZ,
         FOREIGN KEY (user_id) REFERENCES users(id)
       );
 

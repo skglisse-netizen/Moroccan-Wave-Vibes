@@ -36,11 +36,21 @@ router.post("/login", async (req: AuthRequest, res: Response) => {
     req.session.userId = user.id;
     req.session.lastActivity = Date.now();
     
-    // Invalidate other sessions in the database for this user
-    await query(
-      "UPDATE user_connections SET logout_at = CURRENT_TIMESTAMP WHERE user_id = ? AND logout_at IS NULL",
-      [user.id]
-    );
+    // Check if there's an active session on another device
+    // A session is considered active if it has been seen in the last 5 minutes and hasn't logged out
+    const activeConnection: any = await getOne(`
+      SELECT id, session_id, last_seen_at, ip_address
+      FROM user_connections 
+      WHERE user_id = ? AND logout_at IS NULL 
+        AND EXTRACT(EPOCH FROM (now() - last_seen_at)) < 300
+      ORDER BY last_seen_at DESC LIMIT 1
+    `, [user.id]);
+
+    if (activeConnection && activeConnection.session_id !== req.sessionID) {
+      return res.status(401).json({ 
+        error: "Une session est déjà ouverte sur un autre équipement. Veuillez vous déconnecter de l'autre appareil ou attendre 5 minutes d'inactivité." 
+      });
+    }
     
     // Set this as the only valid session
     await query(
