@@ -19,7 +19,7 @@ router.post("/", authenticate, checkPermission('change_settings'), async (req: A
     'app_name', 'app_logo', 'app_bg', 'pages_bg', 'header_color', 'header_text_color',
     'nav_color', 'nav_text_color', 'footer_color', 'footer_text_color', 'body_bg_color',
     'sticky_header', 'sticky_footer', 'services_layout', 'services_title', 'services_subtitle',
-    'services_bg_image', 'spots_title', 'spots_subtitle', 'spots_bg_image', 'spots_layout',
+    'services_bg_image', 'spots_title', 'spots_subtitle', 'spots_content', 'spots_bg_image', 'spots_layout',
     'reserve_title', 'reserve_subtitle', 'reserve_bg_image', 'reserve_layout',
     'conseils_layout', 'conseils_title', 'conseils_subtitle', 'conseils_button_text',
     'conseils_bg_image', 'title_color', 'subtitle_color',
