@@ -250,11 +250,11 @@ export default function LandingPage({
   const NavLinks = () => {
     const sections = [
       { key: 'about', defaultLabel: '' },
-      { key: 'services', defaultLabel: 'Services' },
-      { key: 'reserve', defaultLabel: 'Réserver' },
-      { key: 'conseils', defaultLabel: 'Conseils' },
-      { key: 'spots', defaultLabel: 'Spots' },
-      { key: 'contact', defaultLabel: 'Contact' }
+      { key: 'services', defaultLabel: '' },
+      { key: 'reserve', defaultLabel: '' },
+      { key: 'conseils', defaultLabel: '' },
+      { key: 'spots', defaultLabel: '' },
+      { key: 'contact', defaultLabel: '' }
     ];
 
     const activeSections = sections.filter(s => {
