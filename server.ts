@@ -1,6 +1,7 @@
 import express, { Response } from "express";
 import { createServer as createViteServer } from "vite";
 import session from "express-session";
+import pgSession from 'connect-pg-simple';
 import path from "path";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
@@ -46,7 +47,7 @@ async function startServer() {
   const app = express();
   const server = http.createServer(app);
   const wss = new WebSocketServer({ server });
-  const PORT = process.env.PORT || 3000;
+  const PORT = parseInt(String(process.env.PORT || '3000'), 10);
   const upload = multer({ dest: 'uploads/' });
 
   wss.on('connection', (ws) => {
@@ -57,10 +58,16 @@ async function startServer() {
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
   const isProduction = process.env.NODE_ENV === 'production';
+  const PgStore = pgSession(session);
   app.use(session({
+    store: new PgStore({
+      conString: process.env.DATABASE_URL,
+      createTableIfMissing: true,
+      ttl: 86400 // 24h en secondes
+    }),
     secret: process.env.SESSION_SECRET || "surf-school-secret-key",
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     proxy: isProduction,
     cookie: {
       secure: isProduction,
