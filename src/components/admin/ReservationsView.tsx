@@ -179,7 +179,7 @@ export function ReservationsView({ reservations, services, onUpdate, settings, o
     onUpdate();
   };
 
-  const sectionData = (content || []).find(c => c.section === 'reservations') || { section: 'reservations', button_label: 'Réservations', is_active: true };
+  const sectionData = (content || []).find(c => c.section === 'reserve') || { section: 'reserve', button_label: 'Réserver', is_active: true };
 
   return (
     <div className="space-y-6">
