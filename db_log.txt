@@ -1,0 +1,9 @@
+INSERT QUERY: INSERT INTO staff (full_name, birth_date, cin, type, status) VALUES ($1, $2, $3, $4, $5) RETURNING id
+PARAMS: ["Test Staff 1774912493369","1990-01-01","CIN123","moniteur","salarie"]
+RESULT ID: 7
+---
+INSERT QUERY: INSERT INTO clients (full_name, phone, email, address, is_subscriber, total_sessions, remaining_sessions)
+            VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id
+PARAMS: ["Test Client 1774912493438","0600000000","test@example.com","Address",0,0,0]
+RESULT ID: 6
+---

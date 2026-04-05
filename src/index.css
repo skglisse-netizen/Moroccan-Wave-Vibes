@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import "leaflet/dist/leaflet.css";
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  font-size: 13px;
+}
+
+body {
+  @apply font-sans antialiased text-slate-900;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-50;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-all;
+}
+
+/* --------------------------------------------------------------------------
+   DARK MODE OVERRIDES FOR DASHBOARD
+-------------------------------------------------------------------------- */
+.dark-dashboard {
+  /* White/Black mapping - Lighter gray for cards in dark mode for better visibility */
+  --color-white: #1e293b; 
+  --color-black: #f8fafc;
+
+  /* Slate Palette Inversion - Adjusting slate-50 for better contrast with transparency */
+  --color-slate-50: #020617;
+  --color-slate-100: rgba(255, 255, 255, 0.1);
+  --color-slate-200: #334155;
+  --color-slate-300: #475569;
+  --color-slate-400: #64748b;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #cbd5e1;
+  --color-slate-700: #e2e8f0;
+  --color-slate-800: #f1f5f9;
+  --color-slate-900: #ffffff;
+  --color-slate-950: #ffffff;
+
+  /* Indigo Palette (adjusted for dark mode contrast) */
+  --color-indigo-50: #1e1b4b;
+  --color-indigo-100: #312e81;
+  --color-indigo-200: #3730a3;
+  --color-indigo-300: #4338ca;
+  --color-indigo-400: #6366f1;
+  --color-indigo-500: #818cf8;
+  --color-indigo-600: #818cf8;
+  --color-indigo-700: #a5b4fc;
+  --color-indigo-800: #c7d2fe;
+  --color-indigo-900: #e0e7ff;
+  --color-indigo-950: #eef2ff;
+
+  /* Rose Palette */
+  --color-rose-50: #4c0519;
+  --color-rose-100: #881337;
+  --color-rose-200: #9f1239;
+  --color-rose-300: #be123c;
+  --color-rose-400: #e11d48;
+  --color-rose-500: #fb7185;
+  --color-rose-600: #fb7185;
+  --color-rose-700: #fda4af;
+  --color-rose-800: #fecdd3;
+  --color-rose-900: #ffe4e6;
+  --color-rose-950: #fff1f2;
+
+  /* Emerald Palette */
+  --color-emerald-50: #022c22;
+  --color-emerald-100: #064e3b;
+  --color-emerald-200: #065f46;
+  --color-emerald-300: #047857;
+  --color-emerald-400: #059669;
+  --color-emerald-500: #34d399;
+  --color-emerald-600: #34d399;
+  --color-emerald-700: #6ee7b7;
+  --color-emerald-800: #a7f3d0;
+  --color-emerald-900: #d1fae5;
+  --color-emerald-950: #ecfdf5;
+
+  /* Amber Palette */
+  --color-amber-50: #411a00;
+  --color-amber-100: #78350f;
+  --color-amber-200: #92400e;
+  --color-amber-300: #b45309;
+  --color-amber-400: #d97706;
+  --color-amber-500: #fbbf24;
+  --color-amber-600: #fbbf24;
+  --color-amber-700: #fcd34d;
+  --color-amber-800: #fde68a;
+  --color-amber-900: #fef3c7;
+  --color-amber-950: #fffbeb;
+
+  /* Additional Blues/Purples if used */
+  --color-blue-50: #0f172a;
+  --color-blue-100: #1e3a8a;
+  --color-blue-600: #60a5fa;
+  --color-purple-50: #2e1065;
+  --color-purple-100: #4c1d95;
+  --color-purple-600: #c084fc;
+
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-900);
+}
+
+.dark-dashboard ::-webkit-scrollbar-track {
+  background-color: #020617;
+}
+
+.dark-dashboard ::-webkit-scrollbar-thumb {
+  background-color: #334155;
+}
+
+.dark-dashboard ::-webkit-scrollbar-thumb:hover {
+  background-color: #475569;
+}

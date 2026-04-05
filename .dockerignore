@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.env
+*.sqlite
+surf_school.db
+uploads/*
+!uploads/.gitkeep
+package-lock.json
+npm-debug.log
