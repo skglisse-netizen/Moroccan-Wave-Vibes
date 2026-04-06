@@ -104,7 +104,7 @@ import { NavItem } from './components/ui/NavItem';
 import { DashboardView } from './components/dashboard/DashboardView';
 import { hasPermission } from './utils/permissions';
 
-function LoginForm({ onLogin, initialError }: { onLogin: (user: User) => void, initialError?: string }) {
+function LoginForm({ onLogin, initialError, settings }: { onLogin: (user: User) => void, initialError?: string, settings?: AppSettings }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState(initialError || '');
@@ -142,9 +142,13 @@ function LoginForm({ onLogin, initialError }: { onLogin: (user: User) => void, i
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-100 p-8">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
-            <Waves size={32} />
-          </div>
+          {settings?.app_logo ? (
+            <img src={settings.app_logo} alt="Logo" className="h-[4.5rem] w-auto object-contain mx-auto mb-4" />
+          ) : (
+            <div className="w-16 h-16 bg-indigo-600 text-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-200">
+              <Waves size={32} />
+            </div>
+          )}
           <h2 className="text-2xl font-black text-slate-900 tracking-tight">Espace Staff</h2>
           <p className="text-slate-500 font-medium text-sm mt-1">Connectez-vous pour accéder au tableau de bord</p>
         </div>
@@ -430,6 +434,7 @@ export default function App() {
           fetchAllData(); 
         }} 
         initialError={loginMessage}
+        settings={settings as any}
       />
     );
     return <LandingPage onLoginClick={() => setShowLogin(true)} settings={settings || {} as AppSettings} />;

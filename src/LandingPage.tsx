@@ -705,7 +705,7 @@ export default function LandingPage({
                   <div className={`flex-1 flex justify-start items-center flex-col px-6 pt-0 ${String(settings.sticky_footer) === 'true' ? 'pb-12' : 'pb-6'} md:pb-10`}>
                     <div className="max-w-xl text-center">
                       {!!about?.show_logo && settings.app_logo && (
-                        <img src={settings.app_logo} alt={settings.app_name} className="h-48 w-auto object-contain mx-auto mb-0" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
+                        <img src={settings.app_logo} alt={settings.app_name} className="h-32 w-auto object-contain mx-auto mb-0" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
                       )}
                       <h2
                         className={getStyleClasses(about?.title_style, "text-4xl md:text-5xl font-black mb-4 leading-tight")}
