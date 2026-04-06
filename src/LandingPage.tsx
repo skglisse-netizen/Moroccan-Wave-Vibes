@@ -634,10 +634,10 @@ export default function LandingPage({
                             <div className="text-lg font-black text-indigo-600 flex flex-col items-end" style={{ color: settings.title_color || '#4f46e5' }}>
                               {service.discount_percentage > 0 && (
                                 <span className="text-[10px] font-bold text-slate-900 line-through">
-                                  {Math.round(service.price * (1 + service.discount_percentage / 100))} DH
+                                  {service.price} DH
                                 </span>
                               )}
-                              <span>{service.price} DH</span>
+                              <span>{service.discount_percentage > 0 ? Math.round(service.price * (1 - service.discount_percentage / 100)) : service.price} DH</span>
                             </div>
                           </div>
 
