@@ -631,7 +631,7 @@ export default function LandingPage({
                               <div className="h-0.5 w-6 bg-indigo-500 rounded-full" />
                               <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em]">{service.sessions_count || 1} SESSION{(Number(service.sessions_count || 1) > 1) ? 'S' : ''}</span>
                             </div>
-                            <div className="text-lg font-black text-indigo-600 flex flex-col items-end" style={{ color: settings.title_color || '#4f46e5' }}>
+                            <div className="text-lg font-black text-indigo-600 flex flex-col items-end">
                               {service.discount_percentage > 0 && (
                                 <span className="text-[10px] font-bold text-slate-900 line-through">
                                   {service.price} DH
