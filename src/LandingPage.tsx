@@ -1202,6 +1202,7 @@ export default function LandingPage({
                                       <h4 className="font-black text-slate-900 text-sm truncate max-w-full">{spot.name}</h4>
                                       <span className={`shrink-0 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md ${(spot.difficulty?.toLowerCase().includes('deb')) ? 'bg-emerald-100 text-emerald-600' :
                                         (spot.difficulty?.toLowerCase().includes('int')) ? 'bg-amber-100 text-amber-600' :
+                                        (spot.difficulty?.toLowerCase().includes('tout')) ? 'bg-sky-100 text-sky-600' :
                                           'bg-rose-100 text-rose-600'
                                         }`}>
                                         {spot.difficulty}

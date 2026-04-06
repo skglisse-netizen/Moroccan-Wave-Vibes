@@ -304,8 +304,11 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
                       className="w-full text-[10px] border-slate-200 rounded-md bg-white focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 py-0.5 px-2 font-normal"
                     >
                       <option value="">Toutes</option>
+                      <option value="Tout niveau">Tout niveau</option>
                       <option value="Débutant">Débutant</option>
+                      <option value="Débutant & +">Débutant & +</option>
                       <option value="Intermédiaire">Intermédiaire</option>
+                      <option value="Intermédiaire & +">Intermédiaire & +</option>
                       <option value="Avancé">Avancé</option>
                       <option value="Expert">Expert</option>
                     </select>
@@ -416,8 +419,11 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
               value={formData.difficulty}
               onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
               options={[
+                { value: 'Tout niveau', label: 'Tout niveau' },
                 { value: 'Débutant', label: 'Débutant' },
+                { value: 'Débutant & +', label: 'Débutant & +' },
                 { value: 'Intermédiaire', label: 'Intermédiaire' },
+                { value: 'Intermédiaire & +', label: 'Intermédiaire & +' },
                 { value: 'Avancé', label: 'Avancé' },
                 { value: 'Expert', label: 'Expert' }
               ]}
