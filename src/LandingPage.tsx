@@ -839,19 +839,25 @@ export default function LandingPage({
             >
 
               <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-2 relative z-10">
-                <div className={`w-full max-w-5xl mx-auto flex flex-col ${settings.reserve_layout === 'split' ? 'lg:flex-row lg:items-center gap-12' : 'items-center'}`}>
-                  {settings.reserve_layout === 'split' && settings.reserve_bg_image && (
-                    <div className="hidden lg:block w-1/2 aspect-square rounded-3xl overflow-hidden shadow-2xl relative">
-                      <img src={settings.reserve_bg_image} alt="Réserver" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className={`w-full max-w-6xl mx-auto flex flex-col ${settings.reserve_layout === 'split' ? 'lg:flex-row lg:items-center gap-12 xl:gap-20' : 'items-center'}`}>
+                  {settings.reserve_layout === 'split' && (
+                    <div className="hidden lg:flex w-1/2 flex-col justify-center">
+                      <h2 className="text-5xl lg:text-6xl font-black mb-6 tracking-tight leading-tight drop-shadow-xl" style={{ color: settings.title_color || '#0f172a' }}>
+                        {settings.reserve_title}
+                      </h2>
+                      <p className="text-xl lg:text-2xl font-bold leading-relaxed drop-shadow-md" style={{ color: settings.subtitle_color || '#64748b' }}>
+                        {settings.reserve_subtitle}
+                      </p>
                     </div>
                   )}
                   <div className={`w-full ${settings.reserve_layout === 'split' ? 'lg:w-1/2' : 'max-w-2xl'}`}>
-                    <div className="text-center mb-10">
-                      <h2 className="text-4xl font-black mb-3 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>{settings.reserve_title || ''}</h2>
-                      <p className="text-lg font-medium" style={{ color: settings.subtitle_color || '#64748b' }}>{settings.reserve_subtitle || ''}</p>
-                    </div>
-                    <div className="bg-slate-100/40 backdrop-blur-sm p-2 md:p-3 rounded-3xl border border-slate-200/60">
+                    {settings.reserve_layout !== 'split' && (
+                      <div className="text-center mb-10">
+                        <h2 className="text-4xl font-black mb-3 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>{settings.reserve_title}</h2>
+                        <p className="text-lg font-medium" style={{ color: settings.subtitle_color || '#64748b' }}>{settings.reserve_subtitle}</p>
+                      </div>
+                    )}
+                    <div className="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/50 shadow-2xl">
                       {status === 'success' ? (
                         <div className="text-center py-8">
                           <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
