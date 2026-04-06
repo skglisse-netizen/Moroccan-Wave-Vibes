@@ -1071,8 +1071,44 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     app.use(express.static(path.join(__dirname, "dist")));
-    app.get("*", (_req, res) => {
-      res.sendFile(path.join(__dirname, "dist", "index.html"));
+    app.get("*", async (_req, res) => {
+      try {
+        const indexPath = path.join(__dirname, "dist", "index.html");
+        if (!fs.existsSync(indexPath)) {
+          return res.status(404).send("Build not found");
+        }
+        
+        let html = fs.readFileSync(indexPath, "utf8");
+
+        // Fetch all initial data needed for the landing page
+        const settingsResult = await getAll("SELECT * FROM settings");
+        const settings = settingsResult.reduce((acc: any, curr: any) => {
+          acc[curr.key] = curr.value;
+          return acc;
+        }, {});
+
+        const content = await getAll("SELECT * FROM landing_page_content");
+        const services = await getAll("SELECT * FROM public_services WHERE is_active = TRUE");
+        const spots = await getAll("SELECT * FROM spots WHERE is_active = TRUE ORDER BY created_at DESC");
+        const conseils = await getAll("SELECT * FROM conseils WHERE is_active = TRUE");
+
+        const initialData = {
+          settings,
+          content,
+          services,
+          spots,
+          conseils
+        };
+
+        // Inject the data into a script tag in the head
+        const scriptTag = `\n    <script>window.__INITIAL_DATA__ = ${JSON.stringify(initialData).replace(/</g, '\\u003c')};</script>`;
+        html = html.replace('<head>', `<head>${scriptTag}`);
+
+        res.send(html);
+      } catch (err) {
+        console.error("Injection error:", err);
+        res.sendFile(path.join(__dirname, "dist", "index.html"));
+      }
     });
   }
 

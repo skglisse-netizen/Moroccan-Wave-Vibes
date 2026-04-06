@@ -104,6 +104,18 @@ import { NavItem } from './components/ui/NavItem';
 import { DashboardView } from './components/dashboard/DashboardView';
 import { hasPermission } from './utils/permissions';
 
+declare global {
+  interface Window {
+    __INITIAL_DATA__?: {
+      settings: AppSettings;
+      content: any[];
+      services: any[];
+      spots: any[];
+      conseils: any[];
+    }
+  }
+}
+
 function LoginForm({ onLogin, initialError, settings }: { onLogin: (user: User) => void, initialError?: string, settings?: AppSettings }) {
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -181,13 +193,13 @@ export default function App() {
   const [user, setUser] = React.useState<User | null>(null);
   const [showLogin, setShowLogin] = React.useState(false);
   const [loginMessage, setLoginMessage] = React.useState('');
-  const [settings, setSettings] = React.useState<AppSettings | null>(null);
+  const [settings, setSettings] = React.useState<AppSettings | null>(window.__INITIAL_DATA__?.settings || null);
   const [stats, setStats] = React.useState<DashboardStats | null>(null);
   const [activeTab, setActiveTab] = React.useState('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [showPreview, setShowPreview] = React.useState(() => localStorage.getItem('showPreview') === 'true');
   const [notifications, setNotifications] = React.useState<AppNotification[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState(!window.__INITIAL_DATA__);
   const [isDarkMode, setIsDarkMode] = React.useState(() => localStorage.getItem('theme') === 'dark');
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(() => localStorage.getItem('sidebarCollapsed') === 'true');
 
@@ -220,7 +232,7 @@ export default function App() {
   const [messages, setMessages] = React.useState<any[]>([]);
   const [reservations, setReservations] = React.useState<any[]>([]);
   const [clients, setClients] = React.useState<any[]>([]);
-  const [services, setServices] = React.useState<any[]>([]);
+  const [services, setServices] = React.useState<any[]>(window.__INITIAL_DATA__?.services || []);
   const [lessons, setLessons] = React.useState<any[]>([]);
   const [staff, setStaff] = React.useState<any[]>([]);
   const [rentals, setRentals] = React.useState<any[]>([]);
@@ -231,9 +243,9 @@ export default function App() {
   const [debtsLoans, setDebtsLoans] = React.useState<any[]>([]);
   const [users, setUsers] = React.useState<any[]>([]);
   const [logs, setLogs] = React.useState<any[]>([]);
-  const [conseils, setConseils] = React.useState<any[]>([]);
-  const [spots, setSpots] = React.useState<any[]>([]);
-  const [content, setContent] = React.useState<any[]>([]);
+  const [conseils, setConseils] = React.useState<any[]>(window.__INITIAL_DATA__?.conseils || []);
+  const [spots, setSpots] = React.useState<any[]>(window.__INITIAL_DATA__?.spots || []);
+  const [content, setContent] = React.useState<any[]>(window.__INITIAL_DATA__?.content || []);
 
   const getSectionLabel = (section: string, defaultLabel: string) => {
     const data = content.find(c => c.section === section);
