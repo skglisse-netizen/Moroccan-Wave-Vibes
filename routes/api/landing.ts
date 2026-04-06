@@ -83,15 +83,17 @@ router.delete("/spots/:id", authenticate, checkPermission('delete_landing_page')
 router.post("/landing-page", authenticate, checkPermission('change_landing_page'), async (req, res) => {
   const { 
     section, title, content, image_url, video_url, title_style, content_style, is_active, button_label,
-    show_logo, show_button, button_link, section_button_label, button_label_2, button_link_2, show_button_2
+    show_logo, show_button, button_link, section_button_label, button_label_2, button_link_2, show_button_2,
+    cta1_bg_color, cta1_text_color, cta2_bg_color, cta2_text_color
   } = req.body;
   try {
     await query(`
       INSERT INTO landing_page_content (
         section, title, content, image_url, video_url, title_style, content_style, is_active, button_label,
-        show_logo, show_button, button_link, section_button_label, button_label_2, button_link_2, show_button_2
+        show_logo, show_button, button_link, section_button_label, button_label_2, button_link_2, show_button_2,
+        cta1_bg_color, cta1_text_color, cta2_bg_color, cta2_text_color
       )
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(section) DO UPDATE SET 
         title = excluded.title,
         content = excluded.content,
@@ -107,12 +109,17 @@ router.post("/landing-page", authenticate, checkPermission('change_landing_page'
         section_button_label = excluded.section_button_label,
         button_label_2 = excluded.button_label_2,
         button_link_2 = excluded.button_link_2,
-        show_button_2 = excluded.show_button_2
+        show_button_2 = excluded.show_button_2,
+        cta1_bg_color = excluded.cta1_bg_color,
+        cta1_text_color = excluded.cta1_text_color,
+        cta2_bg_color = excluded.cta2_bg_color,
+        cta2_text_color = excluded.cta2_text_color
     `, [
       section, title, content, image_url, video_url, title_style, content_style, 
       is_active ? 1 : 0, button_label,
       show_logo ? 1 : 0, show_button ? 1 : 0, button_link, section_button_label,
-      button_label_2, button_link_2, show_button_2 !== undefined ? (show_button_2 ? 1 : 0) : 1
+      button_label_2, button_link_2, show_button_2 !== undefined ? (show_button_2 ? 1 : 0) : 1,
+      cta1_bg_color, cta1_text_color, cta2_bg_color, cta2_text_color
     ]);
     res.json({ success: true });
   } catch (err: any) {

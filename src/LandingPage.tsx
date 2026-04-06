@@ -723,7 +723,11 @@ export default function LandingPage({
                         {!!about?.show_button && (
                           <button
                             onClick={() => setCurrentPage((about?.button_link as any) || 'reserve')}
-                            className="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px]"
+                            className="px-6 py-3 rounded-2xl font-black shadow-xl shadow-indigo-100/20 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px] hover:opacity-90"
+                            style={{ 
+                              backgroundColor: about?.cta1_bg_color || '#4f46e5', 
+                              color: about?.cta1_text_color || '#ffffff' 
+                            }}
                           >
                             {about?.section_button_label}
                           </button>
@@ -731,7 +735,12 @@ export default function LandingPage({
                         {!!about?.button_label_2 && (about.show_button_2 === undefined || !!about.show_button_2) && (
                           <button
                             onClick={() => setCurrentPage((about?.button_link_2 as any) || 'spots')}
-                            className="px-6 py-3 bg-white text-indigo-600 border-2 border-indigo-100 rounded-2xl font-black shadow-md shadow-slate-100 hover:bg-indigo-50 hover:border-indigo-200 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px]"
+                            className="px-6 py-3 border-2 rounded-2xl font-black shadow-md shadow-slate-100/10 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px] hover:opacity-90"
+                            style={{ 
+                              backgroundColor: about?.cta2_bg_color || '#ffffff', 
+                              color: about?.cta2_text_color || '#4f46e5',
+                              borderColor: about?.cta2_text_color || '#4f46e5'
+                            }}
                           >
                             {about.button_label_2}
                           </button>

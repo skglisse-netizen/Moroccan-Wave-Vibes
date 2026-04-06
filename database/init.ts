@@ -381,6 +381,22 @@ export async function initDb() {
       await db.exec("ALTER TABLE landing_page_content ADD COLUMN show_button_2 BOOLEAN DEFAULT TRUE");
       console.log("✓ Added show_button_2 column to landing_page_content");
     }
+    if (!landingPageColNames.includes('cta1_bg_color')) {
+      await db.exec("ALTER TABLE landing_page_content ADD COLUMN cta1_bg_color TEXT");
+      console.log("✓ Added cta1_bg_color column to landing_page_content");
+    }
+    if (!landingPageColNames.includes('cta1_text_color')) {
+      await db.exec("ALTER TABLE landing_page_content ADD COLUMN cta1_text_color TEXT");
+      console.log("✓ Added cta1_text_color column to landing_page_content");
+    }
+    if (!landingPageColNames.includes('cta2_bg_color')) {
+      await db.exec("ALTER TABLE landing_page_content ADD COLUMN cta2_bg_color TEXT");
+      console.log("✓ Added cta2_bg_color column to landing_page_content");
+    }
+    if (!landingPageColNames.includes('cta2_text_color')) {
+      await db.exec("ALTER TABLE landing_page_content ADD COLUMN cta2_text_color TEXT");
+      console.log("✓ Added cta2_text_color column to landing_page_content");
+    }
     
     // Migrations for staff
     const staffCols = await getAll("SELECT column_name as name FROM information_schema.columns WHERE table_name = 'staff'");

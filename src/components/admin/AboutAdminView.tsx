@@ -27,7 +27,12 @@ export function AboutAdminView({ content, onUpdate, user, onUpdateContent }: {
     button_link: 'reserve',
     button_label_2: '',
     button_link_2: '',
-    is_active: true
+    show_button_2: true,
+    is_active: true,
+    cta1_bg_color: '#4f46e5',
+    cta1_text_color: '#ffffff',
+    cta2_bg_color: '#ffffff',
+    cta2_text_color: '#4f46e5'
   };
   
   const [aboutForm, setAboutForm] = useState(initialAbout);
@@ -132,7 +137,11 @@ export function AboutAdminView({ content, onUpdate, user, onUpdateContent }: {
     button_label_2: '',
     button_link_2: '',
     show_button_2: true,
-    is_active: true 
+    is_active: true,
+    cta1_bg_color: '#4f46e5',
+    cta1_text_color: '#ffffff',
+    cta2_bg_color: '#ffffff',
+    cta2_text_color: '#4f46e5'
   };
 
   return (
@@ -237,6 +246,28 @@ export function AboutAdminView({ content, onUpdate, user, onUpdateContent }: {
                       </button>
                     </div>
                   </div>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter w-12">Fond</label>
+                      <input 
+                        type="color" 
+                        value={sectionData.cta1_bg_color || '#4f46e5'} 
+                        onChange={(e: any) => onUpdateContent('about', { ...sectionData, cta1_bg_color: e.target.value })}
+                        className="w-6 h-6 p-0 border-0 rounded-full overflow-hidden cursor-pointer"
+                      />
+                      <span className="text-[10px] font-mono text-slate-500 uppercase">{sectionData.cta1_bg_color || '#4f46e5'}</span>
+                    </div>
+                    <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter w-12">Texte</label>
+                      <input 
+                        type="color" 
+                        value={sectionData.cta1_text_color || '#ffffff'} 
+                        onChange={(e: any) => onUpdateContent('about', { ...sectionData, cta1_text_color: e.target.value })}
+                        className="w-6 h-6 p-0 border-0 rounded-full overflow-hidden cursor-pointer"
+                      />
+                      <span className="text-[10px] font-mono text-slate-500 uppercase">{sectionData.cta1_text_color || '#ffffff'}</span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Bouton Secondaire */}
@@ -279,6 +310,28 @@ export function AboutAdminView({ content, onUpdate, user, onUpdateContent }: {
                       >
                         <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm ${Boolean(sectionData.show_button_2 ?? true) ? 'left-7' : 'left-1'}`} />
                       </button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mt-2">
+                    <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter w-12">Fond</label>
+                      <input 
+                        type="color" 
+                        value={sectionData.cta2_bg_color || '#ffffff'} 
+                        onChange={(e: any) => onUpdateContent('about', { ...sectionData, cta2_bg_color: e.target.value })}
+                        className="w-6 h-6 p-0 border-0 rounded-full overflow-hidden cursor-pointer"
+                      />
+                      <span className="text-[10px] font-mono text-slate-500 uppercase">{sectionData.cta2_bg_color || '#ffffff'}</span>
+                    </div>
+                    <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-tighter w-12">Texte</label>
+                      <input 
+                        type="color" 
+                        value={sectionData.cta2_text_color || '#4f46e5'} 
+                        onChange={(e: any) => onUpdateContent('about', { ...sectionData, cta2_text_color: e.target.value })}
+                        className="w-6 h-6 p-0 border-0 rounded-full overflow-hidden cursor-pointer"
+                      />
+                      <span className="text-[10px] font-mono text-slate-500 uppercase">{sectionData.cta2_text_color || '#4f46e5'}</span>
                     </div>
                   </div>
                 </div>

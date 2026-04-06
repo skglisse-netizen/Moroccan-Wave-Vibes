@@ -217,6 +217,10 @@ export interface LandingPageContent {
   button_label_2?: string;
   button_link_2?: string;
   show_button_2?: boolean | number;
+  cta1_bg_color?: string;
+  cta1_text_color?: string;
+  cta2_bg_color?: string;
+  cta2_text_color?: string;
 }
 
 export interface PublicService {
