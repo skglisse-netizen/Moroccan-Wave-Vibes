@@ -46,7 +46,7 @@ async function startServer() {
   const app = express();
   const server = http.createServer(app);
   const wss = new WebSocketServer({ server });
-  const PORT = 3000;
+  const PORT = Number(process.env.PORT) || 3000;
   const upload = multer({ dest: 'uploads/' });
 
   wss.on('connection', (ws) => {
