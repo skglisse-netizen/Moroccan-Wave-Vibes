@@ -2,6 +2,7 @@ import express, { Response } from "express";
 import { createServer as createViteServer } from "vite";
 import session from "express-session";
 import path from "path";
+import { fileURLToPath } from "url";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import multer from 'multer';
@@ -11,6 +12,9 @@ import http from 'http';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
 import compression from 'compression';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
