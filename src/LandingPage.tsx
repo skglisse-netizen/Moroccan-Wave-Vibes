@@ -479,16 +479,12 @@ export default function LandingPage({
             {/* Square sponsor carousel widget */}
             {(() => {
               const barColor = settings.sponsor_bar_color || '#f0f4ff';
-              const defaultSponsors = [
-                { url: 'https://upload.wikimedia.org/wikipedia/commons/e/e8/Rip_Curl_logo.svg', alt: 'Rip Curl' },
-                { url: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Quiksilver_logo.svg', alt: 'Quiksilver' }
-              ];
               let sponsors: { url: string; alt: string }[] = [];
               try {
                 const parsed = JSON.parse(settings.sponsor_images || '[]');
-                sponsors = Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultSponsors;
+                sponsors = Array.isArray(parsed) ? parsed : [];
               } catch {
-                sponsors = defaultSponsors;
+                sponsors = [];
               }
 
               if (sponsors.length === 0) return null;
@@ -678,20 +674,12 @@ export default function LandingPage({
                 <div className="flex flex-col md:flex-row items-stretch w-full flex-grow">
                   {/* ===== Panneau Sponsors Carré (remplace l'image) ===== */}
                   {(() => {
-                    const defaultSponsors = [
-                      { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Rip_Curl_logo.svg/200px-Rip_Curl_logo.svg.png', alt: 'Rip Curl' },
-                      { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Quiksilver_logo.svg/200px-Quiksilver_logo.svg.png', alt: 'Quiksilver' },
-                      { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Vans-logo.svg/200px-Vans-logo.svg.png', alt: 'Vans' },
-                      { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Billabong_logo.svg/200px-Billabong_logo.svg.png', alt: 'Billabong' },
-                      { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/O%27Neill_logo.svg/200px-O%27Neill_logo.svg.png', alt: "O'Neill" },
-                      { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Hurley_logo.svg/200px-Hurley_logo.svg.png', alt: 'Hurley' },
-                    ];
                     let sponsors: { url: string; alt: string }[] = [];
                     try {
                       const parsed = JSON.parse((settings as any).sponsor_images || '[]');
-                      sponsors = Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultSponsors;
+                      sponsors = Array.isArray(parsed) ? parsed : [];
                     } catch {
-                      sponsors = defaultSponsors;
+                      sponsors = [];
                     }
                     const barColor = settings.sponsor_bar_color || '#f0f4ff';
                     return (
@@ -732,7 +720,7 @@ export default function LandingPage({
                             onClick={() => setCurrentPage((about?.button_link as any) || 'reserve')}
                             className="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-black shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px]"
                           >
-                            {about?.section_button_label || 'Réserver un cours'}
+                            {about?.section_button_label}
                           </button>
                         )}
                         {!!about?.button_label_2 && (about.show_button_2 === undefined || !!about.show_button_2) && (
@@ -824,7 +812,7 @@ export default function LandingPage({
                               onClick={() => setSelectedConseil(conseil)}
                               className="w-full py-2 px-5 bg-slate-900 text-white rounded-t-none rounded-b-[3rem] font-bold text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 group/btn border-t-0 active:scale-95 shadow-none hover:bg-slate-800"
                             >
-                              {settings.conseils_button_text || 'En savoir plus'}
+                              {settings.conseils_button_text}
                               <ChevronRight size={14} className="opacity-40 group-hover/btn:translate-x-1 transition-transform" />
                             </button>
                           </div>
@@ -1576,7 +1564,7 @@ function Footer({ settings }: { settings: AppSettings }) {
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center">
           <p className="text-[9px] font-bold uppercase tracking-widest opacity-50">
-            © 2026 {settings.app_name || 'Mon Site'}. Tous droits réservés.
+            © 2026 {settings.app_name}. Tous droits réservés.
           </p>
         </div>
       </div>

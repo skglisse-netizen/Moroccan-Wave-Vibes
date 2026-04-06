@@ -364,7 +364,7 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
           <div className="space-y-3">
             <label className="text-xs font-bold text-slate-600 uppercase">Logos actuels</label>
             {getSponsorImages().length === 0 ? (
-              <p className="text-xs text-slate-400 italic">Aucun logo — les logos par défaut seront affichés.</p>
+              <p className="text-xs text-slate-400 italic">Aucun logo n'est configuré.</p>
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {getSponsorImages().map((img, idx) => (
