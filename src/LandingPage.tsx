@@ -1354,7 +1354,7 @@ export default function LandingPage({
               style={{ backgroundColor: settings.body_bg_color || '#f8fafc' }}
             >
               <section className="flex-grow flex items-center justify-center p-6 lg:p-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center w-full max-w-[1400px] mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-center w-full max-w-[1400px] mx-auto">
                   <div className={`flex flex-col justify-center ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
                     <div className="max-w-lg w-full">
                       <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
