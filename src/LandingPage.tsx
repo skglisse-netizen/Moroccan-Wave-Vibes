@@ -617,6 +617,7 @@ export default function LandingPage({
                               alt={service.name}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                               referrerPolicy="no-referrer"
+                              loading="lazy" decoding="async"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
                           </div>
@@ -692,6 +693,7 @@ export default function LandingPage({
                             src={about.image_url} 
                             alt="À propos" 
                             className="absolute inset-0 w-full h-full object-cover"
+                            loading="lazy" decoding="async"
                           />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
@@ -702,7 +704,7 @@ export default function LandingPage({
                   <div className={`flex-1 flex justify-start items-center flex-col px-6 pt-0 ${String(settings.sticky_footer) === 'true' ? 'pb-12' : 'pb-6'} md:pb-10`}>
                     <div className="max-w-xl text-center">
                       {!!about?.show_logo && settings.app_logo && (
-                        <img src={settings.app_logo} alt={settings.app_name} className="h-48 w-auto object-contain mx-auto mb-0" referrerPolicy="no-referrer" />
+                        <img src={settings.app_logo} alt={settings.app_name} className="h-48 w-auto object-contain mx-auto mb-0" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
                       )}
                       <h2
                         className={getStyleClasses(about?.title_style, "text-4xl md:text-5xl font-black mb-4 leading-tight")}
@@ -798,6 +800,7 @@ export default function LandingPage({
                               alt={conseil.title}
                               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                               referrerPolicy="no-referrer"
+                              loading="lazy" decoding="async"
                             />
                           </div>
                         )}
@@ -839,7 +842,7 @@ export default function LandingPage({
                 <div className={`w-full max-w-5xl mx-auto flex flex-col ${settings.reserve_layout === 'split' ? 'lg:flex-row lg:items-center gap-12' : 'items-center'}`}>
                   {settings.reserve_layout === 'split' && settings.reserve_bg_image && (
                     <div className="hidden lg:block w-1/2 aspect-square rounded-3xl overflow-hidden shadow-2xl relative">
-                      <img src={settings.reserve_bg_image} alt="Réserver" className="w-full h-full object-cover" />
+                      <img src={settings.reserve_bg_image} alt="Réserver" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     </div>
                   )}
@@ -1035,7 +1038,7 @@ export default function LandingPage({
                         `}>
                           {spot.image_url && (
                             <div className="w-full md:w-40 aspect-square rounded-2xl overflow-hidden shrink-0">
-                              <img src={spot.image_url} alt={spot.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                              <img src={spot.image_url} alt={spot.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" decoding="async" />
                             </div>
                           )}
                           <div className="flex-grow min-w-0">
@@ -1177,7 +1180,7 @@ export default function LandingPage({
                               <div className="w-80 bg-white p-1">
                                 <div className="aspect-video rounded-xl overflow-hidden mb-3 bg-slate-50 border border-slate-100">
                                   {spot.image_url ? (
-                                    <img src={spot.image_url} alt={spot.name} className="w-full h-full object-cover" />
+                                    <img src={spot.image_url} alt={spot.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                                   ) : (
                                     <div className="w-full h-full flex items-center justify-center text-slate-300">
                                       <Waves size={32} />
@@ -1412,7 +1415,7 @@ export default function LandingPage({
                   {contactSection?.image_url && (
                     <div className="hidden lg:flex flex-col items-center justify-center self-center px-12 lg:px-24">
                       <div className="w-px h-12 bg-gradient-to-b from-transparent via-slate-200 to-transparent mb-4" />
-                      <img src={contactSection?.image_url} alt={settings.app_name} className="h-80 w-auto object-contain transition-transform hover:scale-105 rounded-xl" referrerPolicy="no-referrer" />
+                      <img src={contactSection?.image_url} alt={settings.app_name} className="h-80 w-auto object-contain transition-transform hover:scale-105 rounded-xl" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
                       <div className="w-px h-12 bg-gradient-to-t from-transparent via-slate-200 to-transparent mt-4" />
                     </div>
                   )}

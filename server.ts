@@ -10,6 +10,7 @@ import { WebSocketServer } from 'ws';
 import http from 'http';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
+import compression from 'compression';
 
 dotenv.config();
 
@@ -44,6 +45,7 @@ declare module "express-session" {
 async function startServer() {
   await initDb();
   const app = express();
+  app.use(compression());
   const server = http.createServer(app);
   const wss = new WebSocketServer({ server });
   const PORT = Number(process.env.PORT) || 3000;
