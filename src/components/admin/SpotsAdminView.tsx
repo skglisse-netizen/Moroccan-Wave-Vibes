@@ -422,7 +422,35 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
                 { value: 'Expert', label: 'Expert' }
               ]}
             />
-            <Input label="URL de l'image" value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
+            <div className="space-y-4 p-4 border border-slate-200 rounded-xl bg-slate-50/50">
+              <Input label="URL de l'image (Lien externe)" value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} />
+              
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-px bg-slate-200"></div>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">OU</span>
+                <div className="flex-1 h-px bg-slate-200"></div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider">Importer depuis votre PC</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => setFormData(prev => ({ ...prev, image_url: reader.result as string }));
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer bg-white border border-slate-200 rounded-xl"
+                />
+                {formData.image_url && formData.image_url.startsWith('data:image') && (
+                   <p className="text-[10px] text-emerald-600 font-bold mt-2">✓ Image locale importée ({Math.round(formData.image_url.length / 1024)} KB)</p>
+                )}
+              </div>
+            </div>
             <Input label="URL Live Cam (ex: YouTube, MKS, etc.)" value={formData.live_cam_url} onChange={(e) => setFormData({ ...formData, live_cam_url: e.target.value })} />
             <div className="pt-4 border-t border-slate-100 space-y-4">
               <div className="flex items-center justify-between">
