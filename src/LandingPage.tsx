@@ -1420,10 +1420,10 @@ export default function LandingPage({
                     </div>
                   </div>
 
-                  {(contactSection?.image_url || settings.app_logo) && (
+                  {contactSection?.image_url && (
                     <div className="hidden lg:flex flex-col items-center justify-center self-center px-12 lg:px-24">
                       <div className="w-px h-12 bg-gradient-to-b from-transparent via-slate-200 to-transparent mb-4" />
-                      <img src={contactSection?.image_url || settings.app_logo} alt={settings.app_name} className="h-80 w-auto object-contain transition-transform hover:scale-105 rounded-xl" referrerPolicy="no-referrer" />
+                      <img src={contactSection?.image_url} alt={settings.app_name} className="h-80 w-auto object-contain transition-transform hover:scale-105 rounded-xl" referrerPolicy="no-referrer" />
                       <div className="w-px h-12 bg-gradient-to-t from-transparent via-slate-200 to-transparent mt-4" />
                     </div>
                   )}
