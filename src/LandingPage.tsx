@@ -1350,11 +1350,12 @@ export default function LandingPage({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="flex-grow flex flex-col justify-center pt-0 pb-4"
+              className="flex-grow flex flex-col justify-center pt-0 pb-4 relative"
+              style={{ backgroundColor: settings.body_bg_color || '#f8fafc' }}
             >
-              <section className="flex-grow flex items-stretch">
-                <div className="flex flex-col md:flex-row items-stretch w-full flex-grow">
-                  <div className={`flex-1 flex flex-col justify-center pt-4 md:py-6 ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'} pl-6 lg:pl-16`}>
+              <section className="flex-grow flex items-center justify-center p-6 lg:p-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center w-full max-w-7xl mx-auto">
+                  <div className={`flex flex-col justify-center ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
                     <div className="max-w-md w-full">
                       <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
                         Contactez-nous
@@ -1429,16 +1430,24 @@ export default function LandingPage({
                     </div>
                   </div>
 
-                  {contactSection?.image_url && (
-                    <div className="hidden lg:flex flex-col items-center justify-center self-center px-12 lg:px-24">
-                      <div className="w-px h-12 bg-gradient-to-b from-transparent via-slate-200 to-transparent mb-4" />
-                      <img src={contactSection?.image_url} alt={settings.app_name} className="h-80 w-auto object-contain transition-transform hover:scale-105 rounded-xl" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
-                      <div className="w-px h-12 bg-gradient-to-t from-transparent via-slate-200 to-transparent mt-4" />
-                    </div>
-                  )}
+                  {/* Centered Image Column */}
+                  <div className="flex flex-col items-center justify-center order-first lg:order-none">
+                    {contactSection?.image_url && (
+                      <div className="flex flex-col items-center">
+                        <img 
+                          src={contactSection?.image_url} 
+                          alt={settings.app_name} 
+                          className="h-72 sm:h-96 lg:h-[450px] w-auto object-contain transition-transform hover:scale-105 rounded-3xl shadow-2xl shadow-indigo-100/20" 
+                          referrerPolicy="no-referrer" 
+                          loading="lazy" 
+                          decoding="async" 
+                        />
+                      </div>
+                    )}
+                  </div>
 
-                  <div className="flex-1 flex items-center justify-center px-6 lg:px-12 py-4 md:py-6 relative overflow-hidden">
-                    <div className="bg-slate-100/40 backdrop-blur-md p-8 lg:p-10 rounded-3xl border border-slate-200/60 shadow-xl max-w-xl w-full relative z-10">
+                  <div className="flex items-center justify-center relative overflow-hidden">
+                    <div className="bg-white/80 backdrop-blur-xl p-8 lg:p-10 rounded-3xl border border-white shadow-2xl max-w-xl w-full relative z-10">
                       {contactStatus === 'success' ? (
                         <div className="text-center py-8 w-full">
                           <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
