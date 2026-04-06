@@ -152,6 +152,10 @@ export interface Settings {
   sponsor_duration?: string;
   sponsor_images?: string;
   sponsor_bar_color?: string;
+  card_title_color?: string;
+  card_text_color?: string;
+  card_button_color?: string;
+  card_button_text_color?: string;
 }
 
 export interface Log {

@@ -48,6 +48,10 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
     sponsor_bar_color: (settings as any).sponsor_bar_color || '#f8fafc',
     sponsor_images: (settings as any).sponsor_images || '[]',
     sponsor_duration: settings.sponsor_duration || '3000',
+    card_title_color: settings.card_title_color || '#ffffff',
+    card_text_color: settings.card_text_color || '#475569',
+    card_button_color: settings.card_button_color || '#0f172a',
+    card_button_text_color: settings.card_button_text_color || '#ffffff',
   });
 
   const [newSponsorUrl, setNewSponsorUrl] = useState('');
@@ -91,6 +95,10 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
       sponsor_bar_color: (settings as any).sponsor_bar_color || '#f8fafc',
       sponsor_images: (settings as any).sponsor_images || '[]',
       sponsor_duration: settings.sponsor_duration || '3000',
+      card_title_color: settings.card_title_color || '#ffffff',
+      card_text_color: settings.card_text_color || '#475569',
+      card_button_color: settings.card_button_color || '#0f172a',
+      card_button_text_color: settings.card_button_text_color || '#ffffff',
     });
   }, [settings]);
 
@@ -266,6 +274,57 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
                   <span className="text-xs font-mono text-slate-500 uppercase">{formData.subtitle_color}</span>
                 </div>
               </div>
+
+              {/* Nouveau : Cartes Services & Conseils */}
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-600 uppercase">Titres des Cartes (Services & Conseils)</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={formData.card_title_color}
+                    onChange={(e) => setFormData({ ...formData, card_title_color: e.target.value })}
+                    className="w-10 h-10 rounded-lg cursor-pointer border-none p-0"
+                  />
+                  <span className="text-xs font-mono text-slate-500 uppercase">{formData.card_title_color}</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-600 uppercase">Texte des Cartes (Services & Conseils)</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={formData.card_text_color}
+                    onChange={(e) => setFormData({ ...formData, card_text_color: e.target.value })}
+                    className="w-10 h-10 rounded-lg cursor-pointer border-none p-0"
+                  />
+                  <span className="text-xs font-mono text-slate-500 uppercase">{formData.card_text_color}</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-600 uppercase">Boutons des Cartes (Fond)</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={formData.card_button_color}
+                    onChange={(e) => setFormData({ ...formData, card_button_color: e.target.value })}
+                    className="w-10 h-10 rounded-lg cursor-pointer border-none p-0"
+                  />
+                  <span className="text-xs font-mono text-slate-500 uppercase">{formData.card_button_color}</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-600 uppercase">Boutons des Cartes (Texte)</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={formData.card_button_text_color}
+                    onChange={(e) => setFormData({ ...formData, card_button_text_color: e.target.value })}
+                    className="w-10 h-10 rounded-lg cursor-pointer border-none p-0"
+                  />
+                  <span className="text-xs font-mono text-slate-500 uppercase">{formData.card_button_text_color}</span>
+                </div>
+              </div>
+
             </div>
 
             <div className="space-y-4 pt-2">

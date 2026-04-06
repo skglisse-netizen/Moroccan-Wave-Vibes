@@ -596,9 +596,10 @@ export default function LandingPage({
                       >
                         {/* Edge-to-edge Title Header */}
                         <div 
-                          className="w-full py-2 px-6 text-center border-b border-white/10 bg-slate-900 flex items-center justify-center gap-3 relative"
+                          className="w-full py-2 px-6 text-center border-b border-white/10 flex items-center justify-center gap-3 relative"
+                          style={{ backgroundColor: settings.card_button_color || '#0f172a' }}
                         >
-                          <h3 className="font-bold tracking-tight text-white text-sm uppercase leading-tight">
+                          <h3 className="font-bold tracking-tight text-[12px] md:text-sm uppercase leading-tight" style={{ color: settings.card_title_color || '#ffffff' }}>
                             {service.name}
                           </h3>
                           {service.discount_percentage > 0 && (
@@ -641,7 +642,7 @@ export default function LandingPage({
 
 
 
-                          <p className="text-[12px] font-medium leading-tight text-slate-600 line-clamp-6 min-h-[90px]">
+                          <p className="text-[12px] font-medium leading-tight line-clamp-6 min-h-[90px]" style={{ color: settings.card_text_color || '#475569' }}>
                             {service.description}
                           </p>
                         </div>
@@ -649,7 +650,8 @@ export default function LandingPage({
                         <div className="mt-auto border-t border-white/30">
                           <button
                             onClick={() => { setReservation(prev => ({ ...prev, service_id: service.id.toString() })); setCurrentPage('reserve'); }}
-                            className="w-full py-2 px-8 bg-slate-900 active:scale-95 hover:bg-slate-800 text-white rounded-t-none rounded-b-[3rem] font-bold text-[10px] uppercase tracking-[0.15em] shadow-none transition-all flex items-center justify-center gap-2 group/btn"
+                            className="w-full py-2 px-8 active:scale-95 rounded-t-none rounded-b-[3rem] font-bold text-[10px] uppercase tracking-[0.15em] shadow-none transition-all flex items-center justify-center gap-2 group/btn hover:opacity-90"
+                            style={{ backgroundColor: settings.card_button_color || '#0f172a', color: settings.card_button_text_color || '#ffffff' }}
                           >
                             Réserver maintenant
                             <ChevronRight size={16} className="opacity-50 group-hover/btn:translate-x-1 transition-transform duration-300" />
@@ -784,9 +786,10 @@ export default function LandingPage({
                       >
                         {/* Edge-to-edge Title Header */}
                         <div 
-                          className="w-full py-2 px-6 text-center border-b border-white/10 bg-slate-900"
+                          className="w-full py-2 px-6 text-center border-b border-white/10"
+                          style={{ backgroundColor: settings.card_button_color || '#0f172a' }}
                         >
-                          <h3 className="font-bold tracking-tight text-white text-[12px] uppercase leading-tight">
+                          <h3 className="font-bold tracking-tight text-[12px] uppercase leading-tight" style={{ color: settings.card_title_color || '#ffffff' }}>
                             {conseil.title}
                           </h3>
                         </div>
@@ -806,7 +809,7 @@ export default function LandingPage({
                           </div>
                         )}
                         <div className="flex-grow px-6 pt-0 pb-2">
-                          <p className="text-[12px] font-medium leading-tight text-slate-600 line-clamp-8 min-h-[120px] mt-2">
+                          <p className="text-[12px] font-medium leading-tight line-clamp-8 min-h-[120px] mt-2" style={{ color: settings.card_text_color || '#475569' }}>
                             {displayContent}
                           </p>
                         </div>
@@ -814,7 +817,8 @@ export default function LandingPage({
                           <div className="mt-auto border-t border-white/20">
                             <button
                               onClick={() => setSelectedConseil(conseil)}
-                              className="w-full py-2 px-5 bg-slate-900 text-white rounded-t-none rounded-b-[3rem] font-bold text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 group/btn border-t-0 active:scale-95 shadow-none hover:bg-slate-800"
+                              className="w-full py-2 px-5 rounded-t-none rounded-b-[3rem] font-bold text-[10px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-2 group/btn border-t-0 active:scale-95 shadow-none hover:opacity-90"
+                              style={{ backgroundColor: settings.card_button_color || '#0f172a', color: settings.card_button_text_color || '#ffffff' }}
                             >
                               {settings.conseils_button_text}
                               <ChevronRight size={14} className="opacity-40 group-hover/btn:translate-x-1 transition-transform" />

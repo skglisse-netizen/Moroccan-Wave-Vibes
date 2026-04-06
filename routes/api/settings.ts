@@ -24,7 +24,8 @@ router.post("/", authenticate, checkPermission('change_settings'), async (req: A
     'conseils_layout', 'conseils_title', 'conseils_subtitle', 'conseils_button_text',
     'conseils_bg_image', 'title_color', 'subtitle_color',
     'smtp_host', 'smtp_port', 'smtp_user', 'smtp_pass', 'smtp_from', 'smtp_to',
-    'sponsor_bar_color', 'sponsor_images'
+    'sponsor_bar_color', 'sponsor_images',
+    'card_title_color', 'card_text_color', 'card_button_color', 'card_button_text_color'
   ];
 
   try {
