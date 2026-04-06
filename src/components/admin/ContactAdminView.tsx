@@ -79,7 +79,14 @@ export function ContactAdminView({ content, onUpdate, user, onUpdateContent }: {
     alert('Informations de contact enregistrées !');
   };
 
-  const sectionData = (content || []).find(c => c.section === 'contact') || { section: 'contact', button_label: 'Contact', is_active: true };
+  const sectionData = (content || []).find(c => c.section === 'contact') || { 
+    section: 'contact', 
+    button_label: 'Contact', 
+    is_active: true,
+    section_button_label: 'Envoyer le message',
+    cta1_bg_color: '#4f46e5',
+    cta1_text_color: '#ffffff'
+  };
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -106,30 +113,72 @@ export function ContactAdminView({ content, onUpdate, user, onUpdateContent }: {
             className="overflow-hidden"
           >
             <Card className="p-6 mb-6 border-indigo-100 bg-indigo-50/10">
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                <div className="flex-1 w-full">
-                  <Input
-                    label="Nom du bouton (Menu)"
-                    defaultValue={sectionData.button_label}
-                    onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
-                      const newVal = e.target.value;
-                      if (newVal !== sectionData.button_label) {
-                        onUpdateContent('contact', { ...sectionData, button_label: newVal });
-                      }
-                    }}
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
+                  <div className="flex-1">
+                    <Input
+                      label="Nom du bouton (Menu)"
+                      defaultValue={sectionData.button_label}
+                      onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                        const newVal = e.target.value;
+                        if (newVal !== sectionData.button_label) {
+                          onUpdateContent('contact', { ...sectionData, button_label: newVal });
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Input
+                      label="Nom du bouton d'envoi"
+                      defaultValue={sectionData.section_button_label || 'Envoyer le message'}
+                      onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                        const newVal = e.target.value;
+                        if (newVal !== sectionData.section_button_label) {
+                          onUpdateContent('contact', { ...sectionData, section_button_label: newVal });
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1 mb-1">Fond Bouton</label>
+                      <input
+                        type="color"
+                        defaultValue={sectionData.cta1_bg_color || '#4f46e5'}
+                        onBlur={(e) => {
+                          const newVal = e.target.value;
+                          if (newVal !== sectionData.cta1_bg_color) {
+                            onUpdateContent('contact', { ...sectionData, cta1_bg_color: newVal });
+                          }
+                        }}
+                        className="w-full h-9 rounded-lg cursor-pointer border border-slate-200"
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1 mb-1">Texte Bouton</label>
+                      <input
+                        type="color"
+                        defaultValue={sectionData.cta1_text_color || '#ffffff'}
+                        onBlur={(e) => {
+                          const newVal = e.target.value;
+                          if (newVal !== sectionData.cta1_text_color) {
+                            onUpdateContent('contact', { ...sectionData, cta1_text_color: newVal });
+                          }
+                        }}
+                        className="w-full h-9 rounded-lg cursor-pointer border border-slate-200"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-center justify-center shrink-0">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1 mb-2">Visibilité Publique</label>
+                    <button
+                      type="button"
+                      onClick={() => onUpdateContent('contact', { ...sectionData, is_read: !sectionData.is_active })}
+                      className={`w-12 h-6 rounded-full relative transition-colors ${sectionData.is_active ? 'bg-emerald-500' : 'bg-slate-200'}`}
+                    >
+                      <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm ${sectionData.is_active ? 'left-7' : 'left-1'}`} />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex flex-col items-center justify-center shrink-0">
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1 mb-2">Visibilité Publique</label>
-                  <button
-                    type="button"
-                    onClick={() => onUpdateContent('contact', { ...sectionData, is_active: !sectionData.is_active })}
-                    className={`w-12 h-6 rounded-full relative transition-colors ${sectionData.is_active ? 'bg-emerald-500' : 'bg-slate-200'}`}
-                  >
-                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm ${sectionData.is_active ? 'left-7' : 'left-1'}`} />
-                  </button>
-                </div>
-              </div>
             </Card>
           </motion.div>
         )}

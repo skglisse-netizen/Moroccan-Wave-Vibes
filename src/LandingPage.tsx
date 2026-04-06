@@ -1451,7 +1451,11 @@ export default function LandingPage({
                           <p className="text-sm text-slate-500 font-medium mb-6">Merci de nous avoir contactés. Nous vous répondrons dans les plus brefs délais.</p>
                           <button
                             onClick={() => setContactStatus('idle')}
-                            className="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all text-sm"
+                            style={{ 
+                              backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
+                              color: contactSection?.cta1_text_color || '#ffffff'
+                            }}
+                            className="px-5 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all text-sm"
                           >
                             Envoyer un autre message
                           </button>
@@ -1507,9 +1511,13 @@ export default function LandingPage({
                           <button
                             type="submit"
                             disabled={contactStatus === 'loading'}
-                            className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                            style={{ 
+                              backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
+                              color: contactSection?.cta1_text_color || '#ffffff'
+                            }}
+                            className="w-full py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                           >
-                            {contactStatus === 'loading' ? 'Envoi...' : 'Envoyer le message'} <Send size={18} />
+                            {contactStatus === 'loading' ? 'Envoi...' : (contactSection?.section_button_label || 'Envoyer le message')} <Send size={18} />
                           </button>
                         </form>
                       )}

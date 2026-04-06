@@ -956,8 +956,12 @@ async function startServer() {
               }
             }
             await tx.query("UPDATE reservations SET status = ? WHERE id = ?", [status, req.params.id]);
+            // Auto-mark notification as read
+            await tx.query("UPDATE notifications SET is_read = TRUE WHERE reference_type = 'reservation' AND reference_id = ?", [req.params.id]);
           } else {
             await tx.query("UPDATE reservations SET status = ? WHERE id = ?", [status, req.params.id]);
+            // Auto-mark notification as read
+            await tx.query("UPDATE notifications SET is_read = TRUE WHERE reference_type = 'reservation' AND reference_id = ?", [req.params.id]);
           }
         }
 
@@ -978,6 +982,8 @@ async function startServer() {
 
   app.delete("/api/admin/reservations/:id", authenticate, checkPermission('delete_reservations'), async (req, res) => {
     await query("DELETE FROM reservations WHERE id = ?", [req.params.id]);
+    // Also mark related notifications as read
+    await query("UPDATE notifications SET is_read = TRUE WHERE reference_type = 'reservation' AND reference_id = ?", [req.params.id]);
     res.json({ success: true });
   });
 
