@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function NavItem({ icon, label, active, onClick, collapsed, isSubItem = false }: any) {
+export function NavItem({ icon, label, active, onClick, collapsed, isSubItem = false, badge = 0 }: any) {
     return (
         <button
             onClick={onClick}
@@ -19,11 +19,20 @@ export function NavItem({ icon, label, active, onClick, collapsed, isSubItem = f
                 {React.cloneElement(icon as React.ReactElement, { size: collapsed ? 22 : 20 })}
             </div>
             
-            <div className={`overflow-hidden transition-all duration-300 flex items-center ${collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100 ml-1'}`}>
+            <div className={`overflow-hidden transition-all duration-300 flex items-center flex-1 ${collapsed ? 'w-0 opacity-0' : 'w-auto opacity-100 ml-1'}`}>
                 <span className={`text-xs font-bold truncate uppercase tracking-widest whitespace-nowrap ${active ? 'text-white' : ''}`}>
                     {label}
                 </span>
             </div>
+
+            {badge > 0 && (
+                <div className={`
+                    bg-red-500 text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white
+                    ${collapsed ? 'absolute top-1 right-1 w-4 h-4' : 'ml-2 px-1.5 h-5 min-w-[20px] shadow-sm'}
+                `}>
+                    {badge > 99 ? '99+' : badge}
+                </div>
+            )}
 
             {collapsed && active && (
                 <div className="absolute left-0 w-1 h-6 bg-white rounded-r-full" />

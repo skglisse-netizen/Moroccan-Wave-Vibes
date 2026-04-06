@@ -243,6 +243,29 @@ export default function App() {
   const [debtsLoans, setDebtsLoans] = React.useState<any[]>([]);
   const [users, setUsers] = React.useState<any[]>([]);
   const [logs, setLogs] = React.useState<any[]>([]);
+  const [sidebarCounts, setSidebarCounts] = React.useState({ messages: 0, reservations: 0, notifications: 0 });
+
+  const fetchSidebarCounts = async () => {
+    const token = localStorage.getItem('auth_token');
+    try {
+      const res = await fetch('/api/admin/sidebar/unread-counts', {
+        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+      });
+      if (res.ok) {
+        setSidebarCounts(await res.json());
+      }
+    } catch (e) {
+      console.error('Error fetching sidebar counts:', e);
+    }
+  };
+
+  React.useEffect(() => {
+    if (user) {
+      fetchSidebarCounts();
+      const interval = setInterval(fetchSidebarCounts, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
   const [conseils, setConseils] = React.useState<any[]>(window.__INITIAL_DATA__?.conseils || []);
   const [spots, setSpots] = React.useState<any[]>(window.__INITIAL_DATA__?.spots || []);
   const [content, setContent] = React.useState<any[]>(window.__INITIAL_DATA__?.content || []);
@@ -358,6 +381,8 @@ export default function App() {
       });
       if (res.ok) {
         setter(await res.json());
+        // Refresh sidebar counts to keep badges in sync
+        fetchSidebarCounts();
       } else if (res.status === 401) {
         handleLogout("Session expirée. Veuillez vous reconnecter.");
       }
@@ -522,6 +547,7 @@ export default function App() {
           {hasPermission(user, 'view_notifications') && (
             <NotificationBell
               notifications={notifications}
+              badge={sidebarCounts.notifications}
               onMarkRead={(ids) => {
                 const token = localStorage.getItem('auth_token');
                 fetch('/api/admin/notifications/mark-read', {
@@ -537,6 +563,8 @@ export default function App() {
                     setNotifications(prev => prev.map(n =>
                       !ids || ids.includes(n.id) ? { ...n, is_read: true } : n
                     ));
+                    // Update sidebar counts immediately
+                    fetchSidebarCounts();
                   }
                 });
               }}
@@ -565,8 +593,8 @@ export default function App() {
 
           <div className="flex-1 overflow-y-auto p-4 space-y-1 scrollbar-premium">
             <NavItem icon={<LayoutDashboard size={20} />} label="Tableau de bord" active={activeTab === 'dashboard'} onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false); }} collapsed={sidebarCollapsed} />
-            {hasPermission(user, 'view_messages') && <NavItem icon={<Mail size={20} />} label={getSectionLabel('contact', 'Messages Contact')} active={activeTab === 'messages'} onClick={() => { setActiveTab('messages'); setMobileMenuOpen(false); }} collapsed={sidebarCollapsed} />}
-            {hasPermission(user, 'view_reservations') && <NavItem icon={<Calendar size={20} />} label={getSectionLabel('reserve', 'Réservations')} active={activeTab === 'reservations'} onClick={() => { setActiveTab('reservations'); setMobileMenuOpen(false); }} collapsed={sidebarCollapsed} />}
+            {hasPermission(user, 'view_messages') && <NavItem icon={<Mail size={20} />} label={getSectionLabel('contact', 'Messages Contact')} active={activeTab === 'messages'} onClick={() => { setActiveTab('messages'); setMobileMenuOpen(false); }} collapsed={sidebarCollapsed} badge={sidebarCounts.messages} />}
+            {hasPermission(user, 'view_reservations') && <NavItem icon={<Calendar size={20} />} label={getSectionLabel('reserve', 'Réservations')} active={activeTab === 'reservations'} onClick={() => { setActiveTab('reservations'); setMobileMenuOpen(false); }} collapsed={sidebarCollapsed} badge={sidebarCounts.reservations} />}
             <div className="my-2 border-t border-slate-100" />
             <div className={`flex items-center transition-all duration-300 ${sidebarCollapsed ? 'justify-center py-2' : 'px-4 py-2'}`}>
               <span className={`text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>

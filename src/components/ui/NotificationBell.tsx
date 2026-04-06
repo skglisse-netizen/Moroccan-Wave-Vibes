@@ -5,9 +5,14 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { AppNotification } from '../../types';
 
-export const NotificationBell = ({ notifications, onMarkRead, onTabChange }: { notifications: AppNotification[], onMarkRead: (ids?: number[]) => void, onTabChange: (tab: string) => void }) => {
+export const NotificationBell = ({ notifications, onMarkRead, onTabChange, badge }: { 
+    notifications: AppNotification[], 
+    onMarkRead: (ids?: number[]) => void, 
+    onTabChange: (tab: string) => void,
+    badge?: number
+}) => {
     const [isOpen, setIsOpen] = useState(false);
-    const unreadCount = notifications.filter(n => !n.is_read).length;
+    const unreadCount = badge !== undefined ? badge : notifications.filter(n => !n.is_read).length;
 
     return (
         <div className="relative">

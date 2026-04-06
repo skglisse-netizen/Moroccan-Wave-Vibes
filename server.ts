@@ -983,19 +983,30 @@ async function startServer() {
   });
 
   app.get("/api/admin/notifications/unread-count", authenticate, async (_req, res) => {
-    const count: any = await getOne("SELECT COUNT(*) as count FROM notifications WHERE is_read = 0");
-    res.json({ count: parseInt(count.count) });
+    const count: any = await getOne("SELECT COUNT(*) as count FROM notifications WHERE is_read = FALSE");
+    res.json({ count: parseInt(count.count || 0) });
   });
 
   app.post("/api/admin/notifications/mark-read", authenticate, async (req, res) => {
     const { ids } = req.body;
     if (Array.isArray(ids) && ids.length > 0) {
       const placeholders = ids.map(() => `?`).join(',');
-      await query(`UPDATE notifications SET is_read = 1 WHERE id IN (${placeholders})`, ids);
+      await query(`UPDATE notifications SET is_read = TRUE WHERE id IN (${placeholders})`, ids);
     } else {
-      await query("UPDATE notifications SET is_read = 1");
+      await query("UPDATE notifications SET is_read = TRUE");
     }
     res.json({ success: true });
+  });
+
+  app.get("/api/admin/sidebar/unread-counts", authenticate, async (_req, res) => {
+    const notifications: any = await getOne("SELECT COUNT(*) as count FROM notifications WHERE is_read = FALSE");
+    const messages: any = await getOne("SELECT COUNT(*) as count FROM contact_messages WHERE is_read = FALSE");
+    const reservations: any = await getOne("SELECT COUNT(*) as count FROM reservations WHERE status = 'pending'");
+    res.json({
+      notifications: parseInt(notifications.count || 0),
+      messages: parseInt(messages.count || 0),
+      reservations: parseInt(reservations.count || 0)
+    });
   });
 
   // Public Spots Forecast Route
