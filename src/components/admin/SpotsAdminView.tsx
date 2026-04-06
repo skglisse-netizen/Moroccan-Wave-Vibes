@@ -40,7 +40,7 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
     spots_subtitle: settings?.spots_subtitle || '',
     spots_content: settings?.spots_content || '',
     nav_color: settings?.nav_color || '#ffffff',
-    spots_layout: settings?.spots_layout || 'grid-2',
+    spots_layout: settings?.spots_layout || 'split',
   });
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
       spots_subtitle: settings?.spots_subtitle || '',
       spots_content: settings?.spots_content || '',
       nav_color: settings?.nav_color || '#ffffff',
-      spots_layout: settings?.spots_layout || 'grid-2',
+      spots_layout: settings?.spots_layout || 'split',
     });
   }, [settings]);
   const [formData, setFormData] = useState({
@@ -219,6 +219,7 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
                       value={configForm.spots_layout}
                       onChange={(e) => setConfigForm({ ...configForm, spots_layout: e.target.value })}
                       options={[
+                        { value: 'split', label: 'Divisé (Carte + Spots)' },
                         { value: 'grid-2', label: 'Grille (2 colonnes)' },
                         { value: 'grid-1', label: 'Liste (1 colonne)' },
                         { value: 'horizontal-scroll', label: 'Défilement horizontal' }
