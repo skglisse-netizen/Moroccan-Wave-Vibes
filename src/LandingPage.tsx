@@ -489,7 +489,7 @@ export default function LandingPage({
               if (sponsors.length === 0) return null;
               return (
                 <div
-                  className="hidden lg:flex w-24 h-10 overflow-hidden shrink-0 relative"
+                  className="hidden lg:flex w-32 h-14 overflow-hidden shrink-0 relative"
                   title="Nos sponsors"
                 >
                   <div className="flex items-center justify-center h-full w-full overflow-hidden p-1.5">
