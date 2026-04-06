@@ -45,7 +45,6 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
     sticky_footer: String(settings.sticky_footer) === 'true',
     services_layout: settings.services_layout || 'grid-3',
     smtp_to: settings.smtp_to || '',
-    sponsor_bar_color: (settings as any).sponsor_bar_color || '#f8fafc',
     sponsor_images: (settings as any).sponsor_images || '[]',
     sponsor_duration: settings.sponsor_duration || '3000',
     card_title_color: settings.card_title_color || '#ffffff',
@@ -92,7 +91,6 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
       sticky_footer: String(settings.sticky_footer) === 'true',
       services_layout: settings.services_layout || 'grid-3',
       smtp_to: settings.smtp_to || '',
-      sponsor_bar_color: (settings as any).sponsor_bar_color || '#f8fafc',
       sponsor_images: (settings as any).sponsor_images || '[]',
       sponsor_duration: settings.sponsor_duration || '3000',
       card_title_color: settings.card_title_color || '#ffffff',
@@ -369,21 +367,7 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
 
         <div className="pt-6 border-t border-slate-100 space-y-6">
           <h3 className="text-lg font-bold text-slate-800">🖼️ Bandeau des Sponsors</h3>
-          <p className="text-xs text-slate-400">Personnalisez la couleur de fond du bandeau et gérez les logos de vos sponsors/partenaires qui défilent en haut du site.</p>
-
-          {/* Color picker */}
-          <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-600 uppercase">Couleur de fond du bandeau</label>
-            <div className="flex items-center gap-3">
-              <input
-                type="color"
-                value={formData.sponsor_bar_color}
-                onChange={(e) => setFormData({ ...formData, sponsor_bar_color: e.target.value })}
-                className="w-10 h-10 rounded-lg cursor-pointer border-none p-0"
-              />
-              <span className="text-xs font-mono text-slate-500 uppercase">{formData.sponsor_bar_color}</span>
-            </div>
-          </div>
+          <p className="text-xs text-slate-400">Gérez les logos de vos sponsors/partenaires qui défilent en haut du site.</p>
 
           {/* Duration slider/input */}
           <div className="space-y-4">

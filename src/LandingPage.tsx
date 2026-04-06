@@ -478,7 +478,6 @@ export default function LandingPage({
           <div className="flex items-center gap-3">
             {/* Square sponsor carousel widget */}
             {(() => {
-              const barColor = settings.sponsor_bar_color || '#f0f4ff';
               let sponsors: { url: string; alt: string }[] = [];
               try {
                 const parsed = JSON.parse(settings.sponsor_images || '[]');
@@ -490,8 +489,7 @@ export default function LandingPage({
               if (sponsors.length === 0) return null;
               return (
                 <div
-                  className="hidden lg:flex w-28 h-16 rounded-l-xl overflow-hidden shrink-0 relative"
-                  style={{ backgroundColor: barColor }}
+                  className="hidden lg:flex w-28 h-16 rounded-l-xl overflow-hidden shrink-0 relative bg-indigo-50/50 backdrop-blur-sm shadow-sm"
                   title="Nos sponsors"
                 >
                   <div className="flex items-center justify-center h-full w-full overflow-hidden p-1.5">
@@ -685,7 +683,6 @@ export default function LandingPage({
                     } catch {
                       sponsors = [];
                     }
-                    const barColor = settings.sponsor_bar_color || '#f0f4ff';
                     return (
                       <div
                         className="w-full h-[300px] md:h-auto md:w-[45%] shrink-0 relative flex flex-col overflow-hidden"

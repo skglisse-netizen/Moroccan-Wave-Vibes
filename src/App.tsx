@@ -121,7 +121,7 @@ function LoginForm({ onLogin, initialError, settings }: { onLogin: (user: User) 
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState(initialError || '');
   const [loading, setLoading] = React.useState(false);
-  
+
   React.useEffect(() => {
     if (initialError) setError(initialError);
   }, [initialError]);
@@ -462,14 +462,14 @@ export default function App() {
 
   if (!user) {
     if (showLogin) return (
-      <LoginForm 
-        onLogin={(u) => { 
-          setUser(u); 
-          setShowLogin(false); 
-          setLoginMessage(''); 
-          fetchStats(); 
-          fetchAllData(); 
-        }} 
+      <LoginForm
+        onLogin={(u) => {
+          setUser(u);
+          setShowLogin(false);
+          setLoginMessage('');
+          fetchStats();
+          fetchAllData();
+        }}
         initialError={loginMessage}
         settings={settings as any}
       />
@@ -580,7 +580,7 @@ export default function App() {
         {mobileMenuOpen && (
           <div className="fixed inset-0 top-14 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden" onClick={() => setMobileMenuOpen(false)} />
         )}
-        <aside 
+        <aside
           className={`fixed lg:sticky top-14 left-0 z-50 ${sidebarCollapsed ? 'w-20' : 'w-64'} h-[calc(100vh-3.5rem)] bg-white border-r border-slate-200 transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-all duration-300 flex flex-col backdrop-blur-md overflow-hidden`}
         >
           {/* Collapse Toggle */}
@@ -633,11 +633,10 @@ export default function App() {
                 {activeTab.startsWith('site_') && !sidebarCollapsed && (
                   <div className="mt-1 border-l-2 border-slate-100 space-y-1 ml-4 pl-2 transition-all duration-300">
                     <NavItem icon={<FileText size={16} />} label={getSectionLabel('about', '')} active={activeTab === 'site_about'} onClick={() => { setActiveTab('site_about'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
-                    <NavItem icon={<Tags size={16} />} label={getSectionLabel('services', 'Services')} active={activeTab === 'site_services'} onClick={() => { setActiveTab('site_services'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
-                    <NavItem icon={<Calendar size={16} />} label={getSectionLabel('reserve', 'Réservations')} active={activeTab === 'reservations'} onClick={() => { setActiveTab('reservations'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
-                    <NavItem icon={<ImageIcon size={16} />} label={getSectionLabel('conseils', 'Conseils')} active={activeTab === 'site_conseils'} onClick={() => { setActiveTab('site_conseils'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
-                    <NavItem icon={<MapPin size={16} />} label={getSectionLabel('spots', 'Spots')} active={activeTab === 'site_spots'} onClick={() => { setActiveTab('site_spots'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
-                    <NavItem icon={<MailOpen size={16} />} label={getSectionLabel('contact', 'Contact')} active={activeTab === 'site_contact'} onClick={() => { setActiveTab('site_contact'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
+                    <NavItem icon={<Tags size={16} />} label={getSectionLabel('services', '')} active={activeTab === 'site_services'} onClick={() => { setActiveTab('site_services'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
+                    <NavItem icon={<ImageIcon size={16} />} label={getSectionLabel('conseils', '')} active={activeTab === 'site_conseils'} onClick={() => { setActiveTab('site_conseils'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
+                    <NavItem icon={<MapPin size={16} />} label={getSectionLabel('spots', '')} active={activeTab === 'site_spots'} onClick={() => { setActiveTab('site_spots'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
+                    <NavItem icon={<MailOpen size={16} />} label={getSectionLabel('contact', '')} active={activeTab === 'site_contact'} onClick={() => { setActiveTab('site_contact'); setMobileMenuOpen(false); }} isSubItem={true} collapsed={sidebarCollapsed} />
                   </div>
                 )}
               </>
