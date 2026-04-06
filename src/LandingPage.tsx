@@ -1354,9 +1354,9 @@ export default function LandingPage({
               style={{ backgroundColor: settings.body_bg_color || '#f8fafc' }}
             >
               <section className="flex-grow flex items-center justify-center p-6 lg:p-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-center w-full max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center w-full max-w-[1400px] mx-auto">
                   <div className={`flex flex-col justify-center ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
-                    <div className="max-w-md w-full">
+                    <div className="max-w-lg w-full">
                       <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
                         Contactez-nous
                       </span>
@@ -1446,8 +1446,8 @@ export default function LandingPage({
                     )}
                   </div>
 
-                  <div className="flex items-center justify-center relative overflow-hidden">
-                    <div className="bg-white/80 backdrop-blur-xl p-8 lg:p-10 rounded-3xl border border-white shadow-2xl max-w-xl w-full relative z-10">
+                  <div className="flex items-center justify-center relative overflow-hidden w-full">
+                    <div className="bg-white/80 backdrop-blur-xl p-8 lg:p-10 rounded-3xl border border-white shadow-2xl max-w-2xl w-full relative z-10">
                       {contactStatus === 'success' ? (
                         <div className="text-center py-8 w-full">
                           <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
