@@ -325,7 +325,7 @@ export default function LandingPage({
     }
   };
 
-  const NavLinks = () => {
+  const NavLinks = ({ isMobile = false } = {}) => {
     const sections = [
       { key: 'about', defaultLabel: '' },
       { key: 'services', defaultLabel: 'Services' },
@@ -350,7 +350,7 @@ export default function LandingPage({
               <button
                 onClick={() => { setCurrentPage(s.key as any); setIsMobileMenuOpen(false); }}
                 className={`text-[12px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-indigo-600' : ''}`}
-                style={{ color: currentPage !== s.key ? (settings.nav_text_color || settings.header_text_color || '#475569') : undefined }}
+                style={{ color: currentPage !== s.key ? (isMobile ? '#334155' : (settings.nav_text_color || settings.header_text_color || '#475569')) : undefined }}
               >
                 {label}
               </button>
@@ -516,9 +516,10 @@ export default function LandingPage({
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-900 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors"
+              className="lg:hidden p-2 rounded-xl transition-colors hover:bg-slate-500/10"
+              style={{ color: settings.header_text_color || '#0f172a', borderColor: settings.header_text_color ? `${settings.header_text_color}40` : '#e2e8f0', borderWidth: 1 }}
             >
-              {isMobileMenuOpen ? <Plus size={20} className="rotate-45" /> : <div className="space-y-1"><div className="w-5 h-0.5 bg-slate-900"></div><div className="w-5 h-0.5 bg-slate-900"></div><div className="w-5 h-0.5 bg-slate-900"></div></div>}
+              {isMobileMenuOpen ? <Plus size={20} className="rotate-45" /> : <div className="space-y-1"><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div></div>}
             </button>
           </div>
         </div>
@@ -535,7 +536,7 @@ export default function LandingPage({
               className="lg:hidden bg-white/95 backdrop-blur-xl border-b border-slate-200 overflow-hidden"
             >
               <div className="flex flex-col p-6 gap-4">
-                <NavLinks />
+                <NavLinks isMobile={true} />
                 <div className="h-px bg-slate-100 my-2" />
                 <button
                   onClick={() => { if (isAdminPreview) onBackToAdmin?.(); else onLoginClick(); setIsMobileMenuOpen(false); }}
