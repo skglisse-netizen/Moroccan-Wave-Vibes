@@ -85,7 +85,8 @@ export function ContactAdminView({ content, onUpdate, user, onUpdateContent }: {
     is_active: true,
     section_button_label: 'Envoyer le message',
     cta1_bg_color: '#4f46e5',
-    cta1_text_color: '#ffffff'
+    cta1_text_color: '#ffffff',
+    content_style: 'centered'
   };
 
   return (
@@ -172,11 +173,26 @@ export function ContactAdminView({ content, onUpdate, user, onUpdateContent }: {
                     <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1 mb-2">Visibilité Publique</label>
                     <button
                       type="button"
-                      onClick={() => onUpdateContent('contact', { ...sectionData, is_read: !sectionData.is_active })}
+                      onClick={() => onUpdateContent('contact', { ...sectionData, is_active: !sectionData.is_active })}
                       className={`w-12 h-6 rounded-full relative transition-colors ${sectionData.is_active ? 'bg-emerald-500' : 'bg-slate-200'}`}
                     >
                       <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm ${sectionData.is_active ? 'left-7' : 'left-1'}`} />
                     </button>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-indigo-100/50">
+                  <div className="max-w-xs transition-all">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1 mb-1 block">Style d'affichage de l'image</label>
+                    <select
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2 text-sm font-bold focus:ring-2 focus:ring-indigo-500 outline-none"
+                      defaultValue={sectionData.content_style || 'centered'}
+                      onChange={(e) => onUpdateContent('contact', { ...sectionData, content_style: e.target.value })}
+                    >
+                      <option value="centered">Centrée (Défaut)</option>
+                      <option value="section_bg">Arrière-plan Section</option>
+                      <option value="form_bg">Arrière-plan Formulaire</option>
+                    </select>
                   </div>
                 </div>
             </Card>

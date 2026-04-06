@@ -1350,11 +1350,22 @@ export default function LandingPage({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="flex-grow flex flex-col justify-center pt-0 pb-4 relative"
-              style={{ backgroundColor: settings.body_bg_color || '#f8fafc' }}
+              className="flex-grow flex flex-col justify-center pt-0 pb-4 relative overflow-hidden"
+              style={{ 
+                backgroundColor: settings.body_bg_color || '#f8fafc',
+                backgroundImage: contactSection?.content_style === 'section_bg' ? `url(${contactSection?.image_url})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
             >
-              <section className="flex-grow flex items-center justify-center p-6 lg:p-8">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-center w-full max-w-[1400px] mx-auto">
+              {contactSection?.content_style === 'section_bg' && (
+                <div 
+                  className="absolute inset-0 z-0" 
+                  style={{ backgroundColor: settings.body_bg_color ? `${settings.body_bg_color}BF` : 'rgba(248, 250, 252, 0.75)' }} 
+                />
+              )}
+              <section className="flex-grow flex items-center justify-center p-6 lg:p-8 relative z-10">
+                <div className={`grid grid-cols-1 ${contactSection?.content_style === 'centered' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8 items-center w-full max-w-[1400px] mx-auto`}>
                   <div className={`flex flex-col justify-center ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
                     <div className="max-w-lg w-full">
                       <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
@@ -1430,103 +1441,122 @@ export default function LandingPage({
                     </div>
                   </div>
 
-                  {/* Centered Image Column */}
-                  <div className="flex flex-col items-center justify-center order-first lg:order-none">
-                    {contactSection?.image_url && (
-                      <div className="flex flex-col items-center">
-                        <img 
-                          src={contactSection?.image_url} 
-                          alt={settings.app_name} 
-                          className="h-72 sm:h-96 lg:h-[450px] w-auto object-contain transition-transform hover:scale-105 rounded-3xl shadow-2xl shadow-indigo-100/20" 
-                          referrerPolicy="no-referrer" 
-                          loading="lazy" 
-                          decoding="async" 
-                        />
-                      </div>
-                    )}
-                  </div>
+                  {/* Centered Image Column (only shown in 'centered' style) */}
+                  {contactSection?.content_style === 'centered' && (
+                    <div className="flex flex-col items-center justify-center order-first lg:order-none">
+                      {contactSection?.image_url && (
+                        <div className="flex flex-col items-center">
+                          <img 
+                            src={contactSection?.image_url} 
+                            alt={settings.app_name} 
+                            className="h-72 sm:h-96 lg:h-[450px] w-auto object-contain transition-transform hover:scale-105 rounded-3xl shadow-2xl shadow-indigo-100/20" 
+                            referrerPolicy="no-referrer" 
+                            loading="lazy" 
+                            decoding="async" 
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-center relative overflow-hidden w-full">
-                    <div className="bg-white/80 backdrop-blur-xl p-8 lg:p-10 rounded-3xl border border-white shadow-2xl max-w-2xl w-full relative z-10">
-                      {contactStatus === 'success' ? (
-                        <div className="text-center py-8 w-full">
-                          <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <CheckCircle2 size={32} />
+                    <div 
+                      className="p-8 lg:p-10 rounded-3xl border border-white shadow-2xl max-w-2xl w-full relative z-10 overflow-hidden"
+                      style={{ 
+                        backgroundColor: contactSection?.content_style === 'form_bg' ? 'transparent' : 'rgba(255, 255, 255, 0.8)',
+                        backdropFilter: contactSection?.content_style === 'form_bg' ? 'none' : 'blur(24px)',
+                        backgroundImage: contactSection?.content_style === 'form_bg' ? `url(${contactSection?.image_url})` : 'none',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                      }}
+                    >
+                      {contactSection?.content_style === 'form_bg' && (
+                        <div 
+                          className="absolute inset-0 z-0" 
+                          style={{ backgroundColor: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(4px)' }} 
+                        />
+                      )}
+                      <div className="relative z-10 w-full">
+                        {contactStatus === 'success' ? (
+                          <div className="text-center py-8 w-full">
+                            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                              <CheckCircle2 size={32} />
+                            </div>
+                            <h3 className="text-2xl font-black text-slate-900 mb-2">Message Envoyé !</h3>
+                            <p className="text-sm text-slate-500 font-medium mb-6">Merci de nous avoir contactés. Nous vous répondrons dans les plus brefs délais.</p>
+                            <button
+                              onClick={() => setContactStatus('idle')}
+                              style={{ 
+                                backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
+                                color: contactSection?.cta1_text_color || '#ffffff'
+                              }}
+                              className="px-5 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all text-sm"
+                            >
+                              Envoyer un autre message
+                            </button>
                           </div>
-                          <h3 className="text-2xl font-black text-slate-900 mb-2">Message Envoyé !</h3>
-                          <p className="text-sm text-slate-500 font-medium mb-6">Merci de nous avoir contactés. Nous vous répondrons dans les plus brefs délais.</p>
-                          <button
-                            onClick={() => setContactStatus('idle')}
-                            style={{ 
-                              backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
-                              color: contactSection?.cta1_text_color || '#ffffff'
-                            }}
-                            className="px-5 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all text-sm"
-                          >
-                            Envoyer un autre message
-                          </button>
-                        </div>
-                      ) : (
-                        <form onSubmit={handleContactSubmit} className="w-full space-y-4">
-                          <div className="grid grid-cols-2 gap-4">
+                        ) : (
+                          <form onSubmit={handleContactSubmit} className="w-full space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-1">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nom</label>
+                                <input
+                                  required
+                                  type="text"
+                                  value={contactForm.name}
+                                  onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
+                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                  placeholder="Nom et Prenom"
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</label>
+                                <input
+                                  required
+                                  type="email"
+                                  value={contactForm.email}
+                                  onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
+                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                  placeholder="votre@email.com"
+                                />
+                              </div>
+                            </div>
                             <div className="space-y-1">
-                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nom</label>
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sujet</label>
                               <input
                                 required
                                 type="text"
-                                value={contactForm.name}
-                                onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
+                                value={contactForm.subject}
+                                onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
                                 className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
-                                placeholder="Nom et Prenom"
+                                placeholder="Comment pouvons-nous vous aider ?"
                               />
                             </div>
                             <div className="space-y-1">
-                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</label>
-                              <input
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Message</label>
+                              <textarea
                                 required
-                                type="email"
-                                value={contactForm.email}
-                                onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
-                                placeholder="votre@email.com"
-                              />
+                                rows={4}
+                                value={contactForm.message}
+                                onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm resize-none"
+                                placeholder="Votre message..."
+                              ></textarea>
                             </div>
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sujet</label>
-                            <input
-                              required
-                              type="text"
-                              value={contactForm.subject}
-                              onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
-                              className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
-                              placeholder="Comment pouvons-nous vous aider ?"
-                            />
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Message</label>
-                            <textarea
-                              required
-                              rows={4}
-                              value={contactForm.message}
-                              onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
-                              className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm resize-none"
-                              placeholder="Votre message..."
-                            ></textarea>
-                          </div>
-                          <button
-                            type="submit"
-                            disabled={contactStatus === 'loading'}
-                            style={{ 
-                              backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
-                              color: contactSection?.cta1_text_color || '#ffffff'
-                            }}
-                            className="w-full py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                          >
-                            {contactStatus === 'loading' ? 'Envoi...' : (contactSection?.section_button_label || 'Envoyer le message')} <Send size={18} />
-                          </button>
-                        </form>
-                      )}
+                            <button
+                              type="submit"
+                              disabled={contactStatus === 'loading'}
+                              style={{ 
+                                backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
+                                color: contactSection?.cta1_text_color || '#ffffff'
+                              }}
+                              className="w-full py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                            >
+                              {contactStatus === 'loading' ? 'Envoi...' : (contactSection?.section_button_label || 'Envoyer le message')} <Send size={18} />
+                            </button>
+                          </form>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
