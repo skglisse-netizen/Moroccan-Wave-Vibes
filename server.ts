@@ -69,8 +69,8 @@ async function startServer() {
     saveUninitialized: true,
     proxy: isProduction,
     cookie: {
-      secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction && process.env.HTTPS === 'true',
+      sameSite: (isProduction && process.env.HTTPS === 'true') ? 'none' : 'lax',
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
