@@ -532,6 +532,9 @@ export default function App() {
       {/* Main Content Area (Sidebar + Content) */}
       <div className="flex pt-14 flex-1">
         {/* Navigation Sidebar */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 top-14 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden" onClick={() => setMobileMenuOpen(false)} />
+        )}
         <aside 
           className={`fixed lg:sticky top-14 left-0 z-50 ${sidebarCollapsed ? 'w-20' : 'w-64'} h-[calc(100vh-3.5rem)] bg-white border-r border-slate-200 transform ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-all duration-300 flex flex-col backdrop-blur-md overflow-hidden`}
         >
@@ -628,9 +631,6 @@ export default function App() {
         </main>
       </div>
 
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[55] lg:hidden" onClick={() => setMobileMenuOpen(false)} />
-      )}
     </div>
   );
 }
