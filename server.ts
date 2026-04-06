@@ -384,7 +384,9 @@ async function startServer() {
         'reservation',
         'Nouvelle RÃ©servation',
         `${name} a rÃ©servÃ© ${dateStr}${timeStr} (${guests || 1} pers.)`,
-        '/admin/reservations'
+        '/admin/reservations',
+        result.lastInsertRowid as number,
+        'reservation'
       );
 
       res.json({ success: true, id: result.lastInsertRowid });
@@ -410,7 +412,9 @@ async function startServer() {
         'message',
         'Nouveau Message',
         `${name} (${email}): ${subject || 'Sans sujet'}`,
-        '/admin/messages'
+        '/admin/messages',
+        result.lastInsertRowid as number,
+        'message'
       );
 
       // --- Send email via SMTP if configured ---
@@ -459,6 +463,8 @@ async function startServer() {
   app.patch("/api/contact_messages/:id/read", authenticate, async (req: AuthRequest, res: Response) => {
     try {
       await query("UPDATE contact_messages SET is_read = TRUE WHERE id = ?", [req.params.id]);
+      // Auto-mark notification as read
+      await query("UPDATE notifications SET is_read = TRUE WHERE reference_type = 'message' AND reference_id = ?", [req.params.id]);
       res.json({ success: true });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -911,8 +917,12 @@ async function startServer() {
 
               // Now proceed to update reservation status
               await tx.query("UPDATE reservations SET status = ? WHERE id = ?", [status, req.params.id]);
+              // Auto-mark notification as read
+              await tx.query("UPDATE notifications SET is_read = TRUE WHERE reference_type = 'reservation' AND reference_id = ?", [req.params.id]);
             } else {
               await tx.query("UPDATE reservations SET status = ? WHERE id = ?", [status, req.params.id]);
+              // Auto-mark notification as read even if already confirmed (e.g. status change)
+              await tx.query("UPDATE notifications SET is_read = TRUE WHERE reference_type = 'reservation' AND reference_id = ?", [req.params.id]);
             }
           } else if (status === 'cancelled') {
             // Reverse confirmation effects if the reservation was previously confirmed
@@ -1138,7 +1148,9 @@ async function startServer() {
           'warning',
           `${typeLabel} en retard : ${item.description}`,
           `Le paiement de ${item.amount} DH attendu le ${item.due_date} est en retard.`,
-          '#debts_loans'
+          '#debts_loans',
+          item.id,
+          'debt_loan'
         );
       }
     } catch (e) {

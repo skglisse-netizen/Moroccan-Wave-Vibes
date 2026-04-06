@@ -282,6 +282,8 @@ export async function initDb() {
         title TEXT,
         message TEXT,
         link TEXT,
+        reference_id INTEGER,
+        reference_type TEXT,
         is_read BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -404,6 +406,18 @@ export async function initDb() {
     if (!staffColNames.includes('matricule')) {
       await db.exec("ALTER TABLE staff ADD COLUMN matricule VARCHAR(255)");
       console.log("✓ Added matricule column to staff");
+    }
+
+    // Migrations for notifications
+    const notificationCols = await getAll("SELECT column_name as name FROM information_schema.columns WHERE table_name = 'notifications'");
+    const notificationColNames = (notificationCols as any[]).map(c => c.name);
+    if (!notificationColNames.includes('reference_id')) {
+      await db.exec("ALTER TABLE notifications ADD COLUMN reference_id INTEGER");
+      console.log("✓ Added reference_id column to notifications");
+    }
+    if (!notificationColNames.includes('reference_type')) {
+      await db.exec("ALTER TABLE notifications ADD COLUMN reference_type TEXT");
+      console.log("✓ Added reference_type column to notifications");
     }
 
     // Migrations for clients  

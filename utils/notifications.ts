@@ -12,11 +12,11 @@ export const broadcastNotification = (notification: any) => {
   });
 };
 
-export const createNotification = async (type: string, title: string, message: string, link: string = '') => {
+export const createNotification = async (type: string, title: string, message: string, link: string = '', reference_id: number | null = null, reference_type: string | null = null) => {
   try {
     const result = await query(
-      "INSERT INTO notifications (type, title, message, link) VALUES (?, ?, ?, ?)",
-      [type, title, message, link]
+      "INSERT INTO notifications (type, title, message, link, reference_id, reference_type) VALUES (?, ?, ?, ?, ?, ?)",
+      [type, title, message, link, reference_id, reference_type]
     );
 
     const notification = {
@@ -25,6 +25,8 @@ export const createNotification = async (type: string, title: string, message: s
       title,
       message,
       link,
+      reference_id,
+      reference_type,
       is_read: false,
       created_at: new Date().toISOString()
     };

@@ -198,7 +198,9 @@ router.patch("/:id/status", authenticate, async (req: AuthRequest, res: Response
           'lesson_completed',
           'Cours Réalisé',
           `Le cours "${lesson?.title}" du ${lesson?.date} a été marqué comme réalisé.`,
-          '/admin/planning'
+          '/admin/planning',
+          parseInt(req.params.id),
+          'lesson'
         );
     }
 
