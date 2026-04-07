@@ -471,20 +471,16 @@ export default function LandingPage({
 
   return (
     <div className={`min-h-screen flex flex-col bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-slate-50'}`}>
-      {/* Unified Navigation */}
-      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
-        <nav
-          className="pointer-events-auto flex flex-col items-center transition-all duration-500 rounded-[2rem] border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-hidden"
-          style={{
-            backgroundColor: settings.header_color ? `${settings.header_color}cc` : 'rgba(255, 255, 255, 0.7)',
-            backdropFilter: 'blur(20px)',
-            color: settings.header_text_color || '#0f172a',
-            width: 'fit-content',
-            maxWidth: '100%'
-          }}
-        >
-
-        <div className="w-full pl-6 pr-0 h-16 flex items-center justify-between">
+      {/* Unified Navigation: L'Horizon de Verre */}
+      <nav
+        className="fixed top-0 left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm"
+        style={{
+          backgroundColor: settings.header_color ? `${settings.header_color}cc` : 'rgba(255, 255, 255, 0.75)',
+          backdropFilter: 'blur(32px)',
+          color: settings.header_text_color || '#0f172a'
+        }}
+      >
+        <div className="w-full px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentPage('about')}>
             {settings.app_logo && (
               <img src={settings.app_logo} alt={settings.app_name} className="h-10 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
@@ -568,33 +564,31 @@ export default function LandingPage({
 
 
 
-        {/* Mobile Menu Overlay */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden bg-white/95 backdrop-blur-xl border-b border-slate-200 overflow-hidden"
-            >
-              <div className="flex flex-col p-6 gap-4">
-                <NavLinks isMobile={true} />
-                <div className="h-px bg-slate-100 my-2" />
-                <button
-                  onClick={() => { if (isAdminPreview) onBackToAdmin?.(); else onLoginClick(); setIsMobileMenuOpen(false); }}
-                  className="text-left text-[10px] font-black text-indigo-600 uppercase tracking-widest"
-                >
-                  {isAdminPreview ? 'Dashboard' : 'Espace Staff'}
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
-    </div>
+          <AnimatePresence>
+            {isMobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="lg:hidden bg-white/95 backdrop-blur-2xl border-t border-slate-100 overflow-hidden"
+              >
+                <div className="flex flex-col p-6 gap-6">
+                  <NavLinks isMobile={true} />
+                  <div className="h-px bg-slate-100/50" />
+                  <button
+                    onClick={() => { if (isAdminPreview) onBackToAdmin?.(); else onLoginClick(); setIsMobileMenuOpen(false); }}
+                    className="text-left text-[11px] font-black text-indigo-600 uppercase tracking-[0.2em]"
+                  >
+                    {isAdminPreview ? 'Dashboard' : 'Espace Staff'}
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </nav>
 
       <main
-        className={`flex-grow pt-24 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true' && !['about', 'spots', 'contact'].includes(currentPage)) ? 'pb-12' : ''}`}
+        className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true' && !['about', 'spots', 'contact'].includes(currentPage)) ? 'pb-12' : ''}`}
         style={getMainBackgroundStyle()}
       >
         {hasBackgroundImage && <div className="absolute inset-0 bg-white/20 z-0" />}
