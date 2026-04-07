@@ -111,6 +111,16 @@ export default function LandingPage({
   const [forecasts, setForecasts] = useState<Record<number, ForecastData>>({});
   const [loadingForecast, setLoadingForecast] = useState<number | null>(null);
   const [sponsorIndex, setSponsorIndex] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Scroll listener for header animations
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Sponsor rotation effect
   useEffect(() => {
@@ -363,30 +373,44 @@ export default function LandingPage({
 
     const activeSections = sections.filter(s => {
       const data = content.find(c => c.section === s.key);
-      return data ? data.is_active : true; // Default to true if not found (seeding should prevent this)
+      return data ? data.is_active : true;
     });
 
     return (
-      <>
+      <div className={`flex ${isMobile ? 'flex-col gap-6' : 'items-center gap-1 h-full'}`}>
         {activeSections.map((s, idx) => {
           const data = content.find(c => c.section === s.key);
           const label = data?.button_label || s.defaultLabel;
+          const isActive = currentPage === s.key;
+
           return (
             <React.Fragment key={s.key}>
               <button
                 onClick={() => { setCurrentPage(s.key as any); setIsMobileMenuOpen(false); }}
-                className={`text-[12px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-indigo-600' : ''}`}
-                style={{ color: currentPage !== s.key ? (isMobile ? '#334155' : (settings.nav_text_color || settings.header_text_color || '#475569')) : undefined }}
+                className={`relative px-3 py-2 text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-300 group
+                  ${isActive ? 'text-indigo-600' : 'text-slate-600 hover:text-slate-900'}
+                  ${isMobile ? 'text-left w-full' : ''}`}
+                style={{ color: !isActive && !isMobile && settings.header_text_color ? settings.header_text_color : undefined }}
               >
                 {label}
+                {/* Dynamic sliding bar */}
+                <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-indigo-600 transition-all duration-300 
+                  ${isActive ? 'w-4 opacity-100' : 'w-0 opacity-0 group-hover:w-2 group-hover:opacity-50'}
+                  ${isMobile ? 'hidden' : ''}`} 
+                />
+                {/* Active Glow */}
+                {isActive && !isMobile && (
+                  <span className="absolute inset-0 bg-indigo-50/40 blur-lg -z-10 rounded-full scale-75" />
+                )}
               </button>
-              {idx < activeSections.length - 1 && (
-                <div className="hidden lg:block h-3 w-[1px]" style={{ backgroundColor: settings.nav_text_color ? `${settings.nav_text_color}33` : 'rgba(71, 85, 105, 0.2)' }} />
+              
+              {!isMobile && idx < activeSections.length - 1 && (
+                <div className="w-[1px] h-3 bg-slate-200/50" />
               )}
             </React.Fragment>
           );
         })}
-      </>
+      </div>
     );
   };
 
@@ -472,15 +496,41 @@ export default function LandingPage({
   return (
     <div className={`min-h-screen flex flex-col bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-slate-50'}`}>
       {/* Unified Navigation: L'Horizon de Verre */}
+      {/* TOP ANNOUNCEMENT BAR */}
+      <div 
+        className={`fixed top-0 left-0 right-0 z-[60] bg-indigo-900 text-white overflow-hidden transition-all duration-500 ease-in-out flex items-center justify-between px-8 text-[10px] font-black uppercase tracking-widest ${scrolled ? 'h-0 opacity-0' : 'h-8 opacity-100 border-b border-white/5'}`}
+      >
+        <div className="flex items-center gap-4">
+          <span className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity cursor-default">
+            <Phone size={10} className="text-indigo-300" /> {contactInfo.phone}
+          </span>
+          <span className="w-1 h-1 bg-white/20 rounded-full hidden sm:block"></span>
+          <span className="hidden sm:flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity cursor-default">
+            <Mail size={10} className="text-indigo-300" /> {contactInfo.email}
+          </span>
+        </div>
+        <div className="flex-grow text-center hidden md:block">
+          <span className="px-3 py-0.5 bg-indigo-800/50 rounded-full border border-indigo-700/50 blur-none">
+            🌊 Ouverture Saison 2026 : Réservez dès maintenant !
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
+          {contactInfo.whatsapp && (
+            <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition-colors">
+              <Phone size={10} /> WhatsApp
+            </a>
+          )}
+        </div>
+      </div>
+
       <nav
-        className="fixed top-0 left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm"
+        className={`fixed left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm ${scrolled ? 'top-0 py-0 h-14' : 'top-8 py-0 h-16'} ${scrolled ? 'bg-white/95 saturate-150' : 'bg-white/75'}`}
         style={{
-          backgroundColor: settings.header_color ? `${settings.header_color}cc` : 'rgba(255, 255, 255, 0.75)',
           backdropFilter: 'blur(32px)',
           color: settings.header_text_color || '#0f172a'
         }}
       >
-        <div className="w-full px-8 h-16 flex items-center justify-between">
+        <div className={`w-full px-8 flex items-center justify-between transition-all duration-500 ${scrolled ? 'h-14' : 'h-16'}`}>
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentPage('about')}>
             {settings.app_logo && (
               <img src={settings.app_logo} alt={settings.app_name} className="h-12 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
@@ -1594,30 +1644,138 @@ export default function LandingPage({
           </AnimatePresence>
         </AnimatePresence>
       </main>
-      <Footer settings={settings} />
+      <WaveDivider bgColor={settings.header_color || settings.footer_color || '#ffffff'} />
+      <Footer settings={settings} contactInfo={contactInfo} setCurrentPage={setCurrentPage} />
     </div>
   );
 }
 
-function Footer({ settings }: { settings: AppSettings }) {
+function WaveDivider({ bgColor }: { bgColor: string }) {
+  return (
+    <div className="w-full relative z-30 -mt-12 overflow-hidden pointer-events-none">
+      <svg
+        viewBox="0 0 1440 120"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-auto drop-shadow-[0_-10px_10px_rgba(0,0,0,0.02)]"
+      >
+        <path
+          d="M0 64L48 58.7C96 53 192 43 288 48C384 53 480 75 576 80C672 85 768 75 864 64C960 53 1056 43 1152 42.7C1248 43 1344 53 1392 58.7L1440 64V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0V64Z"
+          fill={bgColor.startsWith('#') ? `${bgColor}cc` : bgColor}
+        />
+      </svg>
+    </div>
+  );
+}
+
+function Footer({ 
+  settings, 
+  contactInfo, 
+  setCurrentPage 
+}: { 
+  settings: AppSettings, 
+  contactInfo: any,
+  setCurrentPage: (page: string) => void
+}) {
   const isSticky = String(settings.sticky_footer) === 'true';
   const bgColor = settings.header_color || settings.footer_color || '#ffffff';
   const textColor = settings.header_text_color || settings.footer_text_color || '#0f172a';
   
   return (
     <footer
-      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} py-2 border-t border-white/10 z-40`}
+      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} pt-16 pb-8 border-t border-white/10 z-40`}
       style={{
         backgroundColor: bgColor.startsWith('#') ? `${bgColor}cc` : bgColor,
         backdropFilter: 'blur(32px)',
         color: textColor
       }}
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center">
-          <p className="text-[9px] font-bold uppercase tracking-widest opacity-60">
-            © 2026 {settings.app_name}. Tous droits réservés.
+      <div className="max-w-7xl mx-auto px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 border-b border-white/10 pb-12">
+          {/* Column 1: Branding */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentPage('about')}>
+              {settings.app_logo && (
+                <img src={settings.app_logo} alt={settings.app_name} className="h-10 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
+              )}
+              <span className="text-xl font-black uppercase tracking-tighter leading-none">{settings.app_name}</span>
+            </div>
+            <p className="text-sm opacity-60 leading-relaxed font-medium">
+              Vivez l'adrénaline pure sur les plus beaux spots du Maroc. Une équipe passionnée à votre service.
+            </p>
+            <div className="flex gap-4">
+              {contactInfo.instagram && (
+                <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all hover:-translate-y-1">
+                  <Instagram size={18} />
+                </a>
+              )}
+              {contactInfo.facebook && (
+                <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all hover:-translate-y-1">
+                  <Facebook size={18} />
+                </a>
+              )}
+              {contactInfo.whatsapp && (
+                <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all hover:-translate-y-1">
+                  <Phone size={18} />
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Column 2: Navigation */}
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-8 opacity-40">Navigation</h4>
+            <ul className="space-y-4">
+              <li><button onClick={() => setCurrentPage('about')} className="text-sm font-bold opacity-60 hover:opacity-100 hover:translate-x-1 transition-all">L'École</button></li>
+              <li><button onClick={() => setCurrentPage('services')} className="text-sm font-bold opacity-60 hover:opacity-100 hover:translate-x-1 transition-all">Activités</button></li>
+              <li><button onClick={() => setCurrentPage('reserve')} className="text-sm font-bold opacity-60 hover:opacity-100 hover:translate-x-1 transition-all">Réservation</button></li>
+              <li><button onClick={() => setCurrentPage('forecast')} className="text-sm font-bold opacity-60 hover:opacity-100 hover:translate-x-1 transition-all">Surf Forecast</button></li>
+            </ul>
+          </div>
+
+          {/* Column 3: Contact */}
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-8 opacity-40">Contact Rapide</h4>
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3">
+                <Mail size={16} className="mt-1 opacity-40" />
+                <span className="text-sm font-bold opacity-60">{contactInfo.email}</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Phone size={16} className="mt-1 opacity-40" />
+                <span className="text-sm font-bold opacity-60">{contactInfo.phone}</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <MapPin size={16} className="mt-1 opacity-40" />
+                <span className="text-sm font-bold opacity-60 leading-snug">{contactInfo.address}</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Trusted Badges */}
+          <div>
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-8 opacity-40">Nos Engagements</h4>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-3 bg-white/5 rounded-2xl border border-white/5 text-center group hover:bg-white/10 transition-all">
+                <CheckCircle2 size={20} className="mx-auto mb-2 text-emerald-400" />
+                <p className="text-[8px] font-black uppercase tracking-widest leading-tight">Staff Pro</p>
+              </div>
+              <div className="p-3 bg-white/5 rounded-2xl border border-white/5 text-center group hover:bg-white/10 transition-all">
+                <Waves size={20} className="mx-auto mb-2 text-indigo-400" />
+                <p className="text-[8px] font-black uppercase tracking-widest leading-tight">Spots Top</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">
+            © 2026 {settings.app_name}. Conçu avec passion au bord de l'eau.
           </p>
+          <div className="flex gap-6 opacity-40">
+            <span className="text-[9px] font-black uppercase tracking-widest cursor-default hover:opacity-100 transition-opacity">Mentions Légales</span>
+            <span className="text-[9px] font-black uppercase tracking-widest cursor-default hover:opacity-100 transition-opacity">Politique de Confidentialité</span>
+          </div>
         </div>
       </div>
     </footer>
