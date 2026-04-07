@@ -582,7 +582,7 @@ export default function LandingPage({
       </nav>
 
       <main
-        className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true') ? 'pb-10' : ''}`}
+        className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true') ? 'pb-6' : ''}`}
         style={getMainBackgroundStyle()}
       >
         {hasBackgroundImage && <div className="absolute inset-0 bg-white/20 z-0" />}
@@ -1673,7 +1673,7 @@ function Footer({ settings }: { settings: AppSettings }) {
     <footer
       className={`
         ${isSticky ? 'fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80' : 'relative z-40 bg-white'} 
-        py-3
+        py-1.5
       `}
       style={{
         backgroundColor: settings.footer_color ? `${settings.footer_color}${isSticky ? 'cc' : ''}` : undefined,
