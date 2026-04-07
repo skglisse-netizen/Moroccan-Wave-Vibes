@@ -577,7 +577,7 @@ export default function LandingPage({
       </nav>
 
       <main
-        className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true' && !['about', 'spots', 'contact'].includes(currentPage)) ? 'pb-12' : ''}`}
+        className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true') ? 'pb-16' : ''}`}
         style={getMainBackgroundStyle()}
       >
         {hasBackgroundImage && <div className="absolute inset-0 bg-white/20 z-0" />}
@@ -1666,17 +1666,27 @@ function Footer({ settings }: { settings: AppSettings }) {
   const isSticky = String(settings.sticky_footer) === 'true';
   return (
     <footer
-      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} py-1 border-t border-slate-100 z-40`}
+      className={`
+        ${isSticky ? 'fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80' : 'relative z-40 bg-white'} 
+        py-6 border-t border-slate-100 shadow-[0_-5px_15px_-3px_rgba(0,0,0,0.05)]
+      `}
       style={{
-        backgroundColor: settings.footer_color || '#ffffff',
-        color: settings.footer_text_color || 'inherit'
+        backgroundColor: settings.footer_color ? `${settings.footer_color}${isSticky ? 'cc' : ''}` : undefined,
+        color: settings.footer_text_color || '#475569'
       }}
     >
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center">
-          <p className="text-[9px] font-bold uppercase tracking-widest opacity-50">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">
             © 2026 {settings.app_name}. Tous droits réservés.
           </p>
+          <div className="flex items-center gap-6">
+            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">Designed with excellence</span>
+            <div className="h-4 w-px bg-slate-100 hidden md:block" />
+            <button className="text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700 transition-colors">
+              Privacy Policy
+            </button>
+          </div>
         </div>
       </div>
     </footer>
