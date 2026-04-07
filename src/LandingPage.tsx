@@ -1619,21 +1619,25 @@ export default function LandingPage({
           </AnimatePresence>
         </AnimatePresence>
       </main>
-      <WaveDivider bgColor={settings.header_color || settings.footer_color || '#ffffff'} />
-      <Footer settings={settings} />
+      <WaveDivider bgColor={settings.header_color || settings.footer_color || '#ffffff'} settings={settings} />
     </div>
   );
 }
 
-function WaveDivider({ bgColor }: { bgColor: string }) {
+function WaveDivider({ bgColor, settings }: { bgColor: string; settings: AppSettings }) {
   return (
-    <div className="w-full relative z-30 pointer-events-none -mt-20 -mb-[1px]">
+    <div className="w-full relative z-30 -mt-20">
+      <div className="absolute inset-0 flex items-end justify-center pb-2 z-40 pointer-events-none">
+        <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-30 text-center px-4" style={{ color: settings.header_text_color || '#0f172a' }}>
+          © 2026 {settings.app_name}. Conçu avec passion au bord de l'eau.
+        </p>
+      </div>
       <svg
         viewBox="0 0 1440 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none"
-        className="w-full h-[60px] md:h-[100px] block"
+        className="w-full h-[60px] md:h-[100px] block relative z-30"
       >
         <path
           d="M0 64L48 58.7C96 53 192 43 288 48C384 53 480 75 576 80C672 85 768 75 864 64C960 53 1056 43 1152 42.7C1248 43 1344 53 1392 58.7L1440 64V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0V64Z"
@@ -1644,35 +1648,3 @@ function WaveDivider({ bgColor }: { bgColor: string }) {
   );
 }
 
-function Footer({ 
-  settings
-}: { 
-  settings: AppSettings
-}) {
-  const isSticky = String(settings.sticky_footer) === 'true';
-  const bgColor = settings.header_color || settings.footer_color || '#ffffff';
-  const textColor = settings.header_text_color || settings.footer_text_color || '#0f172a';
-  
-  return (
-    <footer
-      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} py-6 border-t border-white/10 z-40`}
-      style={{
-        backgroundColor: bgColor.startsWith('#') ? `${bgColor}cc` : bgColor,
-        backdropFilter: 'blur(32px)',
-        color: textColor
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest opacity-40 text-center md:text-left">
-            © 2026 {settings.app_name}. Conçu avec passion au bord de l'eau.
-          </p>
-          <div className="flex gap-6 opacity-40">
-            <span className="text-[9px] font-black uppercase tracking-widest cursor-default hover:opacity-100 transition-opacity whitespace-nowrap">Mentions Légales</span>
-            <span className="text-[9px] font-black uppercase tracking-widest cursor-default hover:opacity-100 transition-opacity whitespace-nowrap">Politique de Confidentialité</span>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
