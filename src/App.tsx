@@ -279,6 +279,15 @@ export default function App() {
   React.useEffect(() => {
     fetchSettings();
     checkAuth();
+
+    // Global image protection (Right-click block)
+    const handleContextMenu = (e: MouseEvent) => {
+      if ((e.target as HTMLElement).tagName === 'IMG') {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener('contextmenu', handleContextMenu);
+    return () => document.removeEventListener('contextmenu', handleContextMenu);
   }, []);
 
   React.useEffect(() => {

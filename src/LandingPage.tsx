@@ -1355,47 +1355,63 @@ export default function LandingPage({
                 backgroundColor: settings.body_bg_color || '#f8fafc',
                 backgroundImage: contactSection?.content_style === 'section_bg' ? `url(${contactSection?.image_url})` : 'none',
                 backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed'
               }}
             >
               {contactSection?.content_style === 'section_bg' && (
                 <div 
                   className="absolute inset-0 z-0" 
-                  style={{ backgroundColor: settings.body_bg_color ? `${settings.body_bg_color}BF` : 'rgba(248, 250, 252, 0.75)' }} 
+                  style={{ backgroundColor: settings.body_bg_color ? `${settings.body_bg_color}99` : 'rgba(248, 250, 252, 0.6)' }} 
                 />
               )}
-              <section className="flex-grow flex items-center justify-center p-6 lg:p-8 relative z-10">
-                <div className={`grid grid-cols-1 ${contactSection?.content_style === 'centered' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8 items-center w-full max-w-[1400px] mx-auto`}>
-                  <div className={`flex flex-col justify-center ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
-                    <div className="max-w-lg w-full">
-                      <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
-                        Contactez-nous
-                      </span>
-                      <h2 className="text-4xl font-black mb-10 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
-                      <div className="space-y-6 mb-10">
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100">
+              <section className="flex-grow flex flex-col items-center justify-center p-6 lg:p-8 relative z-10 w-full overflow-hidden">
+                {/* Header (Centred at top for background style, or inside left column for centered style) */}
+                {contactSection?.content_style === 'section_bg' && (
+                  <div className="max-w-2xl w-full text-center mb-12">
+                    <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
+                      Contactez-nous
+                    </span>
+                    <h2 className="text-4xl md:text-5xl font-black mb-0 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
+                  </div>
+                )}
+
+                <div className={`grid grid-cols-1 ${contactSection?.content_style === 'centered' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8 lg:gap-16 items-center w-full max-w-[1200px] mx-auto`}>
+                  <div className={`flex flex-col ${contactSection?.content_style === 'section_bg' ? 'items-center text-center' : 'justify-center'} ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
+                    <div className={`w-full ${contactSection?.content_style === 'section_bg' ? 'max-w-md' : 'max-w-lg'}`}>
+                      {contactSection?.content_style !== 'section_bg' && (
+                        <>
+                          <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
+                            Contactez-nous
+                          </span>
+                          <h2 className="text-4xl font-black mb-10 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
+                        </>
+                      )}
+
+                      <div className={`space-y-6 mb-10 ${contactSection?.content_style === 'section_bg' ? 'flex flex-col items-center' : ''}`}>
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
                             <Mail size={20} />
                           </div>
-                          <div>
+                          <div className={contactSection?.content_style === 'section_bg' ? 'text-left' : ''}>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</p>
                             <p className="font-bold text-slate-700">{contactInfo.email}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100">
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
                             <Phone size={20} />
                           </div>
-                          <div>
+                          <div className={contactSection?.content_style === 'section_bg' ? 'text-left' : ''}>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Téléphone</p>
                             <p className="font-bold text-slate-700">{contactInfo.phone}</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100">
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
                             <MapPin size={20} />
                           </div>
-                          <div className="flex-1">
+                          <div className={`flex-1 ${contactSection?.content_style === 'section_bg' ? 'text-left' : ''}`}>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Adresse</p>
                             <p className="font-bold text-slate-700 mb-2">{contactInfo.address}</p>
                             {contactInfo.address && (
@@ -1411,7 +1427,7 @@ export default function LandingPage({
                           </div>
                         </div>
                       </div>
-                      <div className="flex gap-4">
+                      <div className={`flex gap-4 ${contactSection?.content_style === 'section_bg' ? 'justify-center' : ''}`}>
                         {contactInfo.instagram && (
                           <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
                             <Instagram size={18} />
