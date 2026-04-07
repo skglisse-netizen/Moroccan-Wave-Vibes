@@ -472,13 +472,17 @@ export default function LandingPage({
   return (
     <div className={`min-h-screen flex flex-col bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-slate-50'}`}>
       {/* Unified Navigation */}
-      <nav
-        className={`${String(settings.sticky_header) === 'true' ? 'fixed' : 'absolute'} top-0 left-0 right-0 z-50 transition-all shadow-sm flex flex-col`}
-        style={{
-          backgroundColor: settings.header_color ? `${settings.header_color}f2` : 'rgba(255, 255, 255, 0.95)',
-          color: settings.header_text_color || '#0f172a'
-        }}
-      >
+      <div className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+        <nav
+          className="pointer-events-auto flex flex-col items-center transition-all duration-500 rounded-[2rem] border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)] overflow-hidden"
+          style={{
+            backgroundColor: settings.header_color ? `${settings.header_color}cc` : 'rgba(255, 255, 255, 0.7)',
+            backdropFilter: 'blur(20px)',
+            color: settings.header_text_color || '#0f172a',
+            width: 'fit-content',
+            maxWidth: '100%'
+          }}
+        >
 
         <div className="w-full pl-6 pr-0 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentPage('about')}>
@@ -497,12 +501,12 @@ export default function LandingPage({
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center gap-6 px-4">
             <NavLinks />
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Square sponsor carousel widget */}
+          <div className="flex items-center gap-3 pr-2">
+            {/* Infinite Marquee for Sponsors */}
             {(() => {
               let sponsors: { url: string; alt: string }[] = [];
               try {
@@ -513,37 +517,49 @@ export default function LandingPage({
               }
 
               if (sponsors.length === 0) return null;
+              
+              // Double the sponsors for seamless looping if we have enough space
+              const displaySponsors = [...sponsors, ...sponsors];
+              
               return (
                 <div
-                  className="hidden lg:flex w-32 h-14 overflow-hidden shrink-0 relative"
+                  className="hidden lg:flex w-32 h-8 overflow-hidden shrink-0 relative"
                   title="Nos sponsors"
                 >
-                  <div className="flex items-center justify-center h-full w-full overflow-hidden p-1.5">
-                    <AnimatePresence mode="wait">
-                      {sponsors[sponsorIndex % sponsors.length] && (
-                        <motion.img
-                          key={sponsorIndex % sponsors.length}
-                          src={sponsors[sponsorIndex % sponsors.length].url}
-                          alt={sponsors[sponsorIndex % sponsors.length].alt}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 1.1 }}
-                          transition={{ duration: 0.5, ease: "easeInOut" }}
-                          className="max-w-full max-h-full object-contain"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      )}
-                    </AnimatePresence>
-                  </div>
+                  <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-white/20 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute inset-y-0 right-0 w-4 bg-gradient-to-l from-white/20 to-transparent z-10 pointer-events-none" />
+                  
+                  <motion.div 
+                    className="flex items-center gap-6 h-full px-2"
+                    animate={{ x: [0, -50 * sponsors.length] }}
+                    transition={{
+                      x: {
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        duration: sponsors.length * 4,
+                        ease: "linear",
+                      },
+                    }}
+                  >
+                    {displaySponsors.map((s, idx) => (
+                      <img
+                        key={`${s.alt}-${idx}`}
+                        src={s.url}
+                        alt={s.alt}
+                        className="h-5 w-auto object-contain filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ))}
+                  </motion.div>
                 </div>
               );
             })()}
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl transition-colors hover:bg-slate-500/10"
-              style={{ color: settings.header_text_color || '#0f172a', borderColor: settings.header_text_color ? `${settings.header_text_color}40` : '#e2e8f0', borderWidth: 1 }}
+              className="lg:hidden p-2 rounded-full transition-colors hover:bg-white/20"
+              style={{ color: settings.header_text_color || '#0f172a' }}
             >
               {isMobileMenuOpen ? <Plus size={20} className="rotate-45" /> : <div className="space-y-1"><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div></div>}
             </button>
@@ -577,7 +593,7 @@ export default function LandingPage({
       </nav>
 
       <main
-        className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true' && !['about', 'spots', 'contact'].includes(currentPage)) ? 'pb-12' : ''}`}
+        className={`flex-grow pt-24 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true' && !['about', 'spots', 'contact'].includes(currentPage)) ? 'pb-12' : ''}`}
         style={getMainBackgroundStyle()}
       >
         {hasBackgroundImage && <div className="absolute inset-0 bg-white/20 z-0" />}
@@ -610,13 +626,18 @@ export default function LandingPage({
                 `}>
                   {activeServices.map((service) => {
                     return (
-                      <div
+                      <motion.div
                         key={service.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
                         className={`
                             relative bg-white/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
                             w-full max-w-[340px] overflow-hidden
                             ${settings.services_layout === 'horizontal-scroll' ? 'min-w-[310px] snap-center' : 'mx-auto'}
-                            shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)] 
+                            shadow-[0_8px_30px_rgb(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.4)] 
+                            hover:shadow-[0_20px_50px_rgba(79,70,229,0.15),inset_0_1px_1px_rgba(255,255,255,0.6)] 
                             transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group hover:-translate-y-3
                           `}
                       >
@@ -683,7 +704,7 @@ export default function LandingPage({
                             <ChevronRight size={16} className="opacity-50 group-hover/btn:translate-x-1 transition-transform duration-300" />
                           </button>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
@@ -808,13 +829,18 @@ export default function LandingPage({
                     const displayContent = isLong ? (conseil.content || '').substring(0, 450) + '...' : conseil.content;
 
                     return (
-                      <div
+                      <motion.div
                         key={conseil.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
                         className={`
                             relative bg-white/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
                             w-full max-w-[340px] overflow-hidden
                             ${settings.conseils_layout === 'horizontal-scroll' ? 'min-w-[310px] snap-center' : 'mx-auto'}
-                            shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)] 
+                            shadow-[0_8px_30px_rgb(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.4)] 
+                            hover:shadow-[0_20px_50px_rgba(79,70,229,0.15),inset_0_1px_1px_rgba(255,255,255,0.6)] 
                             transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group hover:-translate-y-3
                           `}
                       >
@@ -859,7 +885,7 @@ export default function LandingPage({
                             </button>
                           </div>
                         )}
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
@@ -1580,7 +1606,7 @@ export default function LandingPage({
                               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Message</label>
                               <textarea
                                 required
-                                rows={4}
+                                rows={7}
                                 value={contactForm.message}
                                 onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
                                 className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm resize-none"
