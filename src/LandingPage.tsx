@@ -1601,17 +1601,21 @@ export default function LandingPage({
 
 function Footer({ settings }: { settings: AppSettings }) {
   const isSticky = String(settings.sticky_footer) === 'true';
+  const bgColor = settings.header_color || settings.footer_color || '#ffffff';
+  const textColor = settings.header_text_color || settings.footer_text_color || '#0f172a';
+  
   return (
     <footer
-      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} py-1 border-t border-slate-100 z-40`}
+      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} py-2 border-t border-white/10 z-40`}
       style={{
-        backgroundColor: settings.footer_color || '#ffffff',
-        color: settings.footer_text_color || 'inherit'
+        backgroundColor: bgColor.startsWith('#') ? `${bgColor}cc` : bgColor,
+        backdropFilter: 'blur(32px)',
+        color: textColor
       }}
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center">
-          <p className="text-[9px] font-bold uppercase tracking-widest opacity-50">
+          <p className="text-[9px] font-bold uppercase tracking-widest opacity-60">
             © 2026 {settings.app_name}. Tous droits réservés.
           </p>
         </div>
