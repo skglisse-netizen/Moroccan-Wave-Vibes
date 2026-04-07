@@ -375,7 +375,7 @@ export default function LandingPage({
             <React.Fragment key={s.key}>
               <button
                 onClick={() => { setCurrentPage(s.key as any); setIsMobileMenuOpen(false); }}
-                className={`text-[12px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-indigo-600' : ''}`}
+                className={`text-[10px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-indigo-600' : ''}`}
                 style={{ color: currentPage !== s.key ? (isMobile ? '#334155' : (settings.nav_text_color || settings.header_text_color || '#475569')) : undefined }}
               >
                 {label}
@@ -1682,7 +1682,7 @@ function Footer({ settings }: { settings: AppSettings }) {
     >
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center">
-          <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">
+          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 opacity-80">
             © 2026 {settings.app_name}. Tous droits réservés.
           </p>
         </div>
