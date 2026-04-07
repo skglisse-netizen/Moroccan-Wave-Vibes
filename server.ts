@@ -989,8 +989,11 @@ async function startServer() {
 
 
 
-  // Serve uploads directory
-  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+  // Serve uploads directory with 7-day caching
+  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads'), {
+    maxAge: '7d',
+    immutable: true
+  }));
 
   // Notification Routes
   app.get("/api/admin/notifications", authenticate, async (_req, res) => {
@@ -1098,7 +1101,16 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     // Serve static files but DON'T serve index.html automatically (we want to inject data into it)
-    app.use(express.static(path.join(__dirname, "dist"), { index: false }));
+    // Add aggressive caching for hashed assets in /assets/
+    app.use(express.static(path.join(__dirname, "dist"), { 
+      index: false,
+      maxAge: '1h',
+      setHeaders: (res, path) => {
+        if (path.includes('/assets/')) {
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+      }
+    }));
     
     app.get("*", async (_req, res) => {
       try {

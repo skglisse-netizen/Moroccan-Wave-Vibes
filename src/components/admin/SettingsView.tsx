@@ -139,7 +139,7 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
               <div className="flex items-center gap-4">
                 {formData.app_logo ? (
                   <div className="relative group">
-                    <img src={formData.app_logo} alt="Logo" className="h-16 w-16 object-contain rounded-xl border border-slate-200" />
+                    <img src={formData.app_logo} alt="Logo" className="h-16 w-16 object-contain rounded-xl border border-slate-200" loading="lazy" decoding="async" />
                     <button
                       type="button"
                       onClick={() => setFormData({ ...formData, app_logo: '' })}
@@ -412,7 +412,7 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {getSponsorImages().map((img, idx) => (
                   <div key={idx} className="relative group bg-slate-50 rounded-xl border border-slate-200 p-3 flex flex-col items-center gap-2">
-                    <img src={img.url} alt={img.alt} className="h-10 object-contain w-full grayscale group-hover:grayscale-0 transition-all" />
+                    <img src={img.url} alt={img.alt} className="h-10 object-contain w-full grayscale group-hover:grayscale-0 transition-all" loading="lazy" decoding="async" />
                     <span className="text-[10px] text-slate-500 text-center truncate w-full">{img.alt}</span>
                     <button
                       type="button"

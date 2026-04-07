@@ -339,7 +339,7 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
                   <td className="px-4 py-2">
                     <div className="w-10 h-10 rounded-xl bg-slate-100 overflow-hidden border border-slate-200">
                       {s.image_url ? (
-                        <img src={s.image_url} alt={s.name} className="w-full h-full object-cover" />
+                        <img src={s.image_url} alt={s.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-slate-300">
                           <MapPin size={16} />

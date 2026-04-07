@@ -483,7 +483,7 @@ export default function LandingPage({
         <div className="w-full pl-6 pr-0 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentPage('about')}>
             {settings.app_logo && (
-              <img src={settings.app_logo} alt={settings.app_name} className="h-10 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" />
+              <img src={settings.app_logo} alt={settings.app_name} className="h-10 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
             )}
             <div className="flex flex-col gap-0.5">
               <span className="text-base font-black uppercase tracking-tighter leading-none" style={{ color: settings.header_text_color || '#0f172a' }}>{settings.app_name}</span>
@@ -530,6 +530,8 @@ export default function LandingPage({
                           exit={{ opacity: 0, scale: 1.1 }}
                           transition={{ duration: 0.5, ease: "easeInOut" }}
                           className="max-w-full max-h-full object-contain"
+                          loading="lazy"
+                          decoding="async"
                         />
                       )}
                     </AnimatePresence>

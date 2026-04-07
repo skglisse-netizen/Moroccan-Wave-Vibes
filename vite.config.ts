@@ -17,8 +17,30 @@ export default defineConfig(({mode}) => {
     },
     server: {
       // HMR is disabled in AI Studio via DISABLE_HMR env var.
-      // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
+      // Do not modify — file watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // Core React — always needed, cached separately
+            'vendor-react': ['react', 'react-dom'],
+            // Animations — large library, rarely changes
+            'vendor-motion': ['motion/react'],
+            // Charts — heavy, only used in dashboard
+            'vendor-charts': ['recharts'],
+            // Maps — very heavy, only used in spots/admin
+            'vendor-maps': ['leaflet', 'react-leaflet'],
+            // Date utilities
+            'vendor-dates': ['date-fns'],
+            // Icons
+            'vendor-icons': ['lucide-react'],
+          },
+        },
+      },
+      // Raise the warning limit since we are now splitting properly
+      chunkSizeWarningLimit: 600,
     },
   };
 });

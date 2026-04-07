@@ -270,7 +270,7 @@ export function ServicesAdminView({ services, onUpdate, settings, onUpdateSettin
                   <div className="flex flex-col gap-4">
                     {configForm.services_bg_image ? (
                       <div className="relative group aspect-video">
-                        <img src={configForm.services_bg_image} alt="Fond Services" className="w-full h-full object-cover rounded-xl border border-slate-200" />
+                        <img src={configForm.services_bg_image} alt="Fond Services" className="w-full h-full object-cover rounded-xl border border-slate-200" loading="lazy" decoding="async" />
                         <button
                           type="button"
                           onClick={() => setConfigForm({ ...configForm, services_bg_image: '' })}
@@ -311,7 +311,7 @@ export function ServicesAdminView({ services, onUpdate, settings, onUpdateSettin
           <Card key={s.id} className={`p-4 relative group overflow-hidden border-slate-100 hover:shadow-lg transition-all ${!s.is_active ? 'opacity-50' : ''}`}>
             <div className="h-32 -mx-4 -mt-4 mb-4 bg-slate-100 relative">
               {s.image_url ? (
-                <img src={s.image_url} alt={s.name} className="w-full h-full object-cover" />
+                <img src={s.image_url} alt={s.name} className="w-full h-full object-cover" loading="lazy" decoding="async" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-slate-300">
                   <MapPin size={48} />
@@ -441,7 +441,7 @@ export function ServicesAdminView({ services, onUpdate, settings, onUpdateSettin
               </div>
               {serviceForm.image_url && (
                 <div className="h-32 rounded-xl overflow-hidden border border-slate-200 mt-2 bg-slate-50">
-                  <img src={serviceForm.image_url} alt="Service Preview" className="w-full h-full object-cover" />
+                  <img src={serviceForm.image_url} alt="Service Preview" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
               )}
             </div>
