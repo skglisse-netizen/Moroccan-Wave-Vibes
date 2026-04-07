@@ -502,56 +502,6 @@ export default function LandingPage({
           </div>
 
           <div className="flex items-center gap-3 pr-2">
-            {/* Infinite Marquee for Sponsors */}
-            {(() => {
-              let sponsors: { url: string; alt: string }[] = [];
-              try {
-                const parsed = JSON.parse(settings.sponsor_images || '[]');
-                sponsors = Array.isArray(parsed) ? parsed : [];
-              } catch {
-                sponsors = [];
-              }
-
-              if (sponsors.length === 0) return null;
-              
-              // Double the sponsors for seamless looping if we have enough space
-              const displaySponsors = [...sponsors, ...sponsors];
-              
-              return (
-                <div
-                  className="hidden lg:flex w-32 h-8 overflow-hidden shrink-0 relative"
-                  title="Nos sponsors"
-                >
-                  <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-white/20 to-transparent z-10 pointer-events-none" />
-                  <div className="absolute inset-y-0 right-0 w-4 bg-gradient-to-l from-white/20 to-transparent z-10 pointer-events-none" />
-                  
-                  <motion.div 
-                    className="flex items-center gap-6 h-full px-2"
-                    animate={{ x: [0, -50 * sponsors.length] }}
-                    transition={{
-                      x: {
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration: sponsors.length * 4,
-                        ease: "linear",
-                      },
-                    }}
-                  >
-                    {displaySponsors.map((s, idx) => (
-                      <img
-                        key={`${s.alt}-${idx}`}
-                        src={s.url}
-                        alt={s.alt}
-                        className="h-5 w-auto object-contain filter grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ))}
-                  </motion.div>
-                </div>
-              );
-            })()}
-
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 rounded-full transition-colors hover:bg-white/20"
