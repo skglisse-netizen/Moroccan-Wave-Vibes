@@ -1097,7 +1097,9 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.join(__dirname, "dist")));
+    // Serve static files but DON'T serve index.html automatically (we want to inject data into it)
+    app.use(express.static(path.join(__dirname, "dist"), { index: false }));
+    
     app.get("*", async (_req, res) => {
       try {
         const indexPath = path.join(__dirname, "dist", "index.html");
