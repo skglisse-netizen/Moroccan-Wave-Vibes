@@ -643,7 +643,7 @@ export default function LandingPage({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="flex-grow flex flex-col relative justify-center pt-0 pb-16 z-10"
+              className="flex-grow flex flex-col relative justify-center pt-0 pb-0 z-10"
             >
 
               <div className="w-full relative z-10">
@@ -788,7 +788,7 @@ export default function LandingPage({
                       </div>
                     );
                   })()}
-                  <div className={`flex-1 flex justify-start items-center flex-col px-6 pt-0 ${String(settings.sticky_footer) === 'true' ? 'pb-12' : 'pb-6'} md:pb-10`}>
+                  <div className={`flex-1 flex justify-start items-center flex-col px-6 pt-0 ${String(settings.sticky_footer) === 'true' ? 'pb-12' : 'pb-0'} md:pb-0`}>
                     <div className="max-w-xl text-center">
                       {!!about?.show_logo && settings.app_logo && (
                         <img src={settings.app_logo} alt={settings.app_name} className="h-32 w-auto object-contain mx-auto mb-0" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
@@ -941,7 +941,7 @@ export default function LandingPage({
               className="flex-grow flex flex-col relative justify-center z-10"
             >
 
-              <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-2 relative z-10">
+              <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-0 relative z-10">
                 <div className={`w-full max-w-6xl mx-auto flex flex-col ${settings.reserve_layout === 'split' ? 'lg:flex-row lg:items-center gap-12 xl:gap-20' : 'items-center'}`}>
                   {settings.reserve_layout === 'split' && (
                     <div className="hidden lg:flex w-1/2 flex-col justify-center">
@@ -1442,10 +1442,10 @@ export default function LandingPage({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="flex-grow flex flex-col justify-center pt-0 pb-2 relative overflow-hidden"
-              style={{ paddingBottom: String(settings.sticky_footer) === 'true' ? '4rem' : '1rem' }}
+              className="flex-grow flex flex-col justify-center pt-0 pb-0 relative overflow-hidden"
+              style={{ paddingBottom: String(settings.sticky_footer) === 'true' ? '4rem' : '0' }}
             >
-              <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-2 relative z-10">
+              <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-0 relative z-10">
                 <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row lg:items-center gap-12 xl:gap-24">
                   {/* Left Column: Info */}
                   <div className="w-full lg:w-1/2 flex flex-col justify-center">
@@ -1652,7 +1652,7 @@ export default function LandingPage({
 
 function WaveDivider({ bgColor }: { bgColor: string }) {
   return (
-    <div className="w-full relative z-30 pointer-events-none -mb-[1px]">
+    <div className="w-full relative z-30 pointer-events-none -mt-20 -mb-[1px]">
       <svg
         viewBox="0 0 1440 120"
         fill="none"
