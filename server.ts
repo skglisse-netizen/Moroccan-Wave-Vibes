@@ -1109,97 +1109,67 @@ async function startServer() {
         
         let html = fs.readFileSync(indexPath, "utf8");
 
-        // Fetch all initial data needed for the landing page
-        const settingsResult = await getAll("SELECT * FROM settings");
-        const settings = settingsResult.reduce((acc: any, curr: any) => {
-          acc[curr.key] = curr.value;
-          return acc;
-        }, {});
-
-        const content = await getAll("SELECT * FROM landing_page_content");
-        const services = await getAll("SELECT * FROM public_services WHERE is_active = TRUE");
-        const spots = await getAll("SELECT * FROM spots WHERE is_active = TRUE ORDER BY created_at DESC");
-        const conseils = await getAll("SELECT * FROM conseils WHERE is_active = TRUE");
-
-        const initialData = {
-          settings,
-          content,
-          services,
-          spots,
-          conseils
-        };
-
-        // Inject the data into a script tag in the head
-        const scriptTag = `\n    <script>window.__INITIAL_DATA__ = ${JSON.stringify(initialData).replace(/</g, '\\u003c')};</script>`;
+        // 1. Fetch data with a safety catch
+        let settings: any = {};
+        let initialData: any = { content: [], services: [], spots: [], conseils: [] };
         
-        // Dynamic Meta & CSS Injection
-        const title = settings.app_name || 'SurfSchool Manager';
+        try {
+          const settingsResult = await getAll("SELECT * FROM settings");
+          settings = settingsResult.reduce((acc: any, curr: any) => {
+            acc[curr.key] = curr.value;
+            return acc;
+          }, {});
+          
+          const [content, services, spots, conseils] = await Promise.all([
+            getAll("SELECT * FROM landing_page_content"),
+            getAll("SELECT * FROM public_services"),
+            getAll("SELECT * FROM spots"),
+            getAll("SELECT * FROM conseils WHERE is_active = TRUE")
+          ]);
+          initialData = { settings, content, services, spots, conseils };
+        } catch (dbErr) {
+          console.error("Database pre-fetch failed:", dbErr);
+          // We continue anyway to show the logo/branding
+        }
+
+        // 2. Prepare Branding
+        const title = settings.app_name || 'Moroccan Wave Vibes';
         const logo = settings.app_logo || '/favicon.ico';
-        const bgColor = settings.body_bg_color || '#f8fafc';
+        const bgColor = settings.body_bg_color || '#ffffff';
+        
+        // 3. Inject Branding & Data
+        const scriptTag = `\n    <script>window.__INITIAL_DATA__ = ${JSON.stringify(initialData).replace(/</g, '\\u003c')};</script>`;
         
         const extraHeadTags = `
     <title>${title}</title>
     <link id="app-favicon" rel="icon" href="${logo}" />
     <style>
-      body { background-color: ${bgColor} !important; margin: 0; padding: 0; }
+      body { background-color: ${bgColor} !important; border: none; margin: 0; padding: 0; }
       .splash-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background-color: ${bgColor};
-        z-index: 9999;
-        transition: opacity 0.5s ease-out, visibility 0.5s;
+        position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        background-color: ${bgColor}; z-index: 99999;
+        transition: opacity 0.4s ease, visibility 0.4s;
       }
-      .splash-logo {
-        width: 120px;
-        height: 120px;
-        object-fit: contain;
-        animation: pulse 2s infinite ease-in-out;
-        margin-bottom: 24px;
-      }
-      .splash-name {
-        font-family: sans-serif;
-        font-weight: 800;
-        font-size: 1.5rem;
-        color: #1e293b;
-        letter-spacing: -0.025em;
-        text-transform: uppercase;
-      }
-      @keyframes pulse {
-        0% { transform: scale(0.95); opacity: 0.8; }
-        50% { transform: scale(1.05); opacity: 1; }
-        100% { transform: scale(0.95); opacity: 0.8; }
-      }
-      #root:not(:empty) + .splash-container {
-        opacity: 0;
-        visibility: hidden;
-      }
+      .splash-logo { width: 140px; height: 140px; object-fit: contain; animation: splashPulse 2s infinite ease-in-out; }
+      @keyframes splashPulse { 0%,100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
+      #root:not(:empty) + .splash-container { opacity: 0; visibility: hidden; pointer-events: none; }
     </style>${scriptTag}`;
 
-        // Remove default title if present
         html = html.replace(/<title>.*?<\/title>/, '');
-        // Inject into head
         html = html.replace('<head>', `<head>${extraHeadTags}`);
-
-        // Inject Splash Screen into the root div
+        
         const splashHtml = `
     <div id="root"></div>
-    <div class="splash-container" id="splash-screen">
+    <div class="splash-container">
       <img src="${logo}" alt="${title}" class="splash-logo" onerror="this.style.display='none'" />
-      <div class="splash-name">${title}</div>
     </div>`;
 
         html = html.replace('<div id="root"></div>', splashHtml);
 
         res.send(html);
       } catch (err) {
-        console.error("Injection error:", err);
+        console.error("Critical Injection error:", err);
         res.sendFile(path.join(__dirname, "dist", "index.html"));
       }
     });
