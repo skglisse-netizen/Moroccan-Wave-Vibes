@@ -497,34 +497,9 @@ export default function LandingPage({
     <div className={`min-h-screen flex flex-col bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-slate-50'}`}>
       {/* Unified Navigation: L'Horizon de Verre */}
       {/* TOP ANNOUNCEMENT BAR */}
-      <div 
-        className={`fixed top-0 left-0 right-0 z-[60] bg-indigo-900 text-white overflow-hidden transition-all duration-500 ease-in-out flex items-center justify-between px-8 text-[10px] font-black uppercase tracking-widest ${scrolled ? 'h-0 opacity-0' : 'h-8 opacity-100 border-b border-white/5'}`}
-      >
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity cursor-default">
-            <Phone size={10} className="text-indigo-300" /> {contactInfo.phone}
-          </span>
-          <span className="w-1 h-1 bg-white/20 rounded-full hidden sm:block"></span>
-          <span className="hidden sm:flex items-center gap-1.5 opacity-80 hover:opacity-100 transition-opacity cursor-default">
-            <Mail size={10} className="text-indigo-300" /> {contactInfo.email}
-          </span>
-        </div>
-        <div className="flex-grow text-center hidden md:block">
-          <span className="px-3 py-0.5 bg-indigo-800/50 rounded-full border border-indigo-700/50 blur-none">
-            🌊 Ouverture Saison 2026 : Réservez dès maintenant !
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          {contactInfo.whatsapp && (
-            <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-emerald-400 hover:text-emerald-300 transition-colors">
-              <Phone size={10} /> WhatsApp
-            </a>
-          )}
-        </div>
-      </div>
 
       <nav
-        className={`fixed left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm ${scrolled || isMobileMenuOpen ? 'top-0 bg-white/95' : 'top-8 bg-white/75'}`}
+        className={`fixed left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm top-0 ${scrolled ? 'bg-white/95' : 'bg-white/75'}`}
         style={{
           backdropFilter: 'blur(32px)',
           color: settings.header_text_color || '#0f172a'
@@ -582,10 +557,10 @@ export default function LandingPage({
                       src={currentSponsor.url}
                       alt={currentSponsor.alt}
                       initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 0.6, y: 0 }}
+                      animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.5 }}
-                      className="h-7 w-auto object-contain filter grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-help"
+                      className="h-7 w-auto object-contain hover:scale-105 transition-all cursor-help"
                       title={`Partenaire : ${currentSponsor.alt}`}
                       loading="lazy"
                       decoding="async"
