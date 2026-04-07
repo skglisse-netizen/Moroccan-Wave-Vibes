@@ -483,7 +483,7 @@ export default function LandingPage({
         <div className="w-full px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentPage('about')}>
             {settings.app_logo && (
-              <img src={settings.app_logo} alt={settings.app_name} className="h-10 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
+              <img src={settings.app_logo} alt={settings.app_name} className="h-12 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
             )}
             <div className="flex flex-col gap-0.5">
               <span className="text-base font-black uppercase tracking-tighter leading-none" style={{ color: settings.header_text_color || '#0f172a' }}>{settings.app_name}</span>
@@ -525,7 +525,7 @@ export default function LandingPage({
               const currentSponsor = sponsors[sponsorIndex % sponsors.length];
               
               return (
-                <div className="hidden lg:flex items-center justify-center w-24 h-8 relative overflow-hidden mr-1">
+                <div className="hidden lg:flex items-center justify-center w-32 h-10 relative overflow-hidden mr-1">
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={currentSponsor.url}
@@ -535,7 +535,7 @@ export default function LandingPage({
                       animate={{ opacity: 0.6, y: 0 }}
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.5 }}
-                      className="h-5 w-auto object-contain filter grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-help"
+                      className="h-7 w-auto object-contain filter grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-help"
                       title={`Partenaire : ${currentSponsor.alt}`}
                       loading="lazy"
                       decoding="async"
