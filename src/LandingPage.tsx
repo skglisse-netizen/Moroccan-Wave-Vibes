@@ -598,29 +598,29 @@ export default function LandingPage({
             >
 
               <div className="w-full relative z-10">
-                <div className="text-center mb-10">
-                  <h2 className="text-4xl font-black mb-3 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>{settings.services_title || ''}</h2>
-                  <p className="text-lg font-medium" style={{ color: settings.subtitle_color || '#64748b' }}>{settings.services_subtitle || ''}</p>
+                <div className="text-center mb-6">
+                  <h2 className="text-3xl font-black mb-2 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>{settings.services_title || ''}</h2>
+                  <p className="text-base font-medium" style={{ color: settings.subtitle_color || '#64748b' }}>{settings.services_subtitle || ''}</p>
                 </div>
                 <div className={`
                   ${settings.services_layout === 'horizontal-scroll'
-                    ? 'flex overflow-x-auto snap-x snap-mandatory gap-8 pb-8 hide-scrollbar px-4 max-w-full'
+                    ? 'flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 hide-scrollbar px-4 max-w-full'
                     : settings.services_layout === 'single-row-centered'
-                      ? 'flex flex-wrap gap-10 justify-center px-4 max-w-7xl mx-auto'
+                      ? 'flex flex-wrap gap-8 justify-center px-4 max-w-7xl mx-auto'
                       : settings.services_layout === 'grid-4'
-                        ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 max-w-7xl mx-auto justify-items-center'
+                        ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 max-w-7xl mx-auto justify-items-center'
                         : settings.services_layout === 'grid-5'
-                          ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 px-4 max-w-7xl mx-auto justify-items-center'
-                          : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-4 max-w-7xl mx-auto justify-items-center'}
+                          ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 px-4 max-w-7xl mx-auto justify-items-center'
+                          : 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 max-w-7xl mx-auto justify-items-center'}
                 `}>
                   {activeServices.map((service) => {
                     return (
                       <div
                         key={service.id}
                         className={`
-                            relative bg-white/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
-                            w-full max-w-[340px] overflow-hidden
-                            ${settings.services_layout === 'horizontal-scroll' ? 'min-w-[310px] snap-center' : 'mx-auto'}
+                            relative bg-white/20 backdrop-blur-3xl rounded-[2rem] border border-white/40 flex flex-col h-full
+                            w-full max-w-[310px] overflow-hidden
+                            ${settings.services_layout === 'horizontal-scroll' ? 'min-w-[280px] snap-center' : 'mx-auto'}
                             shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)] 
                             transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group hover:-translate-y-3
                           `}
@@ -655,7 +655,7 @@ export default function LandingPage({
                             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
                           </div>
                         )}
-                        <div className="flex-grow px-6 pt-0 pb-2">
+                        <div className="flex-grow px-4 pt-0 pb-1">
                           <div className="flex items-center justify-between mt-0 mb-1">
                             <div className="flex items-center gap-2">
                               <div className="h-0.5 w-6 bg-indigo-500 rounded-full" />
@@ -673,7 +673,7 @@ export default function LandingPage({
 
 
 
-                          <p className="text-[12px] font-medium leading-tight line-clamp-6 min-h-[90px]" style={{ color: settings.card_text_color || '#475569' }}>
+                          <p className="text-[12px] font-medium leading-tight line-clamp-6 min-h-[70px]" style={{ color: settings.card_text_color || '#475569' }}>
                             {service.description}
                           </p>
                         </div>
@@ -681,7 +681,7 @@ export default function LandingPage({
                         <div className="mt-auto border-t border-white/30">
                           <button
                             onClick={() => { setReservation(prev => ({ ...prev, service_id: service.id.toString() })); setCurrentPage('reserve'); }}
-                            className="w-full py-2 px-8 active:scale-95 rounded-t-none rounded-b-[3rem] font-bold text-[10px] uppercase tracking-[0.15em] shadow-none transition-all flex items-center justify-center gap-2 group/btn hover:opacity-90"
+                            className="w-full py-1.5 px-8 active:scale-95 rounded-t-none rounded-b-[2rem] font-bold text-[10px] uppercase tracking-[0.15em] shadow-none transition-all flex items-center justify-center gap-2 group/btn hover:opacity-90"
                             style={{ backgroundColor: settings.card_button_color || '#0f172a', color: settings.card_button_text_color || '#ffffff' }}
                           >
                             Réserver maintenant
