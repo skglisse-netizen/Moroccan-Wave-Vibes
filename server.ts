@@ -1139,15 +1139,61 @@ async function startServer() {
     <title>${title}</title>
     <link id="app-favicon" rel="icon" href="${logo}" />
     <style>
-      body { background-color: ${bgColor} !important; }
-      #root { opacity: 0; transition: opacity 0.3s ease; }
-      #root.ready { opacity: 1; }
+      body { background-color: ${bgColor} !important; margin: 0; padding: 0; }
+      .splash-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: ${bgColor};
+        z-index: 9999;
+        transition: opacity 0.5s ease-out, visibility 0.5s;
+      }
+      .splash-logo {
+        width: 120px;
+        height: 120px;
+        object-fit: contain;
+        animation: pulse 2s infinite ease-in-out;
+        margin-bottom: 24px;
+      }
+      .splash-name {
+        font-family: sans-serif;
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: #1e293b;
+        letter-spacing: -0.025em;
+        text-transform: uppercase;
+      }
+      @keyframes pulse {
+        0% { transform: scale(0.95); opacity: 0.8; }
+        50% { transform: scale(1.05); opacity: 1; }
+        100% { transform: scale(0.95); opacity: 0.8; }
+      }
+      #root:not(:empty) + .splash-container {
+        opacity: 0;
+        visibility: hidden;
+      }
     </style>${scriptTag}`;
 
         // Remove default title if present
         html = html.replace(/<title>.*?<\/title>/, '');
         // Inject into head
         html = html.replace('<head>', `<head>${extraHeadTags}`);
+
+        // Inject Splash Screen into the root div
+        const splashHtml = `
+    <div id="root"></div>
+    <div class="splash-container" id="splash-screen">
+      <img src="${logo}" alt="${title}" class="splash-logo" onerror="this.style.display='none'" />
+      <div class="splash-name">${title}</div>
+    </div>`;
+
+        html = html.replace('<div id="root"></div>', splashHtml);
 
         res.send(html);
       } catch (err) {

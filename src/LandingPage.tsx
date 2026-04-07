@@ -112,12 +112,6 @@ export default function LandingPage({
   const [loadingForecast, setLoadingForecast] = useState<number | null>(null);
   const [sponsorIndex, setSponsorIndex] = useState(0);
 
-  // Mark app as ready for smooth fade-in
-  useEffect(() => {
-    const root = document.getElementById('root');
-    if (root) root.classList.add('ready');
-  }, []);
-
   // Sponsor rotation effect
   useEffect(() => {
     let sponsors: any[] = [];
