@@ -1407,13 +1407,13 @@ export default function LandingPage({
                   {/* Left Column: Info */}
                   <div className="w-full lg:w-1/2 flex flex-col justify-center">
                     <h2 
-                      className="text-5xl lg:text-7xl font-black mb-6 tracking-tight leading-tight drop-shadow-xl" 
+                      className="text-4xl lg:text-5xl font-black mb-6 tracking-tight leading-tight drop-shadow-xl" 
                       style={{ color: settings.title_color || '#0f172a' }}
                     >
                       Une question ? <br/>Un projet ?
                     </h2>
                     <p 
-                      className="text-xl lg:text-2xl font-bold leading-relaxed mb-10 drop-shadow-md" 
+                      className="text-lg lg:text-xl font-bold leading-relaxed mb-10 drop-shadow-md" 
                       style={{ color: settings.subtitle_color || '#64748b' }}
                     >
                       Nous sommes là pour vous aider à organiser votre expérience surf idéale.
@@ -1426,7 +1426,7 @@ export default function LandingPage({
                         </div>
                         <div>
                           <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Écrivez-nous</p>
-                          <p className="text-xl font-bold text-slate-800">{contactInfo.email}</p>
+                          <p className="text-lg font-bold text-slate-800">{contactInfo.email}</p>
                         </div>
                       </div>
 
@@ -1436,7 +1436,7 @@ export default function LandingPage({
                         </div>
                         <div>
                           <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Appelez-nous</p>
-                          <p className="text-xl font-bold text-slate-800">{contactInfo.phone}</p>
+                          <p className="text-lg font-bold text-slate-800">{contactInfo.phone}</p>
                         </div>
                       </div>
 
