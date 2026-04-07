@@ -524,7 +524,7 @@ export default function LandingPage({
       </div>
 
       <nav
-        className={`fixed left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm ${scrolled ? 'top-0 py-0 h-14' : 'top-8 py-0 h-16'} ${scrolled ? 'bg-white/95 saturate-150' : 'bg-white/75'}`}
+        className={`fixed left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm ${scrolled || isMobileMenuOpen ? 'top-0 bg-white/95' : 'top-8 bg-white/75'}`}
         style={{
           backdropFilter: 'blur(32px)',
           color: settings.header_text_color || '#0f172a'
