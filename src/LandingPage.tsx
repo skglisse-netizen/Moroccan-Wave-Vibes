@@ -1645,7 +1645,7 @@ export default function LandingPage({
         </AnimatePresence>
       </main>
       <WaveDivider bgColor={settings.header_color || settings.footer_color || '#ffffff'} />
-      <Footer settings={settings} contactInfo={contactInfo} setCurrentPage={setCurrentPage} />
+      <Footer settings={settings} />
     </div>
   );
 }
@@ -1669,13 +1669,9 @@ function WaveDivider({ bgColor }: { bgColor: string }) {
 }
 
 function Footer({ 
-  settings, 
-  contactInfo, 
-  setCurrentPage 
+  settings
 }: { 
-  settings: AppSettings, 
-  contactInfo: any,
-  setCurrentPage: (page: string) => void
+  settings: AppSettings
 }) {
   const isSticky = String(settings.sticky_footer) === 'true';
   const bgColor = settings.header_color || settings.footer_color || '#ffffff';
@@ -1683,7 +1679,7 @@ function Footer({
   
   return (
     <footer
-      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} pt-16 pb-8 border-t border-white/10 z-40`}
+      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} py-6 border-t border-white/10 z-40`}
       style={{
         backgroundColor: bgColor.startsWith('#') ? `${bgColor}cc` : bgColor,
         backdropFilter: 'blur(32px)',
@@ -1691,90 +1687,13 @@ function Footer({
       }}
     >
       <div className="max-w-7xl mx-auto px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 border-b border-white/10 pb-12">
-          {/* Column 1: Branding */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentPage('about')}>
-              {settings.app_logo && (
-                <img src={settings.app_logo} alt={settings.app_name} className="h-10 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
-              )}
-              <span className="text-xl font-black uppercase tracking-tighter leading-none">{settings.app_name}</span>
-            </div>
-            <p className="text-sm opacity-60 leading-relaxed font-medium">
-              Vivez l'adrénaline pure sur les plus beaux spots du Maroc. Une équipe passionnée à votre service.
-            </p>
-            <div className="flex gap-4">
-              {contactInfo.instagram && (
-                <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all hover:-translate-y-1">
-                  <Instagram size={18} />
-                </a>
-              )}
-              {contactInfo.facebook && (
-                <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all hover:-translate-y-1">
-                  <Facebook size={18} />
-                </a>
-              )}
-              {contactInfo.whatsapp && (
-                <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all hover:-translate-y-1">
-                  <Phone size={18} />
-                </a>
-              )}
-            </div>
-          </div>
-
-          {/* Column 2: Navigation */}
-          <div>
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-8 opacity-40">Navigation</h4>
-            <ul className="space-y-4">
-              <li><button onClick={() => setCurrentPage('about')} className="text-sm font-bold opacity-60 hover:opacity-100 hover:translate-x-1 transition-all">L'École</button></li>
-              <li><button onClick={() => setCurrentPage('services')} className="text-sm font-bold opacity-60 hover:opacity-100 hover:translate-x-1 transition-all">Activités</button></li>
-              <li><button onClick={() => setCurrentPage('reserve')} className="text-sm font-bold opacity-60 hover:opacity-100 hover:translate-x-1 transition-all">Réservation</button></li>
-              <li><button onClick={() => setCurrentPage('forecast')} className="text-sm font-bold opacity-60 hover:opacity-100 hover:translate-x-1 transition-all">Surf Forecast</button></li>
-            </ul>
-          </div>
-
-          {/* Column 3: Contact */}
-          <div>
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-8 opacity-40">Contact Rapide</h4>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <Mail size={16} className="mt-1 opacity-40" />
-                <span className="text-sm font-bold opacity-60">{contactInfo.email}</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Phone size={16} className="mt-1 opacity-40" />
-                <span className="text-sm font-bold opacity-60">{contactInfo.phone}</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin size={16} className="mt-1 opacity-40" />
-                <span className="text-sm font-bold opacity-60 leading-snug">{contactInfo.address}</span>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Trusted Badges */}
-          <div>
-            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] mb-8 opacity-40">Nos Engagements</h4>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-white/5 rounded-2xl border border-white/5 text-center group hover:bg-white/10 transition-all">
-                <CheckCircle2 size={20} className="mx-auto mb-2 text-emerald-400" />
-                <p className="text-[8px] font-black uppercase tracking-widest leading-tight">Staff Pro</p>
-              </div>
-              <div className="p-3 bg-white/5 rounded-2xl border border-white/5 text-center group hover:bg-white/10 transition-all">
-                <Waves size={20} className="mx-auto mb-2 text-indigo-400" />
-                <p className="text-[8px] font-black uppercase tracking-widest leading-tight">Spots Top</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-[10px] font-bold uppercase tracking-widest opacity-40 text-center md:text-left">
             © 2026 {settings.app_name}. Conçu avec passion au bord de l'eau.
           </p>
           <div className="flex gap-6 opacity-40">
-            <span className="text-[9px] font-black uppercase tracking-widest cursor-default hover:opacity-100 transition-opacity">Mentions Légales</span>
-            <span className="text-[9px] font-black uppercase tracking-widest cursor-default hover:opacity-100 transition-opacity">Politique de Confidentialité</span>
+            <span className="text-[9px] font-black uppercase tracking-widest cursor-default hover:opacity-100 transition-opacity whitespace-nowrap">Mentions Légales</span>
+            <span className="text-[9px] font-black uppercase tracking-widest cursor-default hover:opacity-100 transition-opacity whitespace-nowrap">Politique de Confidentialité</span>
           </div>
         </div>
       </div>
