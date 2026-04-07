@@ -591,6 +591,7 @@ export default function LandingPage({
           )}
         </AnimatePresence>
       </nav>
+    </div>
 
       <main
         className={`flex-grow pt-24 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true' && !['about', 'spots', 'contact'].includes(currentPage)) ? 'pb-12' : ''}`}
