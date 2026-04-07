@@ -547,17 +547,17 @@ export async function initDb() {
 
     // Initialize default settings
     const settingsToInit = [
-      { key: 'app_name', value: '' },
+      { key: 'app_name', value: 'Moroccan Wave Vibes' },
       { key: 'app_logo', value: 'Waves' },
       { key: 'app_bg', value: '' },
       { key: 'header_color', value: '#ffffff' },
       { key: 'title_color', value: '#1e293b' },
       { key: 'subtitle_color', value: '#64748b' },
-      { key: 'header_text_color', value: '#000000' },
+      { key: 'header_text_color', value: '#0f172a' },
       { key: 'nav_color', value: '#ffffff' },
       { key: 'nav_text_color', value: '#475569' },
-      { key: 'footer_color', value: '#ffffff' },
-      { key: 'footer_text_color', value: '#000000' },
+      { key: 'footer_color', value: '#1e293b' },
+      { key: 'footer_text_color', value: '#ffffff' },
       { key: 'body_bg_color', value: '#f8fafc' },
       { key: 'sticky_header', value: 'true' },
       { key: 'sticky_footer', value: 'false' },
@@ -569,6 +569,29 @@ export async function initDb() {
       const exists = await getOne("SELECT value FROM settings WHERE key = ?", [setting.key]);
       if (!exists) {
         await query("INSERT INTO settings (key, value) VALUES (?, ?)", [setting.key, setting.value]);
+      } else if (exists.value === '' || exists.value === null) {
+        // Update if empty to provide the new defaults
+        await query("UPDATE settings SET value = ? WHERE key = ?", [setting.value, setting.key]);
+      }
+    }
+
+    // Initialize default landing page content (Sections / Menu Buttons)
+    const landingPageToInit = [
+      { section: 'about', title: 'Moroccan Wave Vibes', button_label: 'Découvrir', is_active: true },
+      { section: 'services', title: 'Nos Parcours Surf', button_label: 'Services', is_active: true },
+      { section: 'reserve', title: 'Réservez Votre Session', button_label: 'Réserver', is_active: true },
+      { section: 'conseils', title: 'Conseils Passionnés', button_label: 'Conseils', is_active: true },
+      { section: 'spots', title: 'Les Meilleurs Spots', button_label: 'Spots', is_active: true },
+      { section: 'contact', title: "Rejoignez l'Aventure", button_label: 'Contact', is_active: true }
+    ];
+
+    for (const item of landingPageToInit) {
+      const exists = await getOne("SELECT id FROM landing_page_content WHERE section = ?", [item.section]);
+      if (!exists) {
+        await query(
+          "INSERT INTO landing_page_content (section, title, button_label, is_active) VALUES (?, ?, ?, ?)",
+          [item.section, item.title, item.button_label, item.is_active]
+        );
       }
     }
 
