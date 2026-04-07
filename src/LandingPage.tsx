@@ -111,16 +111,6 @@ export default function LandingPage({
   const [forecasts, setForecasts] = useState<Record<number, ForecastData>>({});
   const [loadingForecast, setLoadingForecast] = useState<number | null>(null);
   const [sponsorIndex, setSponsorIndex] = useState(0);
-  const [scrolled, setScrolled] = useState(false);
-
-  // Scroll listener for header animations
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Sponsor rotation effect
   useEffect(() => {
@@ -373,44 +363,30 @@ export default function LandingPage({
 
     const activeSections = sections.filter(s => {
       const data = content.find(c => c.section === s.key);
-      return data ? data.is_active : true;
+      return data ? data.is_active : true; // Default to true if not found (seeding should prevent this)
     });
 
     return (
-      <div className={`flex ${isMobile ? 'flex-col gap-6' : 'items-center gap-1 h-full'}`}>
+      <>
         {activeSections.map((s, idx) => {
           const data = content.find(c => c.section === s.key);
           const label = data?.button_label || s.defaultLabel;
-          const isActive = currentPage === s.key;
-
           return (
             <React.Fragment key={s.key}>
               <button
                 onClick={() => { setCurrentPage(s.key as any); setIsMobileMenuOpen(false); }}
-                className={`relative px-3 py-2 text-[11px] font-black uppercase tracking-[0.15em] transition-all duration-300 group
-                  ${isActive ? 'text-indigo-600' : 'text-slate-600 hover:text-slate-900'}
-                  ${isMobile ? 'text-left w-full' : ''}`}
-                style={{ color: !isActive && !isMobile && settings.header_text_color ? settings.header_text_color : undefined }}
+                className={`text-[12px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-indigo-600' : ''}`}
+                style={{ color: currentPage !== s.key ? (isMobile ? '#334155' : (settings.nav_text_color || settings.header_text_color || '#475569')) : undefined }}
               >
                 {label}
-                {/* Dynamic sliding bar */}
-                <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-indigo-600 transition-all duration-300 
-                  ${isActive ? 'w-4 opacity-100' : 'w-0 opacity-0 group-hover:w-2 group-hover:opacity-50'}
-                  ${isMobile ? 'hidden' : ''}`} 
-                />
-                {/* Active Glow */}
-                {isActive && !isMobile && (
-                  <span className="absolute inset-0 bg-indigo-50/40 blur-lg -z-10 rounded-full scale-75" />
-                )}
               </button>
-              
-              {!isMobile && idx < activeSections.length - 1 && (
-                <div className="w-[1px] h-3 bg-slate-200/50" />
+              {idx < activeSections.length - 1 && (
+                <div className="hidden lg:block h-3 w-[1px]" style={{ backgroundColor: settings.nav_text_color ? `${settings.nav_text_color}33` : 'rgba(71, 85, 105, 0.2)' }} />
               )}
             </React.Fragment>
           );
         })}
-      </div>
+      </>
     );
   };
 
@@ -495,20 +471,19 @@ export default function LandingPage({
 
   return (
     <div className={`min-h-screen flex flex-col bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-slate-50'}`}>
-      {/* Unified Navigation: L'Horizon de Verre */}
-      {/* TOP ANNOUNCEMENT BAR */}
-
+      {/* Unified Navigation */}
       <nav
-        className={`fixed left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm top-0 ${scrolled ? 'bg-white/95' : 'bg-white/75'}`}
+        className={`${String(settings.sticky_header) === 'true' ? 'fixed' : 'absolute'} top-0 left-0 right-0 z-50 transition-all shadow-sm flex flex-col`}
         style={{
-          backdropFilter: 'blur(32px)',
+          backgroundColor: settings.header_color ? `${settings.header_color}f2` : 'rgba(255, 255, 255, 0.95)',
           color: settings.header_text_color || '#0f172a'
         }}
       >
-        <div className={`w-full px-8 flex items-center justify-between transition-all duration-500 ${scrolled ? 'h-14' : 'h-16'}`}>
+
+        <div className="w-full pl-6 pr-0 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setCurrentPage('about')}>
             {settings.app_logo && (
-              <img src={settings.app_logo} alt={settings.app_name} className="h-12 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
+              <img src={settings.app_logo} alt={settings.app_name} className="h-10 w-auto object-contain transition-transform group-hover:scale-110" referrerPolicy="no-referrer" decoding="async" />
             )}
             <div className="flex flex-col gap-0.5">
               <span className="text-base font-black uppercase tracking-tighter leading-none" style={{ color: settings.header_text_color || '#0f172a' }}>{settings.app_name}</span>
@@ -522,58 +497,53 @@ export default function LandingPage({
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-6 px-4">
+          <div className="hidden lg:flex items-center gap-8">
             <NavLinks />
           </div>
 
-          <div className="flex items-center gap-3 pr-2">
-            {/* One-by-One Sponsor Display */}
+          <div className="flex items-center gap-3">
+            {/* Square sponsor carousel widget */}
             {(() => {
               let sponsors: { url: string; alt: string }[] = [];
               try {
                 const parsed = JSON.parse(settings.sponsor_images || '[]');
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                  sponsors = parsed;
-                } else {
-                  // Fallback to defaults to ensure something is visible if configured
-                  sponsors = [
-                    { url: 'https://upload.wikimedia.org/wikipedia/commons/e/e8/Rip_Curl_logo.svg', alt: 'Rip Curl' },
-                    { url: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Quiksilver_logo.svg', alt: 'Quiksilver' }
-                  ];
-                }
+                sponsors = Array.isArray(parsed) ? parsed : [];
               } catch {
                 sponsors = [];
               }
 
               if (sponsors.length === 0) return null;
-              
-              const currentSponsor = sponsors[sponsorIndex % sponsors.length];
-              
               return (
-                <div className="hidden lg:flex items-center justify-center w-32 h-10 relative overflow-hidden mr-1">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={currentSponsor.url}
-                      src={currentSponsor.url}
-                      alt={currentSponsor.alt}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.5 }}
-                      className="h-7 w-auto object-contain hover:scale-105 transition-all cursor-help"
-                      title={`Partenaire : ${currentSponsor.alt}`}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </AnimatePresence>
+                <div
+                  className="hidden lg:flex w-32 h-14 overflow-hidden shrink-0 relative"
+                  title="Nos sponsors"
+                >
+                  <div className="flex items-center justify-center h-full w-full overflow-hidden p-1.5">
+                    <AnimatePresence mode="wait">
+                      {sponsors[sponsorIndex % sponsors.length] && (
+                        <motion.img
+                          key={sponsorIndex % sponsors.length}
+                          src={sponsors[sponsorIndex % sponsors.length].url}
+                          alt={sponsors[sponsorIndex % sponsors.length].alt}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 1.1 }}
+                          transition={{ duration: 0.5, ease: "easeInOut" }}
+                          className="max-w-full max-h-full object-contain"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </div>
               );
             })()}
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full transition-colors hover:bg-white/20"
-              style={{ color: settings.header_text_color || '#0f172a' }}
+              className="lg:hidden p-2 rounded-xl transition-colors hover:bg-slate-500/10"
+              style={{ color: settings.header_text_color || '#0f172a', borderColor: settings.header_text_color ? `${settings.header_text_color}40` : '#e2e8f0', borderWidth: 1 }}
             >
               {isMobileMenuOpen ? <Plus size={20} className="rotate-45" /> : <div className="space-y-1"><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div></div>}
             </button>
@@ -582,28 +552,29 @@ export default function LandingPage({
 
 
 
-          <AnimatePresence>
-            {isMobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="lg:hidden bg-white/95 backdrop-blur-2xl border-t border-slate-100 overflow-hidden"
-              >
-                <div className="flex flex-col p-6 gap-6">
-                  <NavLinks isMobile={true} />
-                  <div className="h-px bg-slate-100/50" />
-                  <button
-                    onClick={() => { if (isAdminPreview) onBackToAdmin?.(); else onLoginClick(); setIsMobileMenuOpen(false); }}
-                    className="text-left text-[11px] font-black text-indigo-600 uppercase tracking-[0.2em]"
-                  >
-                    {isAdminPreview ? 'Dashboard' : 'Espace Staff'}
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </nav>
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="lg:hidden bg-white/95 backdrop-blur-xl border-b border-slate-200 overflow-hidden"
+            >
+              <div className="flex flex-col p-6 gap-4">
+                <NavLinks isMobile={true} />
+                <div className="h-px bg-slate-100 my-2" />
+                <button
+                  onClick={() => { if (isAdminPreview) onBackToAdmin?.(); else onLoginClick(); setIsMobileMenuOpen(false); }}
+                  className="text-left text-[10px] font-black text-indigo-600 uppercase tracking-widest"
+                >
+                  {isAdminPreview ? 'Dashboard' : 'Espace Staff'}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
 
       <main
         className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true' && !['about', 'spots', 'contact'].includes(currentPage)) ? 'pb-12' : ''}`}
@@ -618,7 +589,7 @@ export default function LandingPage({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="flex-grow flex flex-col relative justify-center pt-0 pb-0 z-10"
+              className="flex-grow flex flex-col relative justify-center pt-0 pb-16 z-10"
             >
 
               <div className="w-full relative z-10">
@@ -639,18 +610,13 @@ export default function LandingPage({
                 `}>
                   {activeServices.map((service) => {
                     return (
-                      <motion.div
+                      <div
                         key={service.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
                         className={`
                             relative bg-white/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
                             w-full max-w-[340px] overflow-hidden
                             ${settings.services_layout === 'horizontal-scroll' ? 'min-w-[310px] snap-center' : 'mx-auto'}
-                            shadow-[0_8px_30px_rgb(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.4)] 
-                            hover:shadow-[0_20px_50px_rgba(79,70,229,0.15),inset_0_1px_1px_rgba(255,255,255,0.6)] 
+                            shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)] 
                             transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group hover:-translate-y-3
                           `}
                       >
@@ -717,7 +683,7 @@ export default function LandingPage({
                             <ChevronRight size={16} className="opacity-50 group-hover/btn:translate-x-1 transition-transform duration-300" />
                           </button>
                         </div>
-                      </motion.div>
+                      </div>
                     );
                   })}
                 </div>
@@ -763,7 +729,7 @@ export default function LandingPage({
                       </div>
                     );
                   })()}
-                  <div className={`flex-1 flex justify-start items-center flex-col px-6 pt-0 ${String(settings.sticky_footer) === 'true' ? 'pb-12' : 'pb-0'} md:pb-0`}>
+                  <div className={`flex-1 flex justify-start items-center flex-col px-6 pt-0 ${String(settings.sticky_footer) === 'true' ? 'pb-12' : 'pb-6'} md:pb-10`}>
                     <div className="max-w-xl text-center">
                       {!!about?.show_logo && settings.app_logo && (
                         <img src={settings.app_logo} alt={settings.app_name} className="h-32 w-auto object-contain mx-auto mb-0" referrerPolicy="no-referrer" loading="lazy" decoding="async" />
@@ -782,7 +748,7 @@ export default function LandingPage({
                         {!!about?.show_button && (
                           <button
                             onClick={() => setCurrentPage((about?.button_link as any) || 'reserve')}
-                            className="px-6 py-3 rounded-2xl font-black shadow-xl shadow-indigo-100 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px] hover:opacity-90"
+                            className="px-6 py-3 rounded-2xl font-black shadow-xl shadow-indigo-100/20 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px] hover:opacity-90"
                             style={{ 
                               backgroundColor: about?.cta1_bg_color || '#4f46e5', 
                               color: about?.cta1_text_color || '#ffffff' 
@@ -842,18 +808,13 @@ export default function LandingPage({
                     const displayContent = isLong ? (conseil.content || '').substring(0, 450) + '...' : conseil.content;
 
                     return (
-                      <motion.div
+                      <div
                         key={conseil.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
                         className={`
                             relative bg-white/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
                             w-full max-w-[340px] overflow-hidden
                             ${settings.conseils_layout === 'horizontal-scroll' ? 'min-w-[310px] snap-center' : 'mx-auto'}
-                            shadow-[0_8px_30px_rgb(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.4)] 
-                            hover:shadow-[0_20px_50px_rgba(79,70,229,0.15),inset_0_1px_1px_rgba(255,255,255,0.6)] 
+                            shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)] 
                             transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group hover:-translate-y-3
                           `}
                       >
@@ -898,7 +859,7 @@ export default function LandingPage({
                             </button>
                           </div>
                         )}
-                      </motion.div>
+                      </div>
                     );
                   })}
                 </div>
@@ -916,7 +877,7 @@ export default function LandingPage({
               className="flex-grow flex flex-col relative justify-center z-10"
             >
 
-              <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-0 relative z-10">
+              <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-2 relative z-10">
                 <div className={`w-full max-w-6xl mx-auto flex flex-col ${settings.reserve_layout === 'split' ? 'lg:flex-row lg:items-center gap-12 xl:gap-20' : 'items-center'}`}>
                   {settings.reserve_layout === 'split' && (
                     <div className="hidden lg:flex w-1/2 flex-col justify-center">
@@ -1417,152 +1378,229 @@ export default function LandingPage({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="flex-grow flex flex-col justify-center pt-0 pb-0 relative overflow-hidden"
-              style={{ paddingBottom: String(settings.sticky_footer) === 'true' ? '4rem' : '0' }}
+              className="flex-grow flex flex-col justify-center pt-0 pb-4 relative overflow-hidden"
+              style={{ 
+                backgroundColor: settings.body_bg_color || '#f8fafc',
+                backgroundImage: contactSection?.content_style === 'section_bg' ? `url(${contactSection?.image_url})` : 'none',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundAttachment: 'fixed'
+              }}
             >
-              <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-0 relative z-10">
-                <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row lg:items-center gap-12 xl:gap-24">
-                  {/* Left Column: Info */}
-                  <div className="w-full lg:w-1/2 flex flex-col justify-center">
-                    <h2 
-                      className="text-3xl lg:text-4xl font-black mb-6 tracking-tight leading-tight drop-shadow-xl" 
-                      style={{ color: settings.title_color || '#0f172a' }}
-                    >
-                      Une question ? <br/>Un projet ?
-                    </h2>
-                    <p 
-                      className="text-base lg:text-lg font-bold leading-relaxed mb-10 drop-shadow-md" 
-                      style={{ color: settings.subtitle_color || '#64748b' }}
-                    >
-                      Nous sommes là pour vous aider à organiser votre expérience surf idéale.
-                    </p>
+              {contactSection?.content_style === 'section_bg' && (
+                <div 
+                  className="absolute inset-0 z-0" 
+                  style={{ backgroundColor: settings.body_bg_color ? `${settings.body_bg_color}99` : 'rgba(248, 250, 252, 0.6)' }} 
+                />
+              )}
+              <section className="flex-grow flex flex-col items-center justify-center p-6 lg:p-8 relative z-10 w-full overflow-hidden">
+                {/* Header (Centred at top for background style, or inside left column for centered style) */}
+                {contactSection?.content_style === 'section_bg' && (
+                  <div className="max-w-2xl w-full text-center mb-12">
+                    <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
+                      Contactez-nous
+                    </span>
+                    <h2 className="text-4xl md:text-5xl font-black mb-0 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
+                  </div>
+                )}
 
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-5 group">
-                        <div className="w-14 h-14 bg-white/40 backdrop-blur-xl rounded-2xl flex items-center justify-center text-indigo-600 shadow-xl border border-white/50 shrink-0 group-hover:scale-110 transition-transform">
-                          <Mail size={24} />
+                <div className={`grid grid-cols-1 ${contactSection?.content_style === 'centered' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8 lg:gap-10 items-center w-full max-w-5xl mx-auto`}>
+                  <div className={`flex flex-col ${contactSection?.content_style === 'section_bg' ? 'items-center text-center' : 'justify-center'} ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
+                    <div className={`w-full ${contactSection?.content_style === 'section_bg' ? 'max-w-md' : 'max-w-lg'}`}>
+                      {contactSection?.content_style !== 'section_bg' && (
+                        <>
+                          <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
+                            Contactez-nous
+                          </span>
+                          <h2 className="text-4xl font-black mb-10 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
+                        </>
+                      )}
+
+                      <div className={`space-y-6 mb-10 ${contactSection?.content_style === 'section_bg' ? 'flex flex-col items-center' : ''}`}>
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
+                            <Mail size={20} />
+                          </div>
+                          <div className={contactSection?.content_style === 'section_bg' ? 'text-left' : ''}>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</p>
+                            <p className="font-bold text-slate-700">{contactInfo.email}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Écrivez-nous</p>
-                          <p className="text-base font-bold text-slate-800">{contactInfo.email}</p>
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
+                            <Phone size={20} />
+                          </div>
+                          <div className={contactSection?.content_style === 'section_bg' ? 'text-left' : ''}>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Téléphone</p>
+                            <p className="font-bold text-slate-700">{contactInfo.phone}</p>
+                          </div>
+                        </div>
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
+                            <MapPin size={20} />
+                          </div>
+                          <div className={`flex-1 ${contactSection?.content_style === 'section_bg' ? 'text-left' : ''}`}>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Adresse</p>
+                            <p className="font-bold text-slate-700 mb-2">{contactInfo.address}</p>
+                            {contactInfo.address && (
+                              <a
+                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors w-fit"
+                              >
+                                <Navigation size={14} /> Itinéraire
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
-
-                      <div className="flex items-center gap-5 group">
-                        <div className="w-14 h-14 bg-white/40 backdrop-blur-xl rounded-2xl flex items-center justify-center text-indigo-600 shadow-xl border border-white/50 shrink-0 group-hover:scale-110 transition-transform">
-                          <Phone size={24} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Appelez-nous</p>
-                          <p className="text-base font-bold text-slate-800">{contactInfo.phone}</p>
-                        </div>
+                      <div className={`flex gap-4 ${contactSection?.content_style === 'section_bg' ? 'justify-center' : ''}`}>
+                        {contactInfo.instagram && (
+                          <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                            <Instagram size={18} />
+                          </a>
+                        )}
+                        {contactInfo.facebook && (
+                          <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                            <Facebook size={18} />
+                          </a>
+                        )}
+                        {contactInfo.twitter && (
+                          <a href={contactInfo.twitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                            <Twitter size={18} />
+                          </a>
+                        )}
+                        {contactInfo.whatsapp && (
+                          <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                            <Phone size={18} />
+                          </a>
+                        )}
+                        {contactInfo.youtube && (
+                          <a href={contactInfo.youtube} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:scale-110 transition-transform" title="Chaîne YouTube">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                          </a>
+                        )}
                       </div>
-
-                      <div className="flex items-center gap-5 group">
-                        <div className="w-14 h-14 bg-white/40 backdrop-blur-xl rounded-2xl flex items-center justify-center text-indigo-600 shadow-xl border border-white/50 shrink-0 group-hover:scale-110 transition-transform">
-                          <MapPin size={24} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Notre Base</p>
-                          <p className="text-lg font-bold text-slate-800 leading-tight">{contactInfo.address}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex gap-4 mt-12">
-                      {contactInfo.instagram && (
-                        <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center hover:scale-110 hover:shadow-lg shadow-indigo-200 transition-all">
-                          <Instagram size={22} />
-                        </a>
-                      )}
-                      {contactInfo.facebook && (
-                        <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center hover:scale-110 hover:shadow-lg shadow-indigo-200 transition-all">
-                          <Facebook size={22} />
-                        </a>
-                      )}
-                      {contactInfo.whatsapp && (
-                        <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center hover:scale-110 hover:shadow-lg shadow-emerald-200 transition-all">
-                          <Phone size={22} />
-                        </a>
-                      )}
                     </div>
                   </div>
 
-                  {/* Right Column: Form */}
-                  <div className="w-full lg:w-[45%]">
-                    <div className="bg-white/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/50 shadow-2xl">
-                      {contactStatus === 'success' ? (
-                        <div className="text-center py-12">
-                          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <CheckCircle2 size={40} />
-                          </div>
-                          <h3 className="text-2xl font-black text-slate-900 mb-3 tracking-tight">C'est envoyé !</h3>
-                          <p className="text-base text-slate-500 font-medium mb-10 leading-relaxed">Merci pour votre message. Nous revenons vers vous très vite.</p>
-                          <button
-                            onClick={() => setContactStatus('idle')}
-                            className="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black hover:bg-indigo-700 transition-all text-sm uppercase tracking-widest shadow-lg shadow-indigo-100"
-                          >
-                            Nouveau message
-                          </button>
+                  {/* Centered Image Column (only shown in 'centered' style) */}
+                  {contactSection?.content_style === 'centered' && (
+                    <div className="flex flex-col items-center justify-center order-first lg:order-none">
+                      {contactSection?.image_url && (
+                        <div className="flex flex-col items-center">
+                          <img 
+                            src={contactSection?.image_url} 
+                            alt={settings.app_name} 
+                            className="h-72 sm:h-96 lg:h-[450px] w-auto object-contain transition-transform hover:scale-105 rounded-3xl shadow-2xl shadow-indigo-100/20" 
+                            referrerPolicy="no-referrer" 
+                            loading="lazy" 
+                            decoding="async" 
+                          />
                         </div>
-                      ) : (
-                        <form onSubmit={handleContactSubmit} className="space-y-4">
-                          <div className="grid grid-cols-2 gap-4">
+                      )}
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-center relative overflow-hidden w-full">
+                    <div 
+                      className="p-8 lg:p-10 rounded-3xl border border-white shadow-2xl max-w-2xl w-full relative z-10 overflow-hidden"
+                      style={{ 
+                        backgroundColor: contactSection?.content_style === 'form_bg' ? 'transparent' : 'rgba(255, 255, 255, 0.8)',
+                        backdropFilter: contactSection?.content_style === 'form_bg' ? 'none' : 'blur(24px)',
+                        backgroundImage: contactSection?.content_style === 'form_bg' ? `url(${contactSection?.image_url})` : 'none',
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                      }}
+                    >
+                      {contactSection?.content_style === 'form_bg' && (
+                        <div 
+                          className="absolute inset-0 z-0" 
+                          style={{ backgroundColor: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(4px)' }} 
+                        />
+                      )}
+                      <div className="relative z-10 w-full">
+                        {contactStatus === 'success' ? (
+                          <div className="text-center py-8 w-full">
+                            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                              <CheckCircle2 size={32} />
+                            </div>
+                            <h3 className="text-2xl font-black text-slate-900 mb-2">Message Envoyé !</h3>
+                            <p className="text-sm text-slate-500 font-medium mb-6">Merci de nous avoir contactés. Nous vous répondrons dans les plus brefs délais.</p>
+                            <button
+                              onClick={() => setContactStatus('idle')}
+                              style={{ 
+                                backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
+                                color: contactSection?.cta1_text_color || '#ffffff'
+                              }}
+                              className="px-5 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all text-sm"
+                            >
+                              Envoyer un autre message
+                            </button>
+                          </div>
+                        ) : (
+                          <form onSubmit={handleContactSubmit} className="w-full space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-1">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nom</label>
+                                <input
+                                  required
+                                  type="text"
+                                  value={contactForm.name}
+                                  onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
+                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                  placeholder="Nom et Prenom"
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</label>
+                                <input
+                                  required
+                                  type="email"
+                                  value={contactForm.email}
+                                  onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
+                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                  placeholder="votre@email.com"
+                                />
+                              </div>
+                            </div>
                             <div className="space-y-1">
-                              <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Votre Nom</label>
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sujet</label>
                               <input
                                 required
                                 type="text"
-                                value={contactForm.name}
-                                onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
-                                className="w-full px-5 py-2 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm transition-all"
-                                placeholder="..."
+                                value={contactForm.subject}
+                                onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                placeholder="Comment pouvons-nous vous aider ?"
                               />
                             </div>
                             <div className="space-y-1">
-                              <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Votre Email</label>
-                              <input
+                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Message</label>
+                              <textarea
                                 required
-                                type="email"
-                                value={contactForm.email}
-                                onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
-                                className="w-full px-5 py-2 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm transition-all"
-                                placeholder="@"
-                              />
+                                rows={7}
+                                value={contactForm.message}
+                                onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm resize-none"
+                                placeholder="Votre message..."
+                              ></textarea>
                             </div>
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Sujet</label>
-                            <input
-                              required
-                              type="text"
-                              value={contactForm.subject}
-                              onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
-                              className="w-full px-5 py-2 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm transition-all"
-                              placeholder="Comment pouvons-nous vous aider ?"
-                            />
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Message</label>
-                            <textarea
-                              required
-                              rows={5}
-                              value={contactForm.message}
-                              onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
-                              className="w-full px-5 py-3 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm resize-none transition-all"
-                              placeholder="Votre message ici..."
-                            ></textarea>
-                          </div>
-                          <button
-                            type="submit"
-                            disabled={contactStatus === 'loading'}
-                            className="w-full py-4 mt-2 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50"
-                          >
-                            {contactStatus === 'loading' ? 'Envoi...' : (contactSection?.section_button_label || 'Envoyer le message')} 
-                            <Send size={16} />
-                          </button>
-                        </form>
-                      )}
+                            <button
+                              type="submit"
+                              disabled={contactStatus === 'loading'}
+                              style={{ 
+                                backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
+                                color: contactSection?.cta1_text_color || '#ffffff'
+                              }}
+                              className="w-full py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                            >
+                              {contactStatus === 'loading' ? 'Envoi...' : (contactSection?.section_button_label || 'Envoyer le message')} <Send size={18} />
+                            </button>
+                          </form>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1619,32 +1657,28 @@ export default function LandingPage({
           </AnimatePresence>
         </AnimatePresence>
       </main>
-      <WaveDivider bgColor={settings.header_color || settings.footer_color || '#ffffff'} settings={settings} />
+      <Footer settings={settings} />
     </div>
   );
 }
 
-function WaveDivider({ bgColor, settings }: { bgColor: string; settings: AppSettings }) {
+function Footer({ settings }: { settings: AppSettings }) {
+  const isSticky = String(settings.sticky_footer) === 'true';
   return (
-    <div className="w-full relative z-30 -mt-20">
-      <div className="absolute inset-0 flex items-end justify-center pb-2 z-40 pointer-events-none">
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-30 text-center px-4" style={{ color: settings.header_text_color || '#0f172a' }}>
-          © 2026 {settings.app_name}. Conçu avec passion au bord de l'eau.
-        </p>
+    <footer
+      className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} py-1 border-t border-slate-100 z-40`}
+      style={{
+        backgroundColor: settings.footer_color || '#ffffff',
+        color: settings.footer_text_color || 'inherit'
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center">
+          <p className="text-[9px] font-bold uppercase tracking-widest opacity-50">
+            © 2026 {settings.app_name}. Tous droits réservés.
+          </p>
+        </div>
       </div>
-      <svg
-        viewBox="0 0 1440 120"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        preserveAspectRatio="none"
-        className="w-full h-[60px] md:h-[100px] block relative z-30"
-      >
-        <path
-          d="M0 64L48 58.7C96 53 192 43 288 48C384 53 480 75 576 80C672 85 768 75 864 64C960 53 1056 43 1152 42.7C1248 43 1344 53 1392 58.7L1440 64V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0V64Z"
-          fill={bgColor.startsWith('#') ? `${bgColor}cc` : bgColor}
-        />
-      </svg>
-    </div>
+    </footer>
   );
 }
-
