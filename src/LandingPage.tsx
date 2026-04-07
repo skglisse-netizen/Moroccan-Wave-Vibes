@@ -502,6 +502,56 @@ export default function LandingPage({
           </div>
 
           <div className="flex items-center gap-3 pr-2">
+            {/* Infinite Marquee for Sponsors */}
+            {(() => {
+              let sponsors: { url: string; alt: string }[] = [];
+              try {
+                const parsed = JSON.parse(settings.sponsor_images || '[]');
+                sponsors = Array.isArray(parsed) ? parsed : [];
+              } catch {
+                sponsors = [];
+              }
+
+              if (sponsors.length === 0) return null;
+              
+              // Double the sponsors for seamless looping if we have enough space
+              const displaySponsors = [...sponsors, ...sponsors];
+              
+              return (
+                <div
+                  className="hidden lg:flex w-32 h-8 overflow-hidden shrink-0 relative mr-2"
+                  title="Nos sponsors"
+                >
+                  <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-white/20 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute inset-y-0 right-0 w-4 bg-gradient-to-l from-white/20 to-transparent z-10 pointer-events-none" />
+                  
+                  <motion.div 
+                    className="flex items-center gap-6 h-full px-2"
+                    animate={{ x: [0, -50 * sponsors.length] }}
+                    transition={{
+                      x: {
+                        repeat: Infinity,
+                        repeatType: "loop",
+                        duration: sponsors.length * 4,
+                        ease: "linear",
+                      },
+                    }}
+                  >
+                    {displaySponsors.map((s, idx) => (
+                      <img
+                        key={`${s.alt}-${idx}`}
+                        src={s.url}
+                        alt={s.alt}
+                        className="h-5 w-auto object-contain filter grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ))}
+                  </motion.div>
+                </div>
+              );
+            })()}
+
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 rounded-full transition-colors hover:bg-white/20"
@@ -1349,229 +1399,152 @@ export default function LandingPage({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4 }}
-              className="flex-grow flex flex-col justify-center pt-0 pb-4 relative overflow-hidden"
-              style={{ 
-                backgroundColor: settings.body_bg_color || '#f8fafc',
-                backgroundImage: contactSection?.content_style === 'section_bg' ? `url(${contactSection?.image_url})` : 'none',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundAttachment: 'fixed'
-              }}
+              className="flex-grow flex flex-col justify-center pt-0 pb-2 relative overflow-hidden"
+              style={{ paddingBottom: String(settings.sticky_footer) === 'true' ? '4rem' : '1rem' }}
             >
-              {contactSection?.content_style === 'section_bg' && (
-                <div 
-                  className="absolute inset-0 z-0" 
-                  style={{ backgroundColor: settings.body_bg_color ? `${settings.body_bg_color}99` : 'rgba(248, 250, 252, 0.6)' }} 
-                />
-              )}
-              <section className="flex-grow flex flex-col items-center justify-center p-6 lg:p-8 relative z-10 w-full overflow-hidden">
-                {/* Header (Centred at top for background style, or inside left column for centered style) */}
-                {contactSection?.content_style === 'section_bg' && (
-                  <div className="max-w-2xl w-full text-center mb-12">
-                    <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
-                      Contactez-nous
-                    </span>
-                    <h2 className="text-4xl md:text-5xl font-black mb-0 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
-                  </div>
-                )}
-
-                <div className={`grid grid-cols-1 ${contactSection?.content_style === 'centered' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8 lg:gap-10 items-center w-full max-w-5xl mx-auto`}>
-                  <div className={`flex flex-col ${contactSection?.content_style === 'section_bg' ? 'items-center text-center' : 'justify-center'} ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
-                    <div className={`w-full ${contactSection?.content_style === 'section_bg' ? 'max-w-md' : 'max-w-lg'}`}>
-                      {contactSection?.content_style !== 'section_bg' && (
-                        <>
-                          <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
-                            Contactez-nous
-                          </span>
-                          <h2 className="text-4xl font-black mb-10 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
-                        </>
-                      )}
-
-                      <div className={`space-y-6 mb-10 ${contactSection?.content_style === 'section_bg' ? 'flex flex-col items-center' : ''}`}>
-                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
-                            <Mail size={20} />
-                          </div>
-                          <div className={contactSection?.content_style === 'section_bg' ? 'text-left' : ''}>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</p>
-                            <p className="font-bold text-slate-700">{contactInfo.email}</p>
-                          </div>
-                        </div>
-                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
-                            <Phone size={20} />
-                          </div>
-                          <div className={contactSection?.content_style === 'section_bg' ? 'text-left' : ''}>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Téléphone</p>
-                            <p className="font-bold text-slate-700">{contactInfo.phone}</p>
-                          </div>
-                        </div>
-                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
-                            <MapPin size={20} />
-                          </div>
-                          <div className={`flex-1 ${contactSection?.content_style === 'section_bg' ? 'text-left' : ''}`}>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Adresse</p>
-                            <p className="font-bold text-slate-700 mb-2">{contactInfo.address}</p>
-                            {contactInfo.address && (
-                              <a
-                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors w-fit"
-                              >
-                                <Navigation size={14} /> Itinéraire
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <div className={`flex gap-4 ${contactSection?.content_style === 'section_bg' ? 'justify-center' : ''}`}>
-                        {contactInfo.instagram && (
-                          <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
-                            <Instagram size={18} />
-                          </a>
-                        )}
-                        {contactInfo.facebook && (
-                          <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
-                            <Facebook size={18} />
-                          </a>
-                        )}
-                        {contactInfo.twitter && (
-                          <a href={contactInfo.twitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
-                            <Twitter size={18} />
-                          </a>
-                        )}
-                        {contactInfo.whatsapp && (
-                          <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center hover:scale-110 transition-transform">
-                            <Phone size={18} />
-                          </a>
-                        )}
-                        {contactInfo.youtube && (
-                          <a href={contactInfo.youtube} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-red-600 text-white flex items-center justify-center hover:scale-110 transition-transform" title="Chaîne YouTube">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Centered Image Column (only shown in 'centered' style) */}
-                  {contactSection?.content_style === 'centered' && (
-                    <div className="flex flex-col items-center justify-center order-first lg:order-none">
-                      {contactSection?.image_url && (
-                        <div className="flex flex-col items-center">
-                          <img 
-                            src={contactSection?.image_url} 
-                            alt={settings.app_name} 
-                            className="h-72 sm:h-96 lg:h-[450px] w-auto object-contain transition-transform hover:scale-105 rounded-3xl shadow-2xl shadow-indigo-100" 
-                            referrerPolicy="no-referrer" 
-                            loading="lazy" 
-                            decoding="async" 
-                          />
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  <div className="flex items-center justify-center relative overflow-hidden w-full">
-                    <div 
-                      className="p-8 lg:p-10 rounded-3xl border border-white shadow-2xl max-w-2xl w-full relative z-10 overflow-hidden"
-                      style={{ 
-                        backgroundColor: contactSection?.content_style === 'form_bg' ? 'transparent' : 'rgba(255, 255, 255, 0.8)',
-                        backdropFilter: contactSection?.content_style === 'form_bg' ? 'none' : 'blur(24px)',
-                        backgroundImage: contactSection?.content_style === 'form_bg' ? `url(${contactSection?.image_url})` : 'none',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center'
-                      }}
+              <section className="flex-grow flex items-center justify-center p-4 pt-0 pb-2 relative z-10">
+                <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row lg:items-center gap-12 xl:gap-24">
+                  {/* Left Column: Info */}
+                  <div className="w-full lg:w-1/2 flex flex-col justify-center">
+                    <h2 
+                      className="text-5xl lg:text-7xl font-black mb-6 tracking-tight leading-tight drop-shadow-xl" 
+                      style={{ color: settings.title_color || '#0f172a' }}
                     >
-                      {contactSection?.content_style === 'form_bg' && (
-                        <div 
-                          className="absolute inset-0 z-0" 
-                          style={{ backgroundColor: 'rgba(255, 255, 255, 0.85)', backdropFilter: 'blur(4px)' }} 
-                        />
+                      Une question ? <br/>Un projet ?
+                    </h2>
+                    <p 
+                      className="text-xl lg:text-2xl font-bold leading-relaxed mb-10 drop-shadow-md" 
+                      style={{ color: settings.subtitle_color || '#64748b' }}
+                    >
+                      Nous sommes là pour vous aider à organiser votre expérience surf idéale.
+                    </p>
+
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-5 group">
+                        <div className="w-14 h-14 bg-white/40 backdrop-blur-xl rounded-2xl flex items-center justify-center text-indigo-600 shadow-xl border border-white/50 shrink-0 group-hover:scale-110 transition-transform">
+                          <Mail size={24} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Écrivez-nous</p>
+                          <p className="text-xl font-bold text-slate-800">{contactInfo.email}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-5 group">
+                        <div className="w-14 h-14 bg-white/40 backdrop-blur-xl rounded-2xl flex items-center justify-center text-indigo-600 shadow-xl border border-white/50 shrink-0 group-hover:scale-110 transition-transform">
+                          <Phone size={24} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Appelez-nous</p>
+                          <p className="text-xl font-bold text-slate-800">{contactInfo.phone}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-5 group">
+                        <div className="w-14 h-14 bg-white/40 backdrop-blur-xl rounded-2xl flex items-center justify-center text-indigo-600 shadow-xl border border-white/50 shrink-0 group-hover:scale-110 transition-transform">
+                          <MapPin size={24} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Notre Base</p>
+                          <p className="text-xl font-bold text-slate-800 leading-tight">{contactInfo.address}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4 mt-12">
+                      {contactInfo.instagram && (
+                        <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center hover:scale-110 hover:shadow-lg shadow-indigo-200 transition-all">
+                          <Instagram size={22} />
+                        </a>
                       )}
-                      <div className="relative z-10 w-full">
-                        {contactStatus === 'success' ? (
-                          <div className="text-center py-8 w-full">
-                            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                              <CheckCircle2 size={32} />
-                            </div>
-                            <h3 className="text-2xl font-black text-slate-900 mb-2">Message Envoyé !</h3>
-                            <p className="text-sm text-slate-500 font-medium mb-6">Merci de nous avoir contactés. Nous vous répondrons dans les plus brefs délais.</p>
-                            <button
-                              onClick={() => setContactStatus('idle')}
-                              style={{ 
-                                backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
-                                color: contactSection?.cta1_text_color || '#ffffff'
-                              }}
-                              className="px-5 py-2.5 rounded-xl font-bold hover:opacity-90 transition-all text-sm"
-                            >
-                              Envoyer un autre message
-                            </button>
+                      {contactInfo.facebook && (
+                        <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center hover:scale-110 hover:shadow-lg shadow-indigo-200 transition-all">
+                          <Facebook size={22} />
+                        </a>
+                      )}
+                      {contactInfo.whatsapp && (
+                        <a href={`https://wa.me/${contactInfo.whatsapp.replace(/\s+/g, '')}`} target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center hover:scale-110 hover:shadow-lg shadow-emerald-200 transition-all">
+                          <Phone size={22} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right Column: Form */}
+                  <div className="w-full lg:w-[45%]">
+                    <div className="bg-white/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/50 shadow-2xl">
+                      {contactStatus === 'success' ? (
+                        <div className="text-center py-12">
+                          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <CheckCircle2 size={40} />
                           </div>
-                        ) : (
-                          <form onSubmit={handleContactSubmit} className="w-full space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Nom</label>
-                                <input
-                                  required
-                                  type="text"
-                                  value={contactForm.name}
-                                  onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
-                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
-                                  placeholder="Nom et Prenom"
-                                />
-                              </div>
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Email</label>
-                                <input
-                                  required
-                                  type="email"
-                                  value={contactForm.email}
-                                  onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
-                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
-                                  placeholder="votre@email.com"
-                                />
-                              </div>
-                            </div>
+                          <h3 className="text-3xl font-black text-slate-900 mb-3 tracking-tight">C'est envoyé !</h3>
+                          <p className="text-base text-slate-500 font-medium mb-10 leading-relaxed">Merci pour votre message. Nous revenons vers vous très vite.</p>
+                          <button
+                            onClick={() => setContactStatus('idle')}
+                            className="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black hover:bg-indigo-700 transition-all text-sm uppercase tracking-widest shadow-lg shadow-indigo-100"
+                          >
+                            Nouveau message
+                          </button>
+                        </div>
+                      ) : (
+                        <form onSubmit={handleContactSubmit} className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-1">
-                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sujet</label>
+                              <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Votre Nom</label>
                               <input
                                 required
                                 type="text"
-                                value={contactForm.subject}
-                                onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
-                                placeholder="Comment pouvons-nous vous aider ?"
+                                value={contactForm.name}
+                                onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
+                                className="w-full px-5 py-2 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm transition-all"
+                                placeholder="..."
                               />
                             </div>
                             <div className="space-y-1">
-                              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Message</label>
-                              <textarea
+                              <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Votre Email</label>
+                              <input
                                 required
-                                rows={7}
-                                value={contactForm.message}
-                                onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm resize-none"
-                                placeholder="Votre message..."
-                              ></textarea>
+                                type="email"
+                                value={contactForm.email}
+                                onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
+                                className="w-full px-5 py-2 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm transition-all"
+                                placeholder="@"
+                              />
                             </div>
-                            <button
-                              type="submit"
-                              disabled={contactStatus === 'loading'}
-                              style={{ 
-                                backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
-                                color: contactSection?.cta1_text_color || '#ffffff'
-                              }}
-                              className="w-full py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
-                            >
-                              {contactStatus === 'loading' ? 'Envoi...' : (contactSection?.section_button_label || 'Envoyer le message')} <Send size={18} />
-                            </button>
-                          </form>
-                        )}
-                      </div>
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Sujet</label>
+                            <input
+                              required
+                              type="text"
+                              value={contactForm.subject}
+                              onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
+                              className="w-full px-5 py-2 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm transition-all"
+                              placeholder="Comment pouvons-nous vous aider ?"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Message</label>
+                            <textarea
+                              required
+                              rows={5}
+                              value={contactForm.message}
+                              onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
+                              className="w-full px-5 py-3 bg-slate-50/50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm resize-none transition-all"
+                              placeholder="Votre message ici..."
+                            ></textarea>
+                          </div>
+                          <button
+                            type="submit"
+                            disabled={contactStatus === 'loading'}
+                            className="w-full py-4 mt-2 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-indigo-100 hover:bg-indigo-700 transition-all flex items-center justify-center gap-3 active:scale-[0.98] disabled:opacity-50"
+                          >
+                            {contactStatus === 'loading' ? 'Envoi...' : (contactSection?.section_button_label || 'Envoyer le message')} 
+                            <Send size={16} />
+                          </button>
+                        </form>
+                      )}
                     </div>
                   </div>
                 </div>
