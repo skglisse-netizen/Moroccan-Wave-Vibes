@@ -91,10 +91,10 @@ export default function LandingPage({
   isAdminPreview?: boolean,
   onBackToAdmin?: () => void
 }) {
-  const [content, setContent] = useState<LandingPageContent[]>([]);
-  const [services, setServices] = useState<PublicService[]>([]);
-  const [conseils, setConseils] = useState<Conseil[]>([]);
-  const [spots, setSpots] = useState<Spot[]>([]);
+  const [content, setContent] = useState<LandingPageContent[]>(window.__INITIAL_DATA__?.content || []);
+  const [services, setServices] = useState<PublicService[]>(window.__INITIAL_DATA__?.services || []);
+  const [conseils, setConseils] = useState<Conseil[]>(window.__INITIAL_DATA__?.conseils || []);
+  const [spots, setSpots] = useState<Spot[]>(window.__INITIAL_DATA__?.spots || []);
   const [currentPage, setCurrentPage] = useState<'services' | 'reserve' | 'about' | 'contact' | 'spots' | 'conseils' | string>('about');
   const [reservation, setReservation] = useState({
     name: '',
@@ -111,6 +111,12 @@ export default function LandingPage({
   const [forecasts, setForecasts] = useState<Record<number, ForecastData>>({});
   const [loadingForecast, setLoadingForecast] = useState<number | null>(null);
   const [sponsorIndex, setSponsorIndex] = useState(0);
+
+  // Mark app as ready for smooth fade-in
+  useEffect(() => {
+    const root = document.getElementById('root');
+    if (root) root.classList.add('ready');
+  }, []);
 
   // Sponsor rotation effect
   useEffect(() => {
@@ -151,6 +157,33 @@ export default function LandingPage({
     }
   };
   useEffect(() => {
+    // If we have initial data, we skip the fetch and use what we have
+    if (window.__INITIAL_DATA__ && window.__INITIAL_DATA__.content) {
+      // Still auto-fetch forecasts if missing
+      const data = window.__INITIAL_DATA__;
+      if (data.spots && data.spots.length > 0) {
+        data.spots.forEach((spot: any) => {
+          if (!forecasts[spot.id]) {
+            fetch(`/api/public/spots/${spot.id}/forecast`)
+              .then(res => res.json())
+              .then(forecastData => {
+                if (forecastData.times) {
+                  setForecasts(prev => ({ ...prev, [spot.id]: forecastData }));
+                }
+              })
+              .catch(e => console.error("Error auto-fetching forecast", e));
+          }
+        });
+      }
+
+      // Sync reservation dropdown
+      const activeOnes = data.services.filter((s: any) => s.is_active);
+      if (activeOnes.length > 0 && !reservation.service_id) {
+        setReservation(prev => ({ ...prev, service_id: activeOnes[0].id.toString() }));
+      }
+      return;
+    }
+
     fetch('/api/public/content')
       .then(res => res.json())
       .then(data => {
@@ -172,7 +205,6 @@ export default function LandingPage({
           });
         }
 
-        // Find first active section to set as default if about is inactive
         const sectionOrder = ['about', 'services', 'reserve', 'conseils', 'spots', 'contact'];
         const aboutData = data.content.find((c: any) => c.section === 'about');
         if (aboutData && !aboutData.is_active) {

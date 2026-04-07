@@ -352,6 +352,12 @@ export default function App() {
   };
 
   const fetchSettings = async () => {
+    // Skip initial fetch on mount if settings already injected by server
+    if (window.__INITIAL_DATA__?.settings && !settings) {
+      setSettings(window.__INITIAL_DATA__.settings);
+      return;
+    }
+    
     try {
       const res = await fetch('/api/settings');
       if (res.ok) setSettings(await res.json());

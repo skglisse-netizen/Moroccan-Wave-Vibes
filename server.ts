@@ -1129,7 +1129,25 @@ async function startServer() {
 
         // Inject the data into a script tag in the head
         const scriptTag = `\n    <script>window.__INITIAL_DATA__ = ${JSON.stringify(initialData).replace(/</g, '\\u003c')};</script>`;
-        html = html.replace('<head>', `<head>${scriptTag}`);
+        
+        // Dynamic Meta & CSS Injection
+        const title = settings.app_name || 'SurfSchool Manager';
+        const logo = settings.app_logo || '/favicon.ico';
+        const bgColor = settings.body_bg_color || '#f8fafc';
+        
+        const extraHeadTags = `
+    <title>${title}</title>
+    <link id="app-favicon" rel="icon" href="${logo}" />
+    <style>
+      body { background-color: ${bgColor} !important; }
+      #root { opacity: 0; transition: opacity 0.3s ease; }
+      #root.ready { opacity: 1; }
+    </style>${scriptTag}`;
+
+        // Remove default title if present
+        html = html.replace(/<title>.*?<\/title>/, '');
+        // Inject into head
+        html = html.replace('<head>', `<head>${extraHeadTags}`);
 
         res.send(html);
       } catch (err) {
