@@ -1376,7 +1376,7 @@ export default function LandingPage({
                   </div>
                 )}
 
-                <div className={`grid grid-cols-1 ${contactSection?.content_style === 'centered' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8 lg:gap-16 items-center w-full max-w-[1200px] mx-auto`}>
+                <div className={`grid grid-cols-1 ${contactSection?.content_style === 'centered' ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8 lg:gap-10 items-center w-full max-w-5xl mx-auto`}>
                   <div className={`flex flex-col ${contactSection?.content_style === 'section_bg' ? 'items-center text-center' : 'justify-center'} ${String(settings.sticky_footer) === 'true' ? 'pb-24' : 'pb-4'}`}>
                     <div className={`w-full ${contactSection?.content_style === 'section_bg' ? 'max-w-md' : 'max-w-lg'}`}>
                       {contactSection?.content_style !== 'section_bg' && (
