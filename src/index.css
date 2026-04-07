@@ -4,6 +4,23 @@
 
 @theme {
   --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  
+  /* Brand Colors: Sunset Atlantic */
+  --color-brand-50: #fffbeb;
+  --color-brand-100: #fef3c7;
+  --color-brand-200: #fde68a;
+  --color-brand-300: #fcd34d;
+  --color-brand-400: #fbbf24;
+  --color-brand-500: #f59e0b;
+  --color-brand-600: #d97706;
+  --color-brand-700: #b45309;
+  --color-brand-800: #92400e;
+  --color-brand-900: #78350f;
+  
+  --color-navy-900: #0f172a;
+  --color-navy-950: #020617;
+  
+  --color-ivory: #fdfcf9;
 }
 
 html {
@@ -11,7 +28,7 @@ html {
 }
 
 body {
-  @apply font-sans antialiased text-slate-900;
+  @apply font-sans antialiased text-navy-900 bg-ivory;
 }
 
 /* Base image protection */
@@ -31,11 +48,11 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-50;
+  @apply bg-ivory;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-all;
+  @apply bg-brand-200 rounded-full hover:bg-brand-300 transition-all;
 }
 
 /* --------------------------------------------------------------------------

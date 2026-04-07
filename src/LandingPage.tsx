@@ -7,7 +7,7 @@ import { Settings as AppSettings } from './types';
 
 // Fix Leaflet marker icon issue
 const customIcon = L.divIcon({
-  html: `<div class="w-10 h-10 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-xl border-2 border-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>`,
+  html: `<div class="w-10 h-10 bg-brand-600 rounded-full flex items-center justify-center text-white shadow-xl border-2 border-white"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>`,
   className: 'custom-marker-icon',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
@@ -375,7 +375,7 @@ export default function LandingPage({
             <React.Fragment key={s.key}>
               <button
                 onClick={() => { setCurrentPage(s.key as any); setIsMobileMenuOpen(false); }}
-                className={`text-[12px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-indigo-600' : ''}`}
+                className={`text-[12px] font-bold transition-colors uppercase tracking-widest px-2 text-left lg:text-center ${currentPage === s.key ? 'text-brand-600' : ''}`}
                 style={{ color: currentPage !== s.key ? (isMobile ? '#334155' : (settings.nav_text_color || settings.header_text_color || '#475569')) : undefined }}
               >
                 {label}
@@ -470,7 +470,7 @@ export default function LandingPage({
     (currentPage === 'reserve' && !!settings.reserve_bg_image);
 
   return (
-    <div className={`min-h-screen flex flex-col bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-slate-50'}`}>
+    <div className={`min-h-screen flex flex-col bg-ivory font-sans text-navy-900 selection:bg-brand-200 selection:text-brand-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-ivory'}`}>
       {/* Unified Navigation: L'Horizon de Verre */}
       <nav
         className="fixed top-0 left-0 right-0 z-50 flex flex-col transition-all duration-500 border-b border-white/10 shadow-sm"
@@ -489,7 +489,7 @@ export default function LandingPage({
               <span className="text-base font-black uppercase tracking-tighter leading-none" style={{ color: settings.header_text_color || '#0f172a' }}>{settings.app_name}</span>
               <button
                 onClick={isAdminPreview ? onBackToAdmin : onLoginClick}
-                className="text-[9px] font-bold text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-widest text-left leading-none"
+                className="text-[9px] font-bold text-slate-400 hover:text-brand-600 transition-colors uppercase tracking-widest text-left leading-none"
                 style={{ color: settings.header_text_color ? `${settings.header_text_color}88` : undefined }}
               >
                 Dashboard
@@ -554,7 +554,7 @@ export default function LandingPage({
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full transition-colors hover:bg-white/20"
+              className="lg:hidden p-2 rounded-full transition-colors hover:bg-ivory/20"
               style={{ color: settings.header_text_color || '#0f172a' }}
             >
               {isMobileMenuOpen ? <Plus size={20} className="rotate-45" /> : <div className="space-y-1"><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div><div className="w-5 h-0.5" style={{ backgroundColor: settings.header_text_color || '#0f172a' }}></div></div>}
@@ -570,14 +570,14 @@ export default function LandingPage({
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="lg:hidden bg-white/95 backdrop-blur-2xl border-t border-slate-100 overflow-hidden"
+                className="lg:hidden bg-ivory/95 backdrop-blur-2xl border-t border-slate-100 overflow-hidden"
               >
                 <div className="flex flex-col p-6 gap-6">
                   <NavLinks isMobile={true} />
                   <div className="h-px bg-slate-100/50" />
                   <button
                     onClick={() => { if (isAdminPreview) onBackToAdmin?.(); else onLoginClick(); setIsMobileMenuOpen(false); }}
-                    className="text-left text-[11px] font-black text-indigo-600 uppercase tracking-[0.2em]"
+                    className="text-left text-[11px] font-black text-brand-600 uppercase tracking-[0.2em]"
                   >
                     {isAdminPreview ? 'Dashboard' : 'Espace Staff'}
                   </button>
@@ -591,7 +591,7 @@ export default function LandingPage({
         className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true' && !['about', 'spots', 'contact'].includes(currentPage)) ? 'pb-12' : ''}`}
         style={getMainBackgroundStyle()}
       >
-        {hasBackgroundImage && <div className="absolute inset-0 bg-white/20 z-0" />}
+        {hasBackgroundImage && <div className="absolute inset-0 bg-ivory/20 z-0" />}
         <AnimatePresence mode="wait">
           {currentPage === 'services' && (
             <motion.div
@@ -628,7 +628,7 @@ export default function LandingPage({
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 }}
                         className={`
-                            relative bg-white/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
+                            relative bg-ivory/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
                             w-full max-w-[340px] overflow-hidden
                             ${settings.services_layout === 'horizontal-scroll' ? 'min-w-[310px] snap-center' : 'mx-auto'}
                             shadow-[0_8px_30px_rgb(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.4)] 
@@ -669,12 +669,12 @@ export default function LandingPage({
                         <div className="flex-grow px-6 pt-0 pb-2">
                           <div className="flex items-center justify-between mt-0 mb-1">
                             <div className="flex items-center gap-2">
-                              <div className="h-0.5 w-6 bg-indigo-500 rounded-full" />
-                              <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em]">{service.sessions_count || 1} SESSION{(Number(service.sessions_count || 1) > 1) ? 'S' : ''}</span>
+                              <div className="h-0.5 w-6 bg-brand-500 rounded-full" />
+                              <span className="text-[10px] font-black text-brand-600 uppercase tracking-[0.2em]">{service.sessions_count || 1} SESSION{(Number(service.sessions_count || 1) > 1) ? 'S' : ''}</span>
                             </div>
-                            <div className="text-lg font-black text-indigo-600 flex flex-col items-end">
+                            <div className="text-lg font-black text-brand-600 flex flex-col items-end">
                               {service.discount_percentage > 0 && (
-                                <span className="text-[10px] font-bold text-slate-900 line-through">
+                                <span className="text-[10px] font-bold text-navy-900 line-through">
                                   {service.price} DH
                                 </span>
                               )}
@@ -764,7 +764,7 @@ export default function LandingPage({
                         {!!about?.show_button && (
                           <button
                             onClick={() => setCurrentPage((about?.button_link as any) || 'reserve')}
-                            className="px-6 py-3 rounded-2xl font-black shadow-xl shadow-indigo-100/20 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px] hover:opacity-90"
+                            className="px-6 py-3 rounded-2xl font-black shadow-xl shadow-brand-200/30 hover:scale-105 active:scale-95 transition-all text-sm uppercase tracking-widest min-w-[180px] hover:opacity-90"
                             style={{ 
                               backgroundColor: about?.cta1_bg_color || '#4f46e5', 
                               color: about?.cta1_text_color || '#ffffff' 
@@ -831,7 +831,7 @@ export default function LandingPage({
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 }}
                         className={`
-                            relative bg-white/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
+                            relative bg-ivory/20 backdrop-blur-3xl rounded-[3rem] border border-white/40 flex flex-col h-full
                             w-full max-w-[340px] overflow-hidden
                             ${settings.conseils_layout === 'horizontal-scroll' ? 'min-w-[310px] snap-center' : 'mx-auto'}
                             shadow-[0_8px_30px_rgb(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,0.4)] 
@@ -917,17 +917,17 @@ export default function LandingPage({
                         <p className="text-lg font-medium" style={{ color: settings.subtitle_color || '#64748b' }}>{settings.reserve_subtitle}</p>
                       </div>
                     )}
-                    <div className="bg-white/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/50 shadow-2xl">
+                    <div className="bg-ivory/80 backdrop-blur-xl p-6 md:p-8 rounded-3xl border border-white/50 shadow-2xl">
                       {status === 'success' ? (
                         <div className="text-center py-8">
                           <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
                             <CheckCircle2 size={32} />
                           </div>
-                          <h3 className="text-2xl font-black text-slate-900 mb-2">Réservation Envoyée !</h3>
+                          <h3 className="text-2xl font-black text-navy-900 mb-2">Réservation Envoyée !</h3>
                           <p className="text-sm text-slate-500 font-medium mb-6">Nous vous contacterons très prochainement pour confirmer votre session.</p>
                           <button
                             onClick={() => setStatus('idle')}
-                            className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all text-sm"
+                            className="px-6 py-3 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition-all text-sm"
                           >
                             Faire une autre réservation
                           </button>
@@ -942,7 +942,7 @@ export default function LandingPage({
                                 type="text"
                                 value={reservation.name}
                                 onChange={e => setReservation({ ...reservation, name: e.target.value })}
-                                className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm"
                                 placeholder=" Nom et Prenom "
                               />
                             </div>
@@ -953,7 +953,7 @@ export default function LandingPage({
                                 type="tel"
                                 value={reservation.phone}
                                 onChange={e => setReservation({ ...reservation, phone: e.target.value })}
-                                className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm"
                                 placeholder="06..."
                               />
                             </div>
@@ -965,7 +965,7 @@ export default function LandingPage({
                               type="email"
                               value={reservation.email}
                               onChange={e => setReservation({ ...reservation, email: e.target.value })}
-                              className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                              className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm"
                               placeholder="votre@email.com"
                             />
                           </div>
@@ -974,7 +974,7 @@ export default function LandingPage({
                             <select
                               value={reservation.service_id}
                               onChange={e => setReservation({ ...reservation, service_id: e.target.value })}
-                              className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold appearance-none text-sm"
+                              className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold appearance-none text-sm"
                             >
                               {activeServices.map(s => {
                                 const finalPrice = s.discount_percentage > 0
@@ -998,7 +998,7 @@ export default function LandingPage({
                                     type="date"
                                     value={reservation.date}
                                     onChange={e => setReservation({ ...reservation, date: e.target.value })}
-                                    className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                    className="w-full px-4 py-1.5 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm"
                                   />
                                 </div>
                                 <div className="space-y-0.5">
@@ -1008,7 +1008,7 @@ export default function LandingPage({
                                     type="time"
                                     value={reservation.time}
                                     onChange={e => setReservation({ ...reservation, time: e.target.value })}
-                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                    className="w-full px-4 py-2 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm"
                                   />
                                 </div>
                               </div>
@@ -1018,7 +1018,7 @@ export default function LandingPage({
                                   <button
                                     type="button"
                                     onClick={() => setReservation(prev => ({ ...prev, guests: Math.max(1, prev.guests - 1) }))}
-                                    className="p-1 text-slate-400 hover:text-indigo-600 transition-colors"
+                                    className="p-1 text-slate-400 hover:text-brand-600 transition-colors"
                                   >
                                     <Minus size={16} />
                                   </button>
@@ -1031,7 +1031,7 @@ export default function LandingPage({
                                   <button
                                     type="button"
                                     onClick={() => setReservation(prev => ({ ...prev, guests: prev.guests + 1 }))}
-                                    className="p-1 text-slate-400 hover:text-indigo-600 transition-colors"
+                                    className="p-1 text-slate-400 hover:text-brand-600 transition-colors"
                                   >
                                     <Plus size={16} />
                                   </button>
@@ -1041,7 +1041,7 @@ export default function LandingPage({
                           )}
                           <button
                             disabled={status === 'loading'}
-                            className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm shadow-md shadow-indigo-100 hover:bg-indigo-700 transition-all active:scale-[0.98] disabled:opacity-50 mt-2"
+                            className="w-full py-3 bg-brand-600 text-white rounded-xl font-bold text-sm shadow-md shadow-brand-200/50 hover:bg-brand-700 transition-all active:scale-[0.98] disabled:opacity-50 mt-2"
                           >
                             {status === 'loading' ? 'Envoi...' : 'Confirmer la réservation'}
                           </button>
@@ -1098,7 +1098,7 @@ export default function LandingPage({
                     `}>
                       {spots.map((spot) => (
                         <div key={spot.id} className={`
-                          bg-white/40 backdrop-blur-sm p-6 rounded-[2rem] border border-slate-200/60 flex flex-col md:flex-row gap-6 text-left
+                          bg-ivory/40 backdrop-blur-sm p-6 rounded-[2rem] border border-slate-200/60 flex flex-col md:flex-row gap-6 text-left
                           ${settings.spots_layout === 'horizontal-scroll' ? 'min-w-[350px] max-w-[450px] snap-center' : 'w-full'}
                           shadow-sm hover:shadow-xl transition-all duration-300 group
                         `}>
@@ -1109,8 +1109,8 @@ export default function LandingPage({
                           )}
                           <div className="flex-grow min-w-0">
                             <div className="flex items-center gap-2 mb-2">
-                              <h3 className="text-xl font-black text-slate-900 truncate">{spot.name}</h3>
-                              <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-black uppercase tracking-widest">{spot.difficulty}</span>
+                              <h3 className="text-xl font-black text-navy-900 truncate">{spot.name}</h3>
+                              <span className="px-2 py-0.5 bg-brand-50 text-brand-600 rounded-lg text-[10px] font-black uppercase tracking-widest">{spot.difficulty}</span>
                             </div>
                             <p className="text-slate-500 text-sm font-medium line-clamp-3 mb-4">{spot.description}</p>
                             <div className="flex flex-wrap gap-2 mb-4">
@@ -1118,7 +1118,7 @@ export default function LandingPage({
                                 href={`https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-indigo-600 hover:text-white transition-all"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-600 hover:bg-brand-600 hover:text-white transition-all"
                               >
                                 <Navigation size={12} /> Itinéraire
                               </a>
@@ -1139,7 +1139,7 @@ export default function LandingPage({
                             {forecasts[spot.id] && (
                               <div className="mt-2 pt-4 border-t border-slate-100">
                                 <div className="flex items-center gap-2 mb-3">
-                                  <div className="h-1 w-1 bg-indigo-500 rounded-full" />
+                                  <div className="h-1 w-1 bg-brand-500 rounded-full" />
                                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Prévisions aujourd'hui</span>
                                 </div>
                                 <div className="overflow-x-auto custom-scrollbar border border-slate-200 rounded-xl bg-white/50 backdrop-blur-sm shadow-inner">
@@ -1153,7 +1153,7 @@ export default function LandingPage({
                                     <tbody>
                                       {/* Vitesse du vent */}
                                       <tr className="border-t border-slate-200/50">
-                                        <td className="p-2 sticky left-0 z-10 bg-white/95 backdrop-blur-xl border-r border-slate-200 flex items-center gap-1.5 font-bold shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
+                                        <td className="p-2 sticky left-0 z-10 bg-ivory/95 backdrop-blur-xl border-r border-slate-200 flex items-center gap-1.5 font-bold shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
                                           <Wind size={12} className="text-emerald-500" /> Vent <span className="font-normal text-[8px] opacity-70">(km/h)</span>
                                         </td>
                                         {forecasts[spot.id].windSpeed.map((v, i) => (
@@ -1169,7 +1169,7 @@ export default function LandingPage({
                                       </tr>
                                       {/* Direction du vent */}
                                       <tr className="border-t border-slate-200/50">
-                                        <td className="p-2 sticky left-0 z-10 bg-white/95 backdrop-blur-xl border-r border-slate-200 font-bold text-slate-500 pl-6 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] text-[9px] uppercase tracking-widest">Dir. Vent</td>
+                                        <td className="p-2 sticky left-0 z-10 bg-ivory/95 backdrop-blur-xl border-r border-slate-200 font-bold text-slate-500 pl-6 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] text-[9px] uppercase tracking-widest">Dir. Vent</td>
                                         {forecasts[spot.id].windDirection.map((v, i) => (
                                           <td key={i} className="p-2 text-center border-r border-slate-200/50">
                                             <Navigation size={12} className="mx-auto text-emerald-600 drop-shadow-sm" style={{ transform: `rotate(${v}deg)` }} />
@@ -1178,32 +1178,32 @@ export default function LandingPage({
                                       </tr>
                                       {/* Houle */}
                                       <tr className="border-t border-slate-200 border-t-2">
-                                        <td className="p-2 sticky left-0 z-10 bg-indigo-50/95 backdrop-blur-xl border-r border-indigo-100 flex items-center gap-1.5 font-bold shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
-                                          <Waves size={12} className="text-indigo-600" /> Vagues <span className="font-normal text-[8px] opacity-70">(m)</span>
+                                        <td className="p-2 sticky left-0 z-10 bg-brand-50/95 backdrop-blur-xl border-r border-brand-100 flex items-center gap-1.5 font-bold shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)]">
+                                          <Waves size={12} className="text-brand-600" /> Vagues <span className="font-normal text-[8px] opacity-70">(m)</span>
                                         </td>
                                         {forecasts[spot.id].waveHeight.map((v, i) => (
-                                          <td key={i} className={`p-2 text-center border-r border-indigo-100/50 font-black ${v >= 1.5 ? 'bg-indigo-100 text-indigo-900' : 'bg-indigo-50/30 text-indigo-700'}`}>
+                                          <td key={i} className={`p-2 text-center border-r border-brand-100/50 font-black ${v >= 1.5 ? 'bg-brand-100 text-brand-900' : 'bg-brand-50/30 text-brand-700'}`}>
                                             {v}
                                           </td>
                                         ))}
                                       </tr>
                                       {/* Période */}
-                                      <tr className="border-t border-indigo-100/50 bg-indigo-50/10">
-                                        <td className="p-2 sticky left-0 z-10 bg-white/95 backdrop-blur-xl border-r border-indigo-100 font-bold text-slate-500 pl-6 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] text-[9px]">Période (s)</td>
-                                        {forecasts[spot.id].wavePeriod.map((v, i) => <td key={i} className="p-2 text-center border-r border-indigo-100/50 font-bold text-slate-600">{v}</td>)}
+                                      <tr className="border-t border-brand-100/50 bg-brand-50/10">
+                                        <td className="p-2 sticky left-0 z-10 bg-ivory/95 backdrop-blur-xl border-r border-brand-100 font-bold text-slate-500 pl-6 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] text-[9px]">Période (s)</td>
+                                        {forecasts[spot.id].wavePeriod.map((v, i) => <td key={i} className="p-2 text-center border-r border-brand-100/50 font-bold text-slate-600">{v}</td>)}
                                       </tr>
                                       {/* Direction Houle */}
-                                      <tr className="border-t border-indigo-100/50">
-                                        <td className="p-2 sticky left-0 z-10 bg-white/95 backdrop-blur-xl border-r border-indigo-100 font-bold text-slate-500 pl-6 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] text-[9px] uppercase tracking-widest">Dir. Vague</td>
+                                      <tr className="border-t border-brand-100/50">
+                                        <td className="p-2 sticky left-0 z-10 bg-ivory/95 backdrop-blur-xl border-r border-brand-100 font-bold text-slate-500 pl-6 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] text-[9px] uppercase tracking-widest">Dir. Vague</td>
                                         {forecasts[spot.id].waveDirection.map((v, i) => (
-                                          <td key={i} className="p-2 text-center border-r border-indigo-100/50">
-                                            <Navigation size={12} className="mx-auto text-indigo-500 drop-shadow-sm" style={{ transform: `rotate(${v}deg)` }} />
+                                          <td key={i} className="p-2 text-center border-r border-brand-100/50">
+                                            <Navigation size={12} className="mx-auto text-brand-500 drop-shadow-sm" style={{ transform: `rotate(${v}deg)` }} />
                                           </td>
                                         ))}
                                       </tr>
                                       {/* Marée */}
                                       <tr className="border-t border-sky-100/50 bg-sky-50/20">
-                                        <td className="p-2 sticky left-0 z-10 bg-white/95 backdrop-blur-xl border-r border-sky-100 font-bold text-slate-500 pl-6 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] text-[9px] uppercase tracking-widest">Marée (m)</td>
+                                        <td className="p-2 sticky left-0 z-10 bg-ivory/95 backdrop-blur-xl border-r border-sky-100 font-bold text-slate-500 pl-6 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.05)] text-[9px] uppercase tracking-widest">Marée (m)</td>
                                         {forecasts[spot.id].seaLevel?.map((v, i) => (
                                           <td key={i} className="p-2 text-center border-r border-sky-100/50 font-black text-sky-700 bg-sky-50/40">
                                             {v}
@@ -1256,7 +1256,7 @@ export default function LandingPage({
                                 <div className="flex items-start justify-between gap-2 mb-2">
                                   <div className="flex-1 min-w-0">
                                     <div className="flex flex-wrap items-center gap-1.5 mb-1">
-                                      <h4 className="font-black text-slate-900 text-sm truncate max-w-full">{spot.name}</h4>
+                                      <h4 className="font-black text-navy-900 text-sm truncate max-w-full">{spot.name}</h4>
                                       <span className={`shrink-0 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md ${(spot.difficulty?.toLowerCase().includes('deb')) ? 'bg-emerald-100 text-emerald-600' :
                                         (spot.difficulty?.toLowerCase().includes('int')) ? 'bg-amber-100 text-amber-600' :
                                         (spot.difficulty?.toLowerCase().includes('tout')) ? 'bg-sky-100 text-sky-600' :
@@ -1283,7 +1283,7 @@ export default function LandingPage({
                                       href={`https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="flex items-center justify-center w-7 h-7 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition-all shadow-sm"
+                                      className="flex items-center justify-center w-7 h-7 bg-brand-50 text-brand-600 hover:bg-brand-600 hover:text-white rounded-xl transition-all shadow-sm"
                                       title="Itinéraire vers ce spot"
                                     >
                                       <Navigation size={12} className="ml-px" />
@@ -1307,7 +1307,7 @@ export default function LandingPage({
                                           </thead>
                                           <tbody>
                                             <tr className="border-t border-slate-200/50">
-                                              <td className="p-1.5 sticky left-0 z-10 bg-white/95 border-r border-slate-200 flex items-center gap-1 font-bold"><Wind size={8} className="text-emerald-500" /> Vent</td>
+                                              <td className="p-1.5 sticky left-0 z-10 bg-ivory/95 border-r border-slate-200 flex items-center gap-1 font-bold"><Wind size={8} className="text-emerald-500" /> Vent</td>
                                               {forecasts[spot.id].windSpeed.map((v, i) => <td key={i} className={`p-1.5 text-center border-r border-slate-200/50 font-black ${v > 15 ? 'text-emerald-700' : 'text-slate-700'}`}>{Math.round(v)}</td>)}
                                             </tr>
                                             <tr className="border-t border-slate-200/50 bg-slate-50/50">
@@ -1315,20 +1315,20 @@ export default function LandingPage({
                                               {forecasts[spot.id].windGusts?.map((v, i) => <td key={i} className="p-1.5 text-center border-r border-slate-200/50 font-bold">{Math.round(v)}</td>)}
                                             </tr>
                                             <tr className="border-t border-slate-200/50">
-                                              <td className="p-1.5 sticky left-0 z-10 bg-white/95 border-r border-slate-200 text-center"><Navigation size={8} className="mx-auto text-emerald-600" /></td>
+                                              <td className="p-1.5 sticky left-0 z-10 bg-ivory/95 border-r border-slate-200 text-center"><Navigation size={8} className="mx-auto text-emerald-600" /></td>
                                               {forecasts[spot.id].windDirection.map((v, i) => <td key={i} className="p-1.5 text-center border-r border-slate-200/50"><Navigation size={8} className="mx-auto text-emerald-500" style={{ transform: `rotate(${v}deg)` }} /></td>)}
                                             </tr>
                                             <tr className="border-t border-slate-200 border-t-2">
-                                              <td className="p-1.5 sticky left-0 z-10 bg-indigo-50/95 border-r border-indigo-100 flex items-center gap-1 font-bold"><Waves size={8} className="text-indigo-600" /> Houle</td>
-                                              {forecasts[spot.id].waveHeight.map((v, i) => <td key={i} className="p-1.5 text-center border-r border-indigo-100/50 font-black text-indigo-700 bg-indigo-50/30">{v}</td>)}
+                                              <td className="p-1.5 sticky left-0 z-10 bg-brand-50/95 border-r border-brand-100 flex items-center gap-1 font-bold"><Waves size={8} className="text-brand-600" /> Houle</td>
+                                              {forecasts[spot.id].waveHeight.map((v, i) => <td key={i} className="p-1.5 text-center border-r border-brand-100/50 font-black text-brand-700 bg-brand-50/30">{v}</td>)}
                                             </tr>
-                                            <tr className="border-t border-indigo-100/50 bg-indigo-50/10">
-                                              <td className="p-1.5 sticky left-0 z-10 bg-white/95 border-r border-indigo-100 font-bold text-slate-500 pl-4">Pér.</td>
-                                              {forecasts[spot.id].wavePeriod.map((v, i) => <td key={i} className="p-1.5 text-center border-r border-indigo-100/50 font-bold">{v}</td>)}
+                                            <tr className="border-t border-brand-100/50 bg-brand-50/10">
+                                              <td className="p-1.5 sticky left-0 z-10 bg-ivory/95 border-r border-brand-100 font-bold text-slate-500 pl-4">Pér.</td>
+                                              {forecasts[spot.id].wavePeriod.map((v, i) => <td key={i} className="p-1.5 text-center border-r border-brand-100/50 font-bold">{v}</td>)}
                                             </tr>
-                                            <tr className="border-t border-indigo-100/50">
-                                              <td className="p-1.5 sticky left-0 z-10 bg-white/95 border-r border-indigo-100 text-center"><Navigation size={8} className="mx-auto text-indigo-500" /></td>
-                                              {forecasts[spot.id].waveDirection.map((v, i) => <td key={i} className="p-1.5 text-center border-r border-indigo-100/50"><Navigation size={8} className="mx-auto text-indigo-400" style={{ transform: `rotate(${v}deg)` }} /></td>)}
+                                            <tr className="border-t border-brand-100/50">
+                                              <td className="p-1.5 sticky left-0 z-10 bg-ivory/95 border-r border-brand-100 text-center"><Navigation size={8} className="mx-auto text-brand-500" /></td>
+                                              {forecasts[spot.id].waveDirection.map((v, i) => <td key={i} className="p-1.5 text-center border-r border-brand-100/50"><Navigation size={8} className="mx-auto text-brand-400" style={{ transform: `rotate(${v}deg)` }} /></td>)}
                                             </tr>
                                             <tr className="border-t border-sky-100/50 bg-sky-50/10">
                                               <td className="p-1.5 sticky left-0 z-10 bg-sky-50/95 border-r border-sky-100 font-bold text-slate-500 pl-3">Marée</td>
@@ -1345,13 +1345,13 @@ export default function LandingPage({
                                   {spot.suggestions && spot.suggestions.length > 0 ? (
                                     spot.suggestions.map((sugg, idx) => (
                                       <div key={idx} className="mt-1 flex items-start gap-1.5">
-                                        <span className="shrink-0 text-[8px] font-black text-indigo-400 uppercase tracking-widest mt-0.5">{sugg.type}</span>
+                                        <span className="shrink-0 text-[8px] font-black text-brand-400 uppercase tracking-widest mt-0.5">{sugg.type}</span>
                                         {sugg.link ? (
                                           <a
                                             href={sugg.link.startsWith('http') ? sugg.link : `https://${sugg.link}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-[11px] font-bold text-slate-700 hover:text-indigo-600 hover:underline leading-tight transition-colors"
+                                            className="text-[11px] font-bold text-slate-700 hover:text-brand-600 hover:underline leading-tight transition-colors"
                                           >
                                             {sugg.name}
                                           </a>
@@ -1363,13 +1363,13 @@ export default function LandingPage({
                                   ) : (
                                     spot.suggestion_name && (
                                       <div className="mt-1 flex items-start gap-1.5">
-                                        <span className="shrink-0 text-[8px] font-black text-indigo-400 uppercase tracking-widest mt-0.5">{spot.suggestion_type || 'Suggestion'}</span>
+                                        <span className="shrink-0 text-[8px] font-black text-brand-400 uppercase tracking-widest mt-0.5">{spot.suggestion_type || 'Suggestion'}</span>
                                         {spot.suggestion_link ? (
                                           <a
                                             href={spot.suggestion_link.startsWith('http') ? spot.suggestion_link : `https://${spot.suggestion_link}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="text-[11px] font-bold text-slate-700 hover:text-indigo-600 hover:underline leading-tight transition-colors"
+                                            className="text-[11px] font-bold text-slate-700 hover:text-brand-600 hover:underline leading-tight transition-colors"
                                           >
                                             {spot.suggestion_name}
                                           </a>
@@ -1418,7 +1418,7 @@ export default function LandingPage({
                 {/* Header (Centred at top for background style, or inside left column for centered style) */}
                 {contactSection?.content_style === 'section_bg' && (
                   <div className="max-w-2xl w-full text-center mb-12">
-                    <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
+                    <span className="inline-block px-3 py-1 bg-brand-50 text-brand-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
                       Contactez-nous
                     </span>
                     <h2 className="text-4xl md:text-5xl font-black mb-0 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
@@ -1430,7 +1430,7 @@ export default function LandingPage({
                     <div className={`w-full ${contactSection?.content_style === 'section_bg' ? 'max-w-md' : 'max-w-lg'}`}>
                       {contactSection?.content_style !== 'section_bg' && (
                         <>
-                          <span className="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
+                          <span className="inline-block px-3 py-1 bg-brand-50 text-brand-600 rounded-full text-xs font-black uppercase tracking-widest mb-4">
                             Contactez-nous
                           </span>
                           <h2 className="text-4xl font-black mb-10 tracking-tight" style={{ color: settings.title_color || '#0f172a' }}>Une question ? Un projet ?</h2>
@@ -1438,8 +1438,8 @@ export default function LandingPage({
                       )}
 
                       <div className={`space-y-6 mb-10 ${contactSection?.content_style === 'section_bg' ? 'flex flex-col items-center' : ''}`}>
-                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-ivory/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-brand-600 shadow-sm border border-slate-100 shrink-0">
                             <Mail size={20} />
                           </div>
                           <div className={contactSection?.content_style === 'section_bg' ? 'text-left' : ''}>
@@ -1447,8 +1447,8 @@ export default function LandingPage({
                             <p className="font-bold text-slate-700">{contactInfo.email}</p>
                           </div>
                         </div>
-                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-ivory/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-brand-600 shadow-sm border border-slate-100 shrink-0">
                             <Phone size={20} />
                           </div>
                           <div className={contactSection?.content_style === 'section_bg' ? 'text-left' : ''}>
@@ -1456,8 +1456,8 @@ export default function LandingPage({
                             <p className="font-bold text-slate-700">{contactInfo.phone}</p>
                           </div>
                         </div>
-                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-white/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
-                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm border border-slate-100 shrink-0">
+                        <div className={`flex items-center gap-4 ${contactSection?.content_style === 'section_bg' ? 'bg-ivory/40 backdrop-blur-md p-3 rounded-2xl border border-white/50 w-full' : ''}`}>
+                          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-brand-600 shadow-sm border border-slate-100 shrink-0">
                             <MapPin size={20} />
                           </div>
                           <div className={`flex-1 ${contactSection?.content_style === 'section_bg' ? 'text-left' : ''}`}>
@@ -1468,7 +1468,7 @@ export default function LandingPage({
                                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(contactInfo.address)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors w-fit"
+                                className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors w-fit"
                               >
                                 <Navigation size={14} /> Itinéraire
                               </a>
@@ -1478,17 +1478,17 @@ export default function LandingPage({
                       </div>
                       <div className={`flex gap-4 ${contactSection?.content_style === 'section_bg' ? 'justify-center' : ''}`}>
                         {contactInfo.instagram && (
-                          <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                          <a href={contactInfo.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
                             <Instagram size={18} />
                           </a>
                         )}
                         {contactInfo.facebook && (
-                          <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                          <a href={contactInfo.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
                             <Facebook size={18} />
                           </a>
                         )}
                         {contactInfo.twitter && (
-                          <a href={contactInfo.twitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
+                          <a href={contactInfo.twitter} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-brand-600 text-white flex items-center justify-center hover:scale-110 transition-transform">
                             <Twitter size={18} />
                           </a>
                         )}
@@ -1514,7 +1514,7 @@ export default function LandingPage({
                           <img 
                             src={contactSection?.image_url} 
                             alt={settings.app_name} 
-                            className="h-72 sm:h-96 lg:h-[450px] w-auto object-contain transition-transform hover:scale-105 rounded-3xl shadow-2xl shadow-indigo-100/20" 
+                            className="h-72 sm:h-96 lg:h-[450px] w-auto object-contain transition-transform hover:scale-105 rounded-3xl shadow-2xl shadow-brand-200/30" 
                             referrerPolicy="no-referrer" 
                             loading="lazy" 
                             decoding="async" 
@@ -1547,7 +1547,7 @@ export default function LandingPage({
                             <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
                               <CheckCircle2 size={32} />
                             </div>
-                            <h3 className="text-2xl font-black text-slate-900 mb-2">Message Envoyé !</h3>
+                            <h3 className="text-2xl font-black text-navy-900 mb-2">Message Envoyé !</h3>
                             <p className="text-sm text-slate-500 font-medium mb-6">Merci de nous avoir contactés. Nous vous répondrons dans les plus brefs délais.</p>
                             <button
                               onClick={() => setContactStatus('idle')}
@@ -1570,7 +1570,7 @@ export default function LandingPage({
                                   type="text"
                                   value={contactForm.name}
                                   onChange={e => setContactForm({ ...contactForm, name: e.target.value })}
-                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm"
                                   placeholder="Nom et Prenom"
                                 />
                               </div>
@@ -1581,7 +1581,7 @@ export default function LandingPage({
                                   type="email"
                                   value={contactForm.email}
                                   onChange={e => setContactForm({ ...contactForm, email: e.target.value })}
-                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                  className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm"
                                   placeholder="votre@email.com"
                                 />
                               </div>
@@ -1593,7 +1593,7 @@ export default function LandingPage({
                                 type="text"
                                 value={contactForm.subject}
                                 onChange={e => setContactForm({ ...contactForm, subject: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm"
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm"
                                 placeholder="Comment pouvons-nous vous aider ?"
                               />
                             </div>
@@ -1604,7 +1604,7 @@ export default function LandingPage({
                                 rows={7}
                                 value={contactForm.message}
                                 onChange={e => setContactForm({ ...contactForm, message: e.target.value })}
-                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-bold text-sm resize-none"
+                                className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none font-bold text-sm resize-none"
                                 placeholder="Votre message..."
                               ></textarea>
                             </div>
@@ -1615,7 +1615,7 @@ export default function LandingPage({
                                 backgroundColor: contactSection?.cta1_bg_color || '#4f46e5',
                                 color: contactSection?.cta1_text_color || '#ffffff'
                               }}
-                              className="w-full py-3 rounded-xl font-bold shadow-lg shadow-indigo-100 hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                              className="w-full py-3 rounded-xl font-bold shadow-lg shadow-brand-200/50 hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                             >
                               {contactStatus === 'loading' ? 'Envoi...' : (contactSection?.section_button_label || 'Envoyer le message')} <Send size={18} />
                             </button>
@@ -1647,17 +1647,17 @@ export default function LandingPage({
                 >
                   <button
                     onClick={() => setSelectedConseil(null)}
-                    className="absolute top-6 right-6 p-2 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors z-10"
+                    className="absolute top-6 right-6 p-2 bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 hover:text-navy-900 transition-colors z-10"
                   >
                     <X size={20} />
                   </button>
 
                   <div className="p-8 md:p-12">
-                    <div className="flex items-center gap-2 text-indigo-600 mb-4">
+                    <div className="flex items-center gap-2 text-brand-600 mb-4">
                       <Info size={16} />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-indigo-500/80">Conseil & Astuce</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-brand-500/80">Conseil & Astuce</span>
                     </div>
-                    <h3 className="text-3xl font-black text-slate-900 mb-6 leading-tight tracking-tight">
+                    <h3 className="text-3xl font-black text-navy-900 mb-6 leading-tight tracking-tight">
                       {selectedConseil.title}
                     </h3>
                     <div className="max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
@@ -1667,7 +1667,7 @@ export default function LandingPage({
                     </div>
                     <button
                       onClick={() => setSelectedConseil(null)}
-                      className="mt-8 w-full py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all uppercase tracking-widest text-xs"
+                      className="mt-8 w-full py-4 bg-brand-600 text-white rounded-2xl font-black shadow-lg shadow-brand-200/50 hover:bg-brand-700 transition-all uppercase tracking-widest text-xs"
                     >
                       Fermer le guide
                     </button>
@@ -1689,7 +1689,7 @@ function Footer({ settings }: { settings: AppSettings }) {
     <footer
       className={`${isSticky ? 'fixed bottom-0 left-0 right-0' : 'relative'} py-1 border-t border-slate-100 z-40`}
       style={{
-        backgroundColor: settings.footer_color || '#ffffff',
+        backgroundColor: settings.footer_color || '#fdfcf9',
         color: settings.footer_text_color || 'inherit'
       }}
     >
