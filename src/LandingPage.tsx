@@ -1652,12 +1652,13 @@ export default function LandingPage({
 
 function WaveDivider({ bgColor }: { bgColor: string }) {
   return (
-    <div className="w-full relative z-30 -mt-12 overflow-hidden pointer-events-none">
+    <div className="w-full relative z-30 pointer-events-none -mb-[1px]">
       <svg
         viewBox="0 0 1440 120"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-auto drop-shadow-[0_-10px_10px_rgba(0,0,0,0.02)]"
+        preserveAspectRatio="none"
+        className="w-full h-[60px] md:h-[100px] block"
       >
         <path
           d="M0 64L48 58.7C96 53 192 43 288 48C384 53 480 75 576 80C672 85 768 75 864 64C960 53 1056 43 1152 42.7C1248 43 1344 53 1392 58.7L1440 64V120H1392C1344 120 1248 120 1152 120C1056 120 960 120 864 120C768 120 672 120 576 120C480 120 384 120 288 120C192 120 96 120 48 120H0V64Z"
