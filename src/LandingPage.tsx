@@ -502,52 +502,45 @@ export default function LandingPage({
           </div>
 
           <div className="flex items-center gap-3 pr-2">
-            {/* Infinite Marquee for Sponsors */}
+            {/* One-by-One Sponsor Display */}
             {(() => {
               let sponsors: { url: string; alt: string }[] = [];
               try {
                 const parsed = JSON.parse(settings.sponsor_images || '[]');
-                sponsors = Array.isArray(parsed) ? parsed : [];
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                  sponsors = parsed;
+                } else {
+                  // Fallback to defaults to ensure something is visible if configured
+                  sponsors = [
+                    { url: 'https://upload.wikimedia.org/wikipedia/commons/e/e8/Rip_Curl_logo.svg', alt: 'Rip Curl' },
+                    { url: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Quiksilver_logo.svg', alt: 'Quiksilver' }
+                  ];
+                }
               } catch {
                 sponsors = [];
               }
 
               if (sponsors.length === 0) return null;
               
-              // Double the sponsors for seamless looping if we have enough space
-              const displaySponsors = [...sponsors, ...sponsors];
+              const currentSponsor = sponsors[sponsorIndex % sponsors.length];
               
               return (
-                <div
-                  className="hidden lg:flex w-32 h-8 overflow-hidden shrink-0 relative mr-2"
-                  title="Nos sponsors"
-                >
-                  <div className="absolute inset-y-0 left-0 w-4 bg-gradient-to-r from-white/20 to-transparent z-10 pointer-events-none" />
-                  <div className="absolute inset-y-0 right-0 w-4 bg-gradient-to-l from-white/20 to-transparent z-10 pointer-events-none" />
-                  
-                  <motion.div 
-                    className="flex items-center gap-6 h-full px-2"
-                    animate={{ x: [0, -50 * sponsors.length] }}
-                    transition={{
-                      x: {
-                        repeat: Infinity,
-                        repeatType: "loop",
-                        duration: sponsors.length * 4,
-                        ease: "linear",
-                      },
-                    }}
-                  >
-                    {displaySponsors.map((s, idx) => (
-                      <img
-                        key={`${s.alt}-${idx}`}
-                        src={s.url}
-                        alt={s.alt}
-                        className="h-5 w-auto object-contain filter grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ))}
-                  </motion.div>
+                <div className="hidden lg:flex items-center justify-center w-24 h-8 relative overflow-hidden mr-1">
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={currentSponsor.url}
+                      src={currentSponsor.url}
+                      alt={currentSponsor.alt}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 0.6, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.5 }}
+                      className="h-5 w-auto object-contain filter grayscale hover:grayscale-0 hover:opacity-100 transition-all cursor-help"
+                      title={`Partenaire : ${currentSponsor.alt}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </AnimatePresence>
                 </div>
               );
             })()}
