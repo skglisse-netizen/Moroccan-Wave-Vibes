@@ -470,7 +470,7 @@ export default function LandingPage({
     (currentPage === 'reserve' && !!settings.reserve_bg_image);
 
   return (
-    <div className={`min-h-screen flex flex-col bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-slate-50'}`}>
+    <div className={`min-h-screen flex flex-col bg-white font-sans text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 ${settings?.body_bg_color ? `bg-[${settings.body_bg_color}]` : 'bg-white'}`}>
       {/* Unified Navigation */}
       <nav
         className={`${String(settings.sticky_header) === 'true' ? 'fixed' : 'absolute'} top-0 left-0 right-0 z-50 transition-all shadow-sm flex flex-col`}
@@ -489,10 +489,15 @@ export default function LandingPage({
               <span className="text-base font-black uppercase tracking-tighter leading-none" style={{ color: settings.header_text_color || '#0f172a' }}>{settings.app_name}</span>
               <button
                 onClick={isAdminPreview ? onBackToAdmin : onLoginClick}
-                className="text-[9px] font-bold text-slate-400 hover:text-indigo-600 transition-colors uppercase tracking-widest text-left leading-none"
-                style={{ color: settings.header_text_color ? `${settings.header_text_color}88` : undefined }}
+                className="group/staff flex items-center gap-1.5 px-2 py-0.5 rounded-lg hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100"
               >
-                Dashboard
+                <div className="w-1 h-1 rounded-full bg-slate-300 group-hover/staff:bg-indigo-500 transition-colors" />
+                <span 
+                  className="text-[10px] font-black text-slate-400 group-hover/staff:text-slate-600 transition-colors uppercase tracking-widest leading-none"
+                  style={{ color: settings.header_text_color ? `${settings.header_text_color}88` : undefined }}
+                >
+                  {isAdminPreview ? 'Back home' : 'Staff Portal'}
+                </span>
               </button>
             </div>
           </div>
@@ -577,7 +582,7 @@ export default function LandingPage({
       </nav>
 
       <main
-        className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true') ? 'pb-16' : ''}`}
+        className={`flex-grow pt-16 flex flex-col relative transition-all duration-500 ${(String(settings.sticky_footer) === 'true') ? 'pb-10' : ''}`}
         style={getMainBackgroundStyle()}
       >
         {hasBackgroundImage && <div className="absolute inset-0 bg-white/20 z-0" />}
@@ -1668,7 +1673,7 @@ function Footer({ settings }: { settings: AppSettings }) {
     <footer
       className={`
         ${isSticky ? 'fixed bottom-0 left-0 right-0 z-50 backdrop-blur-xl bg-white/80' : 'relative z-40 bg-white'} 
-        py-6 border-t border-slate-100 shadow-[0_-5px_15px_-3px_rgba(0,0,0,0.05)]
+        py-3
       `}
       style={{
         backgroundColor: settings.footer_color ? `${settings.footer_color}${isSticky ? 'cc' : ''}` : undefined,
@@ -1676,17 +1681,10 @@ function Footer({ settings }: { settings: AppSettings }) {
       }}
     >
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="text-center">
           <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">
             © 2026 {settings.app_name}. Tous droits réservés.
           </p>
-          <div className="flex items-center gap-6">
-            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">Designed with excellence</span>
-            <div className="h-4 w-px bg-slate-100 hidden md:block" />
-            <button className="text-[10px] font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700 transition-colors">
-              Privacy Policy
-            </button>
-          </div>
         </div>
       </div>
     </footer>

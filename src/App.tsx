@@ -366,9 +366,13 @@ export default function App() {
 
   const checkAuth = async () => {
     const token = localStorage.getItem('auth_token');
+    if (!token) {
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch('/api/auth/me', {
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+        headers: { 'Authorization': `Bearer ${token}` }
       });
       if (res.ok) {
         const userData = await res.json();
