@@ -4,7 +4,7 @@ services:
     container_name: surfschool-app
     restart: always
     ports:
-      - "80:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       - ./uploads:/app/uploads
     env_file:
