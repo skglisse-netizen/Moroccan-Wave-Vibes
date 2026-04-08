@@ -24,16 +24,37 @@ export async function uploadMedia(
     });
 
     if (response.status === 409) {
-      const data = await response.json();
-      if (window.confirm(data.message || "Ce fichier existe déjà. Voulez-vous l'écraser ?")) {
+      let msg = "Ce fichier existe déjà. Voulez-vous l'écraser ?";
+      try {
+        const data = await response.json();
+        msg = data.message || msg;
+      } catch { /* ignore parse error */ }
+      if (window.confirm(msg)) {
         return uploadMedia(file, type, true);
       }
       return null;
     }
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Erreur lors de l'upload");
+      // Safely determine error message — server may return HTML (e.g. nginx 413/502)
+      let errorMsg = `Erreur serveur (${response.status})`;
+      if (response.status === 413) {
+        errorMsg = "Fichier trop volumineux. Veuillez réduire la taille de l'image.";
+      } else if (response.status === 401) {
+        errorMsg = "Session expirée. Veuillez vous reconnecter.";
+      } else if (response.status === 403) {
+        errorMsg = "Vous n'avez pas la permission d'effectuer cette action.";
+      } else {
+        try {
+          const contentType = response.headers.get('content-type') || '';
+          if (contentType.includes('application/json')) {
+            const errorData = await response.json();
+            errorMsg = errorData.message || errorData.error || errorMsg;
+          }
+          // If HTML (e.g. nginx error page), keep the user-friendly errorMsg above
+        } catch { /* ignore parse error, keep generic message */ }
+      }
+      throw new Error(errorMsg);
     }
 
     return await response.json();
