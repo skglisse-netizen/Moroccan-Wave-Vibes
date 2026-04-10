@@ -6,6 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
-uploads/
+# uploads/ (Now tracked)
 *.sqlite
 *.db
