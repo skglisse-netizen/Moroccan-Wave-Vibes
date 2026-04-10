@@ -157,12 +157,13 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        const reader = new FileReader();
-                        reader.onloadend = () => setFormData(prev => ({ ...prev, app_logo: reader.result as string }));
-                        reader.readAsDataURL(file);
+                        const data = await uploadMedia(file);
+                        if (data) {
+                          setFormData(prev => ({ ...prev, app_logo: data.url }));
+                        }
                       }
                     }}
                     className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer"
@@ -466,12 +467,13 @@ export function SettingsView({ settings, onUpdate, content, onUpdateContent, use
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) => {
+                onChange={async (e) => {
                   const file = e.target.files?.[0];
                   if (file) {
-                    const reader = new FileReader();
-                    reader.onloadend = () => addSponsor(reader.result as string, newSponsorAlt || file.name.split('.')[0]);
-                    reader.readAsDataURL(file);
+                    const data = await uploadMedia(file);
+                    if (data) {
+                      addSponsor(data.url, newSponsorAlt || file.name.split('.')[0]);
+                    }
                   }
                 }}
                 className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer"

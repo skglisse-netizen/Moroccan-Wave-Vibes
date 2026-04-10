@@ -288,12 +288,13 @@ export function ServicesAdminView({ services, onUpdate, settings, onUpdateSettin
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          const reader = new FileReader();
-                          reader.onloadend = () => setConfigForm(prev => ({ ...prev, services_bg_image: reader.result as string }));
-                          reader.readAsDataURL(file);
+                          const data = await uploadMedia(file);
+                          if (data) {
+                            setConfigForm(prev => ({ ...prev, services_bg_image: data.url }));
+                          }
                         }
                       }}
                       className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-white file:text-indigo-700 hover:file:bg-indigo-50 transition-all cursor-pointer border border-slate-100 rounded-xl"

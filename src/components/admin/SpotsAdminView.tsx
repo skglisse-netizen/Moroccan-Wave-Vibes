@@ -442,12 +442,13 @@ export function SpotsAdminView({ spots, onUpdate, settings, onUpdateSettings, us
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      const reader = new FileReader();
-                      reader.onloadend = () => setFormData(prev => ({ ...prev, image_url: reader.result as string }));
-                      reader.readAsDataURL(file);
+                      const data = await uploadMedia(file);
+                      if (data) {
+                        setFormData(prev => ({ ...prev, image_url: data.url }));
+                      }
                     }
                   }}
                   className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer bg-white border border-slate-200 rounded-xl"
